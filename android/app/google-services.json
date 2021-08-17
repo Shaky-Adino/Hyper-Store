@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "411239629423",
+    "firebase_url": "https://shop-app-9aa36.firebaseio.com",
+    "project_id": "shop-app-9aa36",
+    "storage_bucket": "shop-app-9aa36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411239629423:android:ffbe8dc96164f7f440439a",
+        "android_client_info": {
+          "package_name": "co.shashanka.shopapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411239629423-r8dca9fkkilmrhq9qtju86dct8250ahf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo14zuMVatwN5ClQCoKpdpZD6ZqMHFyBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411239629423-r8dca9fkkilmrhq9qtju86dct8250ahf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
