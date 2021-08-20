@@ -28,13 +28,16 @@ class _IntroScreenState extends State<IntroScreen> {
   Widget build(BuildContext context) {
     
     return Scaffold(
+      backgroundColor: const Color(0xff18203d),
         body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 400,
-                  height: 400,
-                  child: VideoPlayer(_controller),
+                  width: 300,
+                  height: 300,
+                  child: ClipOval(
+                    child: VideoPlayer(_controller)
+                  ),
                   margin: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(shape: BoxShape.circle),
                 ),
