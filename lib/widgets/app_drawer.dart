@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import '../providers/google_sign_in_provider.dart';
+import '../screens/auth_screen.dart';
 
 import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
@@ -53,12 +53,8 @@ class AppDrawer extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/');
-
-              // Navigator.of(context)
-              //     .pushReplacementNamed(UserProductsScreen.routeName);
+              Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
               Provider.of<Auth>(context, listen: false).logout();
-              // Provider.of<GoogleSignInProvider>(context,listen: false).googleLogout();
             },
           ),
         ],
