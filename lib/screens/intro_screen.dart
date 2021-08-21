@@ -39,7 +39,13 @@ class _IntroScreenState extends State<IntroScreen> {
                     child: VideoPlayer(_controller)
                   ),
                   margin: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(1000)),
+                      border: Border.all(
+                          color: Colors.white,
+                          width: 4.0,
+                      ),
+                  ),
                 ),
                 SizedBox(
                   height: 20,
@@ -61,23 +67,27 @@ class _IntroScreenState extends State<IntroScreen> {
                 ),
                 //Our MaterialButton which when pressed will take us to a new screen named as 
                 //LoginScreen
-                MaterialButton(
-                  elevation: 0,
-                  height: 50,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  color: logoGreen,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Get Started ',
-                          style: TextStyle(color: Colors.white, fontSize: 20)),
-                      Icon(Icons.arrow_forward_ios)
-                    ],
+                Container(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                    child: MaterialButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      elevation: 8.0,
+                      height: 50,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: logoGreen,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Get Started ',
+                              style: TextStyle(color: Colors.white, fontSize: 20)),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                      textColor: Colors.white,
+                    ),
                   ),
-                  textColor: Colors.white,
-                )
               ],
             ),
       );
