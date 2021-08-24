@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/services.dart';
+import '../helpers/scale_route.dart';
 
 import '../widgets/wave_widget.dart';
 import 'package:video_player/video_player.dart';
@@ -43,7 +44,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
     if (!_seen) {
       await prefs.setBool('seen', true);
-      await Navigator.push(context, MaterialPageRoute(builder: (context) => IntroScreen()));
+      Navigator.push(context,SlideRightRoute(page: IntroScreen()));
     }
     setState(() {
         isLoading1 = false;
@@ -203,6 +204,13 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   }
 
   @override
+    void didChangeDependencies() {
+      super.didChangeDependencies();
+      _vcontroller.play();
+      _vcontroller.setLooping(true);
+    }
+
+  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final bool keyBoardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
@@ -244,8 +252,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                           width: 230,
                           height: 230,
                           child: ClipOval(
-                                child: VideoPlayer(_vcontroller)
-                              ),
+                                  child: VideoPlayer(_vcontroller)
+                                ),
                       ),
                     ],
                   ),
@@ -257,15 +265,6 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // Center(
-                  //   child: Container(
-                  //       width: 200,
-                  //       height: 200,
-                  //       child: ClipOval(
-                  //         child: VideoPlayer(_vcontroller)
-                  //       ),
-                  //     ),
-                  // ),
                   SizedBox(
                     height: 20,
                   ),
@@ -517,49 +516,14 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                   ),
                                 ),
                               ),
-                              // RaisedButton(
-                              //   child:
-                              //       Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
-                              //   onPressed: () => _submit(false),
-                              //   shape: RoundedRectangleBorder(
-                              //     borderRadius: BorderRadius.circular(30),
-                              //   ),
-                              //   padding:
-                              //       EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                              //   color: Theme.of(context).primaryColor,
-                              //   textColor: Theme.of(context).primaryTextTheme.button.color,
-                              // ),
                             SizedBox(
                               height: 10,
                             ),
-                            // Material(
-                            //     child: Ink(
-                            //       decoration: BoxDecoration(
-                            //         color: Colors.white,
-                            //         borderRadius: BorderRadius.circular(10),
-                            //         border: Border.all(color: Colors.blue, width: 1.0),
-                            //       ),
-                            //       child: InkWell(
-                            //         onTap: _switchAuthMode,
-                            //         borderRadius: BorderRadius.circular(10),
-                            //         child: Container(
-                            //           height: 60.0,
-                            //           child: Center(
-                            //             child: Text(
-                            //               '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
-                            //               style: TextStyle(
-                            //                 color: Colors.blue,
-                            //                 fontWeight: FontWeight.w600,fontSize: 16.0,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
                             FlatButton(
                               child: Text(
-                                  '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                                  '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
+                                  style: TextStyle(fontWeight: FontWeight.w800),
+                                  ),
                               onPressed: _switchAuthMode,
                               padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
