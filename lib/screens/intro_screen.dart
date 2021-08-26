@@ -95,7 +95,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 }

@@ -42,7 +42,7 @@ class UserProductsScreen extends StatelessWidget {
                     onRefresh: () => _refreshProducts(context),
                     child: Consumer<Products>(
                       builder: (ctx, productsData, _) => Padding(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: ListView.builder(
                               itemCount: productsData.items.length,
                               itemBuilder: (_, i) => Column(

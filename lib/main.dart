@@ -55,8 +55,13 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'MyShop',
           theme: ThemeData(
-            primarySwatch: Colors.purple,
-            accentColor: Colors.deepOrange,
+            primarySwatch: Colors.yellow,
+            accentColor: Colors.redAccent,
+            inputDecorationTheme: InputDecorationTheme(
+              labelStyle: TextStyle(color: Colors.black),
+              focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.black),) , 
+            ),
+            textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.black,selectionHandleColor: Colors.black),
             fontFamily: 'Lato',
             pageTransitionsTheme: PageTransitionsTheme(
               builders: {

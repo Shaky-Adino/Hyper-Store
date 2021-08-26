@@ -95,9 +95,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   }
 
   void dispose() {
-    super.dispose();
     _controller.dispose();
     _vcontroller.dispose();
+    super.dispose();
   }
 
   void _showErrorDialog(String message) {
@@ -119,6 +119,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   }
 
   Future<void> _submit(bool googleSignin) async {
+
     if(googleSignin){
       setState(() {
         _isLoading = true;
@@ -203,12 +204,12 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     }
   }
 
-  @override
-    void didChangeDependencies() {
-      super.didChangeDependencies();
-      _vcontroller.play();
-      _vcontroller.setLooping(true);
-    }
+  // @override
+  //   void didChangeDependencies() {
+  //     super.didChangeDependencies();
+  //     _vcontroller.play();
+  //     _vcontroller.setLooping(true);
+  //   }
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +226,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
             Container(
               height: deviceSize.height - 200,
-              color: Colors.blue,
+              color: Colors.yellow,
             ),
 
             AnimatedPositioned(
@@ -251,6 +252,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                       Container(
                           width: 230,
                           height: 230,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000), border: Border.all(color: Colors.black,width: 5,)),
                           child: ClipOval(
                                   child: VideoPlayer(_vcontroller)
                                 ),
@@ -275,15 +277,13 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                           children: <Widget>[
                             TextFormField(
                               style: TextStyle(
-                                color: Colors.blue,
                                 fontSize: 14.0,
                               ),
-                              cursorColor: Colors.blue,
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
-                                  Icons.mail_outline,
+                                  Icons.mail,
                                   size: 18,
-                                  color: Colors.blue,
+                                  color: Colors.black,
                                 ),
                                 filled: true,
                                 enabledBorder: UnderlineInputBorder(
@@ -292,12 +292,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Colors.blue),
                                 ),
-                                labelStyle: TextStyle(color: Colors.blue),
-                                focusColor: Colors.blue,
                                 labelText: 'E-Mail'
-                                ),
+                              ),
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value.isEmpty || !value.contains('@')) {
@@ -314,15 +311,13 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
                             TextFormField(
                               style: TextStyle(
-                                color: Colors.blue,
                                 fontSize: 14.0,
                               ),
-                              cursorColor: Colors.blue,
                               decoration: InputDecoration(
                                 prefixIcon: Icon(
-                                  Icons.lock_outline,
+                                  Icons.vpn_key,
                                   size: 18,
-                                  color: Colors.blue,
+                                  color: Colors.black,
                                 ),
                                 filled: true,
                                 enabledBorder: UnderlineInputBorder(
@@ -331,7 +326,6 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Colors.blue),
                                 ),
                                 suffixIcon: GestureDetector(
                                   onTap: (){
@@ -342,11 +336,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                   child: Icon(
                                     showPassword1 ? Icons.visibility : Icons.visibility_off,
                                     size: 18,
-                                    color: Colors.blue,
+                                    color: Colors.black,
                                   ),
                                 ),
-                                labelStyle: TextStyle(color: Colors.blue),
-                                focusColor: Colors.blue,
                                 labelText: 'Password'
                               ),
                               obscureText: !showPassword1,
@@ -378,15 +370,13 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                   child: TextFormField(
                                     enabled: _authMode == AuthMode.Signup,
                                     style: TextStyle(
-                                      color: Colors.blue,
                                       fontSize: 14.0,
                                     ),
-                                    cursorColor: Colors.blue,
                                     decoration: InputDecoration(
                                       prefixIcon: Icon(
-                                        Icons.lock_outline,
+                                        Icons.vpn_key,
                                         size: 18,
-                                        color: Colors.blue,
+                                        color: Colors.black,
                                       ),
                                       filled: true,
                                       enabledBorder: UnderlineInputBorder(
@@ -395,7 +385,6 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(color: Colors.blue),
                                       ),
                                       suffixIcon: GestureDetector(
                                         onTap: (){
@@ -406,11 +395,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                         child: Icon(
                                           showPassword2 ? Icons.visibility : Icons.visibility_off,
                                           size: 18,
-                                          color: Colors.blue,
+                                          color: Colors.black,
                                         ),
                                       ),
-                                      labelStyle: TextStyle(color: Colors.blue),
-                                      focusColor: Colors.blue,
                                       labelText: 'Confirm Password'
                                     ),
                                     obscureText: !showPassword2,
@@ -443,7 +430,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                   opacity: anime,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                                  color: Colors.blue,
+                                                  color: Colors.yellow,
                                                   borderRadius: BorderRadius.circular(10)
                                     ),
                                     child: InkWell(
@@ -471,7 +458,6 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                                 Text(
                                                   ' Sign in with Google',
                                                   style: TextStyle(
-                                                    color: Colors.white,
                                                     fontSize: 16.0,
                                                   ),
                                                 ),
@@ -494,7 +480,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                               Material(
                                 child: Ink(
                                   decoration: BoxDecoration(
-                                    color: Colors.blue,
+                                    color: Colors.yellow,
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.fromBorderSide(BorderSide.none),
                                   ),
@@ -507,7 +493,6 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                         child: Text(
                                           _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
                                           style: TextStyle(
-                                            color: Colors.white,
                                             fontWeight: FontWeight.w600,fontSize: 16.0,
                                           ),
                                         ),
@@ -527,7 +512,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                               onPressed: _switchAuthMode,
                               padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              textColor: Colors.blue,
+                              // textColor: Colors.yellow,
                             ),
                           ],
                         ),
