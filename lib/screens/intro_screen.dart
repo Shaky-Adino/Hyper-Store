@@ -8,7 +8,6 @@ class IntroScreen extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroScreen> {
   VideoPlayerController _controller;
-  static Color logoGreen = Color(0xff25bcbb);
 
   @override
   void initState() {
@@ -28,7 +27,7 @@ class _IntroScreenState extends State<IntroScreen> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      backgroundColor: const Color(0xff18203d),
+      backgroundColor: Colors.yellow,
         body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -41,10 +40,6 @@ class _IntroScreenState extends State<IntroScreen> {
                   margin: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(1000)),
-                      border: Border.all(
-                          color: Colors.white,
-                          width: 4.0,
-                      ),
                   ),
                 ),
                 SizedBox(
@@ -54,13 +49,13 @@ class _IntroScreenState extends State<IntroScreen> {
                 Text(
                   'Welcome to Hyper Store !',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 28),
+                  style: TextStyle(color: Colors.black, fontSize: 28),
                 ),
                 SizedBox(height: 20),
                 Text(
                   'A one-stop portal for you to learn the latest technologies from SCRATCH',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 SizedBox(
                   height: 30,
@@ -76,16 +71,16 @@ class _IntroScreenState extends State<IntroScreen> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      color: logoGreen,
+                      color: Colors.black,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text('Get Started ',
-                              style: TextStyle(color: Colors.white, fontSize: 20)),
+                              style: TextStyle(color: Colors.yellow, fontSize: 20)),
                           Icon(Icons.arrow_forward_ios)
                         ],
                       ),
-                      textColor: Colors.white,
+                      textColor: Colors.yellow,
                     ),
                   ),
               ],

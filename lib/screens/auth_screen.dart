@@ -252,7 +252,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                       Container(
                           width: 230,
                           height: 230,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000), border: Border.all(color: Colors.black,width: 5,)),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000)),
                           child: ClipOval(
                                   child: VideoPlayer(_vcontroller)
                                 ),
