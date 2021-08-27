@@ -9,7 +9,6 @@ import './providers/products.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
 import './providers/auth.dart';
-// import './providers/google_sign_in_provider.dart';
 import './screens/orders_screen.dart';
 import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
@@ -27,9 +26,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (ctx) => GoogleSignInProvider(),
-        // ),
         ChangeNotifierProxyProvider<Auth, Products>(
           create: (_) => Products(null, null, []),
           update: (ctx, auth, previousProducts) => Products(
@@ -86,7 +82,6 @@ class MyApp extends StatelessWidget {
             OrdersScreen.routeName: (ctx) => OrdersScreen(),
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
             EditProductScreen.routeName: (ctx) => EditProductScreen(),
-            AuthScreen.routeName: (ctx) => AuthScreen(),
           },
         ),
       ),

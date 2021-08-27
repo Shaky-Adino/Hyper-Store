@@ -10,7 +10,7 @@ import '../models/http_exception.dart';
 class Auth with ChangeNotifier {
   String _token;
   DateTime _expiryDate;
-  String _userId;
+  String _userId, _username;
   Timer _authTimer;
 
   bool get isAuth {
@@ -30,7 +30,11 @@ class Auth with ChangeNotifier {
     return _userId;
   }
 
-  Future<void> _authenticate(String email, String password, String urlSegment) async {
+  String get username{
+    return _username;
+  }
+
+  Future<void> _authenticate(String email, String password, String urlSegment, [String uname]) async {
     final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyCuJULdoB0HrxZokrt2_E_siSQ9f-Ijd3Y');
     try {
       var postbody;
@@ -58,20 +62,54 @@ class Auth with ChangeNotifier {
       );
       final responseData = json.decode(response.body);
       if (responseData['error'] != null) {
-        print("start");
-        print(responseData);
-        print("end");
         throw HttpException(responseData['error']['message']);
       }
       _token = responseData['idToken'];
       _userId = responseData['localId'];
+
+      final url2 = Uri.parse('https://shop-app-9aa36.firebaseio.com/username/$_userId.json?auth=$_token');
+      if(urlSegment == 'signUp')
+      {
+        try{
+          final res = await http.put(
+            url2,
+            body: json.encode({
+              'username': uname,
+            }),
+          );
+          if(res.statusCode >= 400){
+            throw HttpException('status code >= 400');
+          }
+          _username = uname;
+        } catch(error){
+          throw HttpException("Authentication Failed");
+        }
+      }else{
+        if(urlSegment == 'signInWithIdp'){
+          _username = responseData['firstName'];
+        }
+        else
+        {
+          try{
+            final res = await http.get(url2);
+            if(res.statusCode >= 400){
+              throw Error();
+            }
+            var data = json.decode(res.body);
+            _username = data['username'];
+          } catch(error){
+            throw HttpException("Authentication Failed");
+          }
+        }
+      }
+
       _expiryDate = DateTime.now().add(
         Duration(
           seconds: int.parse(
             responseData['expiresIn'],
           ),
         ),
-      );
+      );  
       _autoLogout();
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
@@ -88,8 +126,8 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<void> signup(String email, String password) async {
-    return _authenticate(email, password, 'signUp');
+  Future<void> signup(String uname, String email, String password) async {
+    return _authenticate(email, password, 'signUp', uname);
   }
 
   Future<void> googleLogin() async {

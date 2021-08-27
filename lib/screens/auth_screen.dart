@@ -15,8 +15,6 @@ import '../models/http_exception.dart';
 enum AuthMode { Signup, Login }
 
 class AuthScreen extends StatefulWidget {
-  static const routeName = '/auth';
-
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
@@ -24,14 +22,16 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin{
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
+  bool flag = false;
   Map<String, String> _authData = {
     'email': '',
     'password': '',
   };
+  String username;
   var _isLoading = false;
   final _passwordController = TextEditingController();
   AnimationController _controller;
-  Animation<Offset> _slideAnimation;
+  Animation<Offset> _slideAnimation, _slideAnimation2;
   Animation<double> _opacityAnimation, anime;
 
   bool showPassword1 = false, showPassword2 = false;
@@ -53,6 +53,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
+    flag = false;
     super.initState();
     isLoading1 = true;
     _vcontroller = VideoPlayerController.asset(
@@ -73,6 +74,15 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     );
     _slideAnimation = Tween<Offset>(
       begin: Offset(0, -1.5),
+      end: Offset(0, 0),
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.fastOutSlowIn,
+      ),
+    );
+    _slideAnimation2 = Tween<Offset>(
+      begin: Offset(0, 1.5),
       end: Offset(0, 0),
     ).animate(
       CurvedAnimation(
@@ -158,6 +168,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(
+          username,
           _authData['email'],
           _authData['password'],
         );
@@ -204,12 +215,16 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     }
   }
 
-  // @override
-  //   void didChangeDependencies() {
-  //     super.didChangeDependencies();
-  //     _vcontroller.play();
-  //     _vcontroller.setLooping(true);
-  //   }
+  @override
+    void didChangeDependencies() {
+      if(flag)
+      {
+        _vcontroller.play();
+      _vcontroller.setLooping(true);
+      }
+      flag = true;
+      super.didChangeDependencies();
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -225,14 +240,14 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
           children: [
 
             Container(
-              height: deviceSize.height - 200,
+              height: deviceSize.height - 400,
               color: Colors.yellow,
             ),
 
             AnimatedPositioned(
               duration: Duration(milliseconds: 500),
               curve: Curves.easeOutQuad,
-              top: keyBoardOpen ? -deviceSize.height / 3.7 : 0.0,
+              top: keyBoardOpen ? -deviceSize.height / 3.5 : 0.0,
               child: WaveWidget(
                 size: deviceSize,
                 yOffset: deviceSize.height/3.0,
@@ -263,259 +278,310 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
             ),
 
             Padding(
-              padding: const EdgeInsets.all(30.0),
+              padding: const EdgeInsets.fromLTRB(30.0, 25.0, 30.0, 8.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: SingleChildScrollView(
-                      child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              style: TextStyle(
-                                fontSize: 14.0,
-                              ),
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.mail,
-                                  size: 18,
-                                  color: Colors.black,
+                  SizedBox(),
+                  Flexible(
+                    child: Form(
+                      key: _formKey,
+                      child: SingleChildScrollView(
+                        child: Column(
+                            children: <Widget>[
+                              AnimatedContainer(
+                                constraints: BoxConstraints(
+                                  minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                                  maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
                                 ),
-                                filled: true,
-                                enabledBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                labelText: 'E-Mail'
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (value) {
-                                if (value.isEmpty || !value.contains('@')) {
-                                  return 'Invalid email!';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _authData['email'] = value;
-                              },
-                            ),
-
-                            SizedBox(height: 10.0),
-
-                            TextFormField(
-                              style: TextStyle(
-                                fontSize: 14.0,
-                              ),
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.vpn_key,
-                                  size: 18,
-                                  color: Colors.black,
-                                ),
-                                filled: true,
-                                enabledBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                suffixIcon: GestureDetector(
-                                  onTap: (){
-                                    setState(() {
-                                         showPassword1 = !showPassword1;                             
-                                    });
-                                  },
-                                  child: Icon(
-                                    showPassword1 ? Icons.visibility : Icons.visibility_off,
-                                    size: 18,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                labelText: 'Password'
-                              ),
-                              obscureText: !showPassword1,
-                              controller: _passwordController,
-                              validator: (value) {
-                                if (value.isEmpty || value.length < 5) {
-                                  return 'Password is too short!';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _authData['password'] = value;
-                              },
-                            ),
-
-                            SizedBox(height: 10.0),
-
-                            AnimatedContainer(
-                              constraints: BoxConstraints(
-                                minHeight: _authMode == AuthMode.Signup ? 60 : 0,
-                                maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
-                              ),
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                              child: FadeTransition(
-                                opacity: _opacityAnimation,
-                                child: SlideTransition(
-                                  position: _slideAnimation,
-                                  child: TextFormField(
-                                    enabled: _authMode == AuthMode.Signup,
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                    ),
-                                    decoration: InputDecoration(
-                                      prefixIcon: Icon(
-                                        Icons.vpn_key,
-                                        size: 18,
-                                        color: Colors.black,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeIn,
+                                child: FadeTransition(
+                                  opacity: _opacityAnimation,
+                                  child: SlideTransition(
+                                    position: _slideAnimation2,
+                                    child: TextFormField(
+                                      enabled: _authMode == AuthMode.Signup,
+                                      style: TextStyle(
+                                        fontSize: 14.0,
                                       ),
-                                      filled: true,
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      suffixIcon: GestureDetector(
-                                        onTap: (){
-                                          setState(() {
-                                                showPassword2 = !showPassword2;                                  
-                                          });
-                                        },
-                                        child: Icon(
-                                          showPassword2 ? Icons.visibility : Icons.visibility_off,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(
+                                          Icons.account_circle,
                                           size: 18,
                                           color: Colors.black,
                                         ),
+                                        filled: true,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        labelText: 'Username'
                                       ),
-                                      labelText: 'Confirm Password'
-                                    ),
-                                    obscureText: !showPassword2,
-                                    validator: _authMode == AuthMode.Signup
-                                        ? (value) {
-                                            if (value != _passwordController.text) {
-                                              return 'Passwords do not match!';
+                                      validator: _authMode == AuthMode.Signup
+                                          ? (value) {
+                                              if (value.isEmpty || value.length < 3) {
+                                                return 'username is too short!!';
+                                              }
+                                              return null;
                                             }
-                                            return null;
-                                          }
-                                        : null,
+                                          : null,
+                                      onSaved: (value){
+                                        username = value;
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            
-                            SizedBox(
-                              height: 10,
-                            ),
 
-                            // if(_authMode == AuthMode.Login)
+                              SizedBox(height: 5,),
+
+                              TextFormField(
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                ),
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.mail,
+                                    size: 18,
+                                    color: Colors.black,
+                                  ),
+                                  filled: true,
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  labelText: 'E-Mail'
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (value) {
+                                  if (value.isEmpty || !value.contains('@')) {
+                                    return 'Invalid email!';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  _authData['email'] = value;
+                                },
+                              ),
+
+                              SizedBox(height: 10.0),
+
+                              TextFormField(
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                ),
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    Icons.vpn_key,
+                                    size: 18,
+                                    color: Colors.black,
+                                  ),
+                                  filled: true,
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  suffixIcon: GestureDetector(
+                                    onTap: (){
+                                      setState(() {
+                                           showPassword1 = !showPassword1;                             
+                                      });
+                                    },
+                                    child: Icon(
+                                      showPassword1 ? Icons.visibility : Icons.visibility_off,
+                                      size: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  labelText: 'Password'
+                                ),
+                                obscureText: !showPassword1,
+                                controller: _passwordController,
+                                validator: (value) {
+                                  if (value.isEmpty || value.length < 5) {
+                                    return 'Password is too short!';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  _authData['password'] = value;
+                                },
+                              ),
+
+                              SizedBox(height: 10.0),
+
                               AnimatedContainer(
                                 constraints: BoxConstraints(
-                                minHeight: _authMode == AuthMode.Login ? 40 : 0,
-                                maxHeight: _authMode == AuthMode.Login ? 50 : 0,
-                              ),
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
+                                  minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                                  maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
+                                ),
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeIn,
                                 child: FadeTransition(
-                                  opacity: anime,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                                  color: Colors.yellow,
-                                                  borderRadius: BorderRadius.circular(10)
-                                    ),
-                                    child: InkWell(
-                                      onTap: () => _submit(true),
-                                      child: Ink(
-                                        color: Colors.white,
-                                        child: Padding(
-                                            padding: EdgeInsets.all(6),
-                                            child: Wrap(
-                                              crossAxisAlignment: WrapCrossAlignment.center,
-                                              children: [
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius: BorderRadius.circular(10)
-                                                  ),
-                                                  padding: EdgeInsets.all(2),
-                                                  child: Image.asset(
-                                                    'assets/images/search.png',
-                                                     height: 28,
-                                                     width: 28,
-                                                  ),
-                                                ),
-                                                SizedBox(width: 12),
-                                                Text(
-                                                  ' Sign in with Google',
-                                                  style: TextStyle(
-                                                    fontSize: 16.0,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                  opacity: _opacityAnimation,
+                                  child: SlideTransition(
+                                    position: _slideAnimation,
+                                    child: TextFormField(
+                                      enabled: _authMode == AuthMode.Signup,
+                                      style: TextStyle(
+                                        fontSize: 14.0,
                                       ),
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(
+                                          Icons.vpn_key,
+                                          size: 18,
+                                          color: Colors.black,
+                                        ),
+                                        filled: true,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        suffixIcon: GestureDetector(
+                                          onTap: (){
+                                            setState(() {
+                                                  showPassword2 = !showPassword2;                                  
+                                            });
+                                          },
+                                          child: Icon(
+                                            showPassword2 ? Icons.visibility : Icons.visibility_off,
+                                            size: 18,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        labelText: 'Confirm Password'
+                                      ),
+                                      obscureText: !showPassword2,
+                                      validator: _authMode == AuthMode.Signup
+                                          ? (value) {
+                                              if (value != _passwordController.text) {
+                                                return 'Passwords do not match!';
+                                              }
+                                              return null;
+                                            }
+                                          : null,
                                     ),
                                   ),
                                 ),
                               ),
+                              
+                              SizedBox(
+                                height: 10,
+                              ),
 
-                            SizedBox(
-                              height: 10,
-                            ),
-
-                            if (_isLoading)
-                              CircularProgressIndicator()
-                            else
-                              Material(
-                                child: Ink(
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.fromBorderSide(BorderSide.none),
-                                  ),
-                                  child: InkWell(
-                                    onTap: () => _submit(false),
-                                    borderRadius: BorderRadius.circular(10),
+                              // if(_authMode == AuthMode.Login)
+                                AnimatedContainer(
+                                  constraints: BoxConstraints(
+                                  minHeight: _authMode == AuthMode.Login ? 40 : 0,
+                                  maxHeight: _authMode == AuthMode.Login ? 50 : 0,
+                                ),
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeIn,
+                                  child: FadeTransition(
+                                    opacity: anime,
                                     child: Container(
-                                      height: 60.0,
-                                      child: Center(
-                                        child: Text(
-                                          _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,fontSize: 16.0,
+                                      decoration: BoxDecoration(
+                                                    color: Colors.yellow,
+                                                    borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: InkWell(
+                                        onTap: () => _submit(true),
+                                        child: Ink(
+                                          color: Colors.white,
+                                          child: Padding(
+                                              padding: EdgeInsets.all(6),
+                                              child: Wrap(
+                                                crossAxisAlignment: WrapCrossAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.circular(10)
+                                                    ),
+                                                    padding: EdgeInsets.all(2),
+                                                    child: Image.asset(
+                                                      'assets/images/search.png',
+                                                       height: 28,
+                                                       width: 28,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 12),
+                                                  Text(
+                                                    ' Sign in with Google',
+                                                    style: TextStyle(
+                                                      fontSize: 16.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                            if(_authMode == AuthMode.Login)
+                              SizedBox(
+                                height: 10,
+                              ),
+
+                              if (_isLoading)
+                                CircularProgressIndicator()
+                              else
+                                Material(
+                                  child: Ink(
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.fromBorderSide(BorderSide.none),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () => _submit(false),
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Container(
+                                        height: 50.0,
+                                        child: Center(
+                                          child: Text(
+                                            _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,fontSize: 16.0,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
+                              SizedBox(
+                                height: 7,
                               ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            FlatButton(
-                              child: Text(
-                                  '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
-                                  style: TextStyle(fontWeight: FontWeight.w800),
-                                  ),
-                              onPressed: _switchAuthMode,
-                              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              // textColor: Colors.yellow,
-                            ),
-                          ],
-                        ),
+                              FlatButton(
+                                child: Text(
+                                    '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
+                                    style: TextStyle(fontWeight: FontWeight.w800),
+                                    ),
+                                onPressed: _switchAuthMode,
+                                padding: EdgeInsets.symmetric(horizontal: 30.0),
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                // textColor: Colors.yellow,
+                              ),
+                            ],
+                          ),
+                      ),
                     ),
                   ),
                 ],
