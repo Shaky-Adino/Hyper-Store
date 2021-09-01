@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/products.dart';
+import '../providers/auth.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   // final String title;
@@ -20,6 +21,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final authData = Provider.of<Auth>(context, listen: false);
     final productId = ModalRoute.of(context).settings.arguments as String; 
     final loadedProduct = Provider.of<Products>(context, listen: false).findById(productId);
 
@@ -38,10 +40,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               title: Text(loadedProduct.title),
               centerTitle: true,
               background: Container(
+                width: deviceSize.width,
                 decoration: BoxDecoration(color: Colors.white),
                 child: ClipPath(
                   clipper: CustomClipPath(),
                   child: Stack(
+                    alignment: Alignment.center,
                     children: [
                       Container(
                         decoration: BoxDecoration(color: Colors.yellow),
@@ -74,7 +78,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       Positioned(
                         bottom: 57.0,
-                        left: deviceSize.width/3 + 7,
                         child: Row(children: [
                             for(var i=0;i<4;i++)
                               AnimatedContainer(
@@ -100,18 +103,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                SizedBox(height: 10),
-                Text(
-                  '₹${loadedProduct.price}',
-                  style: TextStyle(
-                    color: Colors.deepOrange,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 10,
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                              ElevatedButton(
+                                onPressed: (){
+                                  loadedProduct.toggleFavoriteStatus(
+                                    authData.token,
+                                    authData.userId,
+                                  );
+                                  setState(() {});
+                                }, 
+                                child: Icon(loadedProduct.isFavorite ? Icons.favorite : Icons.favorite_border,),
+                                style: ElevatedButton.styleFrom(
+                                  shape: CircleBorder(),
+                                  padding: EdgeInsets.all(10),
+                                  onPrimary: Colors.redAccent
+                                ),
+                              ),
+                              Text(
+                                '₹${loadedProduct.price}',
+                                style: TextStyle(
+                                  color: Colors.deepOrange,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              ElevatedButton(
+                                onPressed: (){}, 
+                                child: Icon(Icons.share),
+                                style: ElevatedButton.styleFrom(
+                                  shape: CircleBorder(),
+                                  padding: EdgeInsets.all(10),
+                                ),
+                              ),
+                    ],
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
