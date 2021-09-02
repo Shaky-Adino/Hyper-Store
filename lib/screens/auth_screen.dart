@@ -483,7 +483,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                               ),
 
                               // if(_authMode == AuthMode.Login)
-                                AnimatedContainer(
+                              AnimatedContainer(
                                   constraints: BoxConstraints(
                                   minHeight: _authMode == AuthMode.Login ? 40 : 0,
                                   maxHeight: _authMode == AuthMode.Login ? 50 : 0,

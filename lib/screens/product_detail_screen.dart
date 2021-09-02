@@ -143,7 +143,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ],
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: double.infinity,
                   child: Text(
                     '${loadedProduct.description}\n Avocado trees are partially self-pollinating and are often propogated through grafting to maintain a predictable quality of the fruit',
@@ -270,6 +270,66 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     fontFamily: 'OpenSans-Bold'),
                               ),
                             ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
+                  child: Material(
+                      child: Ink(
+                                decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment(0.8, 0.0),
+                                        colors: <Color>[Colors.orange,Color(0xffeeee00)]
+                                      )
+                                ),
+                                child: InkWell(
+                                          onTap: () {
+                                            for(var i=0;i<_quantity;i++)
+                                              cart.addItem(loadedProduct.id, loadedProduct.price, loadedProduct.title);
+
+                                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    'Added item to cart!',
+                                                  ),
+                                                  duration: Duration(seconds: 2),
+                                                  action: SnackBarAction(
+                                                    label: 'UNDO',
+                                                    onPressed: () {
+                                                      for(var i=0;i<_quantity;i++)
+                                                        cart.removeSingleItem(loadedProduct.id);
+                                                    },
+                                                  ),
+                                                ),
+                                            );
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Icon(
+                                                    Icons.shopping_cart,
+                                                ),
+                                                SizedBox(
+                                                    width: 10,
+                                                ),
+                                                Text(
+                                                    "Add to cart",
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontFamily: 'OpenSans-Bold'),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                  ),
+                      ),
                   ),
                 ),
                 SizedBox(
