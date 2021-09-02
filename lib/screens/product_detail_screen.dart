@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/products.dart';
 import '../providers/auth.dart';
+import '../providers/cart.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   // final String title;
@@ -16,7 +17,7 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
-  int _selectedPage = 0;
+  int _selectedPage = 0, _quantity = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final authData = Provider.of<Auth>(context, listen: false);
     final productId = ModalRoute.of(context).settings.arguments as String; 
     final loadedProduct = Provider.of<Products>(context, listen: false).findById(productId);
+    final cart = Provider.of<Cart>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -152,6 +154,122 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       fontSize: 14,
                       fontFamily: 'OpenSans'
                     ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      children: [
+                        InkWell(
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onTap: (){
+                            if(_quantity > 1){
+                              setState(() {
+                                _quantity--;
+                              });
+                            }
+                          },
+                          child: Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                bottomLeft: Radius.circular(15),
+                              )
+                            ),
+                            child: Icon(
+                              Icons.remove,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 35,
+                          height: 35,
+                          color: Colors.grey[50],
+                          child: Center(
+                            child: Text(
+                              '$_quantity',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        ),
+                        InkWell(
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onTap: (){
+                            setState(() {
+                              _quantity++;
+                            });
+                          },
+                          child: Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                              )
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: deviceSize.width/2,)
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                          Row(
+                              children: <Widget>[
+                                  Icon(
+                                    Icons.airport_shuttle,
+                                    color: Colors.grey[600],
+                                  ),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Text(
+                                    "Standard: Friday Evening",
+                                    style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 0.2,
+                                        fontSize: 12,
+                                        fontFamily: 'OpenSans'),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "You save : 20%",
+                                style: TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    fontFamily: 'OpenSans-Bold'),
+                              ),
+                            ],
                   ),
                 ),
                 SizedBox(
