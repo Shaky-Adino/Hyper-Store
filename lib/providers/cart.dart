@@ -50,7 +50,7 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addItem(String productId,double price,String title) async {
+  Future<void> addItem(String productId,double price,String title,[int q = 1]) async {
     
     if (_items.containsKey(productId)) {
       // change quantity...
@@ -61,7 +61,7 @@ class Cart with ChangeNotifier {
         final response = await http.patch(
           url,
           body: json.encode({
-            'quantity': quant + 1,
+            'quantity': quant + q,
           }),
         );
         if (response.statusCode >= 400) {
@@ -73,7 +73,7 @@ class Cart with ChangeNotifier {
                 id: existingCartItem.id,
                 title: existingCartItem.title,
                 price: existingCartItem.price,
-                quantity: existingCartItem.quantity + 1,
+                quantity: existingCartItem.quantity + q,
               ),
         );
       } catch (error) {
@@ -89,7 +89,7 @@ class Cart with ChangeNotifier {
             'title': title,
             'price': price,
             'productId': productId,
-            'quantity': 1,
+            'quantity': q,
           }),
         );
         _items.putIfAbsent(
@@ -98,7 +98,7 @@ class Cart with ChangeNotifier {
                 id: json.decode(response.body)['name'],
                 title: title,
                 price: price,
-                quantity: 1,
+                quantity: q,
               ),
         );
       } catch (error) {
@@ -132,7 +132,7 @@ class Cart with ChangeNotifier {
     existingItem = null;
   }
 
-  Future<void> removeSingleItem(String productId) async {
+  Future<void> removeSingleItem(String productId, [int q = 1]) async {
     if (!_items.containsKey(productId)) {
       return;
     }
@@ -141,12 +141,12 @@ class Cart with ChangeNotifier {
     final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/cart/$userId/$id1.json?auth=$authToken');
     int quant = _items[productId].quantity;
 
-    if (quant > 1) {
+    if (quant > q) {
       try{
         final response = await http.patch(
           url,
           body: json.encode({
-            'quantity': quant - 1,
+            'quantity': quant - q,
           }),
         );
         if (response.statusCode >= 400) {
@@ -158,7 +158,7 @@ class Cart with ChangeNotifier {
                 id: existingCartItem.id,
                 title: existingCartItem.title,
                 price: existingCartItem.price,
-                quantity: existingCartItem.quantity - 1,
+                quantity: existingCartItem.quantity - q,
               ),
         );
       } catch (error) {

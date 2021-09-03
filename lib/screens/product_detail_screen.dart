@@ -286,8 +286,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 child: InkWell(
                                           onTap: () {
-                                            for(var i=0;i<_quantity;i++)
-                                              cart.addItem(loadedProduct.id, loadedProduct.price, loadedProduct.title);
+                                            cart.addItem(loadedProduct.id, loadedProduct.price, loadedProduct.title, _quantity);
 
                                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                             ScaffoldMessenger.of(context).showSnackBar(
@@ -299,8 +298,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                   action: SnackBarAction(
                                                     label: 'UNDO',
                                                     onPressed: () {
-                                                      for(var i=0;i<_quantity;i++)
-                                                        cart.removeSingleItem(loadedProduct.id);
+                                                      cart.removeSingleItem(loadedProduct.id, _quantity);
                                                     },
                                                   ),
                                                 ),
