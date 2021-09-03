@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../screens/product_detail_screen.dart';
 import '../providers/cart.dart';
+import '../providers/products.dart';
 
 class CartItem extends StatelessWidget {
   final String id;
@@ -20,6 +21,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<Products>(context).findById(productId);
     return Dismissible(
       key: ValueKey(id),
       background: Container(
@@ -65,25 +67,90 @@ class CartItem extends StatelessWidget {
       onDismissed: (direction) {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
-      child: Card(
-        margin: EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 4,
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: ListTile(
-            leading: CircleAvatar(
-              child: Padding(
-                padding: EdgeInsets.all(5),
-                child: FittedBox(
-                  child: Text('\$$price'),
-                ),
-              ),
-            ),
-            title: Text(title),
-            subtitle: Text('Total: ₹${(price * quantity)}'),
-            trailing: Text('$quantity x'),
+      child: GestureDetector(
+        onTap: () {
+            Navigator.of(context).pushNamed(
+              ProductDetailScreen.routeName,
+              arguments: productId,
+            );
+          },
+        child: Card(
+          margin: EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 4,
+          ),
+          child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 90,
+                                        height: 90,
+                                        child: Hero(
+                                          tag: productId,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            child: Image.network(
+                                              product.imageUrl,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: const EdgeInsets.only(left: 16.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                product.title,
+                                                style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                    FontWeight.w600),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets
+                                                    .symmetric(
+                                                  vertical: 4.0,
+                                                ),
+                                                child: Text(
+                                                  "₹${product.price}",
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Theme.of(context)
+                                                          .accentColor,
+                                                      fontWeight:
+                                                      FontWeight.w600),
+                                                ),
+                                              ),
+                                              Text(
+                                                "Total: ₹${(price * quantity)}",
+                                                style: TextStyle(fontWeight:FontWeight.w400),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 5.0),
+                                          child: CircleAvatar(
+                                              backgroundColor: Colors.yellow,
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(4.0),
+                                                  child: FittedBox(
+                                                    child: Text('$quantity x', style: TextStyle(color: Colors.black),),
+                                                  ),
+                                              ),
+                                          ),
+                                        ),
+                                    ],
+                            ),        
           ),
         ),
       ),

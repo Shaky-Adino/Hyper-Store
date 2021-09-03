@@ -37,7 +37,7 @@ class CartScreen extends StatelessWidget {
                             Theme.of(context).primaryTextTheme.headline6.color,
                       ),
                     ),
-                    backgroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: Colors.orange,
                   ),
                   OrderButton(cart: cart)
                 ],
@@ -81,7 +81,7 @@ class _OrderButtonState extends State<OrderButton> {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      child: _isLoading ? CircularProgressIndicator() : Text('ORDER NOW'),
+      child: _isLoading ? CircularProgressIndicator() : Text('ORDER NOW',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.orange),),
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
           ? null
           : () async {

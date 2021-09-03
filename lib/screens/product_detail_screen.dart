@@ -332,6 +332,47 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 15.0),
+                  child: Material(
+                      child: Ink(
+                                decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: Colors.orange
+                                      // gradient: LinearGradient(
+                                      //   begin: Alignment.topLeft,
+                                      //   end: Alignment(0.8, 0.0),
+                                      //   colors: <Color>[Colors.orange,Color(0xffeeee00)]
+                                      // )
+                                ),
+                                child: InkWell(
+                                          onTap: () {},
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Icon(
+                                                    Icons.shopping_bag,
+                                                ),
+                                                SizedBox(
+                                                    width: 10,
+                                                ),
+                                                Text(
+                                                    "Buy Now",
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontFamily: 'OpenSans-Bold'),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                  ),
+                      ),
+                  ),
+                ),
                 SizedBox(
                   height: 800,
                 ),
