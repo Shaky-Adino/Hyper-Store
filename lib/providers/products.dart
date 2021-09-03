@@ -41,16 +41,12 @@ class Products with ChangeNotifier {
     //       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     // ),
   ];
-  // var _showFavoritesOnly = false;
   final String authToken;
   final String userId;
 
   Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
-    // if (_showFavoritesOnly) {
-    //   return _items.where((prodItem) => prodItem.isFavorite).toList();
-    // }
     return [..._items];
   }
 
@@ -73,8 +69,7 @@ class Products with ChangeNotifier {
   // }
 
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
-    final filterString =
-        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     Uri url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products.json?auth=$authToken&$filterString');
     try {
       final response = await http.get(url);

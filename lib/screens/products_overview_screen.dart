@@ -27,7 +27,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   void initState() {
     // Provider.of<Products>(context).fetchAndSetProducts(); // WON'T WORK!
     // Future.delayed(Duration.zero).then((_) {
-    //   Provider.of<Products>(context).fetchAndSetProducts();
+    //   Provider.of<Cart>(context).fetchAndSetCartItems();
     // });
     super.initState();
   }
@@ -39,9 +39,10 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         _isLoading = true;
       });
       Provider.of<Products>(context).fetchAndSetProducts().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+        Provider.of<Cart>(context, listen: false).fetchAndSetCartItems();
+          setState(() {
+            _isLoading = false;
+          });
       });
     }
     _isInit = false;
