@@ -20,7 +20,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Firebase.initializeApp();
+    // Firebase.initializeApp();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

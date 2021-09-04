@@ -96,10 +96,33 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  Future<void> _saveForm() async {
+  Future<void> _saveForm(BuildContext ctx) async {
+    
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
+    }
+    for(var i=0;i<4;i++){
+      if(!(images[i] is ImageUploadModel)){
+        await showDialog(
+          context: ctx, 
+          barrierDismissible: false,
+          builder: (BuildContext context){
+            return AlertDialog(
+              title: Text("Images missing!"),
+              content: Text("Please attach all 4 images"),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    Navigator.of(context).pop();
+                  }, 
+                  child: Text("OK",style: TextStyle(color: Colors.orange),))
+              ],
+            );
+          }
+        );
+        return;
+      }
     }
     _form.currentState.save();
     setState(() {
@@ -145,13 +168,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Product'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: _saveForm,
+            onPressed: (){_saveForm(context);},
           ),
         ],
       ),
@@ -280,7 +304,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               controller: _imageUrlController,
                               focusNode: _imageUrlFocusNode,
                               onFieldSubmitted: (_) {
-                                _saveForm();
+                                _saveForm(context);
                               },
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -311,10 +335,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ),
                         ],
                       ),
-                      Container(
-                        height: 300,
-                        width: 300,
-                        child: buildGridView(),
+                      Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Text(
+                          "Add images of your product",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      buildGridView(),
+                      Padding(
+                        padding: EdgeInsets.only(left: deviceSize.width*0.75 - 70.0),
+                        child: ElevatedButton(
+                          onPressed: (){
+                            _saveForm(context);
+                          }, 
+                          child: Text("Add product",style: TextStyle(fontWeight: FontWeight.bold),)
+                        ),
                       ),
                     ],
                   ),
@@ -325,6 +361,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
   Widget buildGridView() {
     return GridView.count(
+      physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       crossAxisCount: 3,
       childAspectRatio: 1,
@@ -339,6 +376,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   uploadModel.imageFile,
                   width: 300,
                   height: 300,
+                  fit: BoxFit.fill,
                 ),
                 Positioned(
                   right: 5,
