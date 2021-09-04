@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:image_picker/image_picker.dart';
+import '../models/image_upload_model.dart';
 import '../providers/product.dart';
 import '../providers/products.dart';
 
@@ -12,6 +15,10 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
+
+  List<Object> images = [];
+  File _imageFile;
+
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
@@ -37,6 +44,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
     super.initState();
+    setState(() {
+      images.add("Add Image");
+      images.add("Add Image");
+      images.add("Add Image");
+      images.add("Add Image");
+    });
   }
 
   @override
@@ -298,11 +311,85 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ),
                         ],
                       ),
+                      Container(
+                        height: 300,
+                        width: 300,
+                        child: buildGridView(),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
     );
+  }
+  Widget buildGridView() {
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 3,
+      childAspectRatio: 1,
+      children: List.generate(images.length, (index) {
+        if (images[index] is ImageUploadModel) {
+          ImageUploadModel uploadModel = images[index];
+          return Card(
+            clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: <Widget>[
+              Image.file(
+                  uploadModel.imageFile,
+                  width: 300,
+                  height: 300,
+                ),
+                Positioned(
+                  right: 5,
+                  top: 5,
+                  child: InkWell(
+                    child: Icon(
+                      Icons.remove_circle,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        images.replaceRange(index, index + 1, ['Add Image']);
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Card(
+            child: IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                _onAddImageClick(index);
+              },
+            ),
+          );
+        }
+      }),
+    );
+  }
+
+  Future _onAddImageClick(int index) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _imageFile = File(pickedImage.path);
+      getFileImage(index);
+    });
+  }
+
+  void getFileImage(int index) {
+      setState(() {
+        ImageUploadModel imageUpload = new ImageUploadModel();
+        imageUpload.isUploaded = false;
+        imageUpload.uploading = false;
+        imageUpload.imageFile = _imageFile;
+        imageUpload.imageUrl = '';
+        images.replaceRange(index, index + 1, [imageUpload]);
+      });
   }
 }
