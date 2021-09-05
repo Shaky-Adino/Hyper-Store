@@ -1,8 +1,9 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/image_upload_model.dart';
 import '../models/http_exception.dart';
 import './product.dart';
 
@@ -99,7 +100,16 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> addProduct(Product product) async {
+  void test(){
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    firestore
+            .collection('chats/NDMmgPiiTvp2b33ZrfnO/messages')
+            .snapshots().listen((data) {
+                print(data.docs[0]['text']);
+            });
+  }
+
+  Future<void> addProduct(Product product, List<ImageUploadModel> images) async {
     final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products.json?auth=$authToken');
     try {
       final response = await http.post(
@@ -122,6 +132,7 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
+      
     } catch (error) {
       print(error);
       throw error;

@@ -97,7 +97,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   Future<void> _saveForm(BuildContext ctx) async {
-    
+    List<ImageUploadModel> img = [];
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
@@ -123,6 +123,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
         );
         return;
       }
+      for(var i=0;i<4;i++)
+        img.add(images[i]);
     }
     _form.currentState.save();
     setState(() {
@@ -134,7 +136,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     } else {
       try {
         await Provider.of<Products>(context, listen: false)
-            .addProduct(_editedProduct);
+            .addProduct(_editedProduct, img);
       } catch (error) {
         await showDialog(
           context: context,

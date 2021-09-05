@@ -56,6 +56,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         title: Text('MyShop',
         style: TextStyle(fontWeight: FontWeight.bold),),
         actions: <Widget>[
+          ElevatedButton(onPressed: (){Provider.of<Products>(context, listen: false).test();}, child: Text("Test")),
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
               setState(() {

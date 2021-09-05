@@ -35,8 +35,31 @@ class UserProductItem extends StatelessWidget {
               icon: Icon(Icons.delete),
               onPressed: () async {
                 try {
-                  await Provider.of<Products>(context, listen: false)
-                      .deleteProduct(id);
+                  await showDialog(
+                    context: context, 
+                    barrierDismissible: false,
+                    builder: (BuildContext context){
+                      return AlertDialog(
+                        title: Text("Are you sure?"),
+                        content: Text("This action is permanent and can't be undone !"),
+                        actions: [
+                          TextButton(
+                            onPressed: (){
+                              Navigator.of(context).pop();
+                            }, 
+                            child: Text("CANCEL",style: TextStyle(color: Colors.orange),)
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await Provider.of<Products>(context, listen: false).deleteProduct(id);
+                              Navigator.of(context).pop();
+                            }, 
+                            child: Text("YES",style: TextStyle(color: Colors.orange),)
+                          ),
+                        ],
+                      );
+                    }
+                  );
                 } catch (error) {
                   scaffold.showSnackBar(
                     SnackBar(
