@@ -49,6 +49,16 @@ class Auth with ChangeNotifier {
     }
   }
 
+  Future<void> newsignInWithGoogle() async {
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    authResult = await _auth.signInWithCredential(credential);
+  }
+
   Future<void> newsignUp(String email, String password) async {
     try{
       authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
