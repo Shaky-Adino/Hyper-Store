@@ -288,6 +288,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                       key: _formKey,
                       child: SingleChildScrollView(
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               AnimatedContainer(
                                 constraints: BoxConstraints(

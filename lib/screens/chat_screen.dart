@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../widgets/chat/messages.dart';
 import '../widgets/app_drawer.dart';
 
 class ChatScreen extends StatelessWidget{
@@ -8,24 +9,18 @@ class ChatScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('FlutterChat'),
+      ),
       drawer: AppDrawer(),
-      body: StreamBuilder(
-        stream: firestore.collection('chats/NDMmgPiiTvp2b33ZrfnO/messages').snapshots(),
-        builder: (ctx, streamSnapshot){
-          if(streamSnapshot.connectionState == ConnectionState.waiting){
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final documents = streamSnapshot.data.docs;
-          return ListView.builder(
-            itemCount: documents.length,
-            itemBuilder: (ctx, index) => Container(
-              padding: EdgeInsets.all(8),
-              child: Text(documents[index]['text']),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Messages()
             ),
-            );
-        },
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
