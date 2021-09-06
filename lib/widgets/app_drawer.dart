@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/chat_screen.dart';
 import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
 import '../providers/auth.dart';
@@ -44,6 +45,15 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(UserProductsScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.chat),
+            title: Text('Chat Screen'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(ChatScreen.routeName);
             },
           ),
           Divider(),

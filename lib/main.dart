@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import './screens/chat_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/products_overview_screen.dart';
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
                           OrdersScreen.routeName: (ctx) => OrdersScreen(),
                           UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
                           EditProductScreen.routeName: (ctx) => EditProductScreen(),
+                          ChatScreen.routeName : (ctx) => ChatScreen(),
                         },
                       ),
                     ),

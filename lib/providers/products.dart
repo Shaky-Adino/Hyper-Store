@@ -100,15 +100,6 @@ class Products with ChangeNotifier {
     }
   }
 
-  void test(){
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    firestore
-            .collection('chats/NDMmgPiiTvp2b33ZrfnO/messages')
-            .snapshots().listen((data) {
-                print(data.docs[0]['text']);
-            });
-  }
-
   Future<void> addProduct(Product product, List<ImageUploadModel> images) async {
     final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products.json?auth=$authToken');
     try {
