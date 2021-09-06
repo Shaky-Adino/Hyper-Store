@@ -162,15 +162,15 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       if (_authMode == AuthMode.Login) {
         // Log user in
         await Provider.of<Auth>(context, listen: false).login(
-          _authData['email'],
-          _authData['password'],
+          _authData['email'].trim(),
+          _authData['password'].trim(),
         );
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(
-          username,
-          _authData['email'],
-          _authData['password'],
+          username.trim(),
+          _authData['email'].trim(),
+          _authData['password'].trim(),
         );
       }
     } on HttpException catch (error) {

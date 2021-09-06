@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
-
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
+
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  UserCredential authResult;
+
   String _token;
   DateTime _expiryDate;
   String _userId, _username;
@@ -34,12 +39,39 @@ class Auth with ChangeNotifier {
     return _username;
   }
 
+  Future<void> newlogin(String email, String password) async {
+    try{
+      authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      _token = await _auth.currentUser.getIdToken();
+      _userId = _auth.currentUser.uid;
+    } catch(e){
+      throw HttpException(e.code);
+    }
+  }
+
+  Future<void> newsignUp(String email, String password) async {
+    try{
+      authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      _token = await _auth.currentUser.getIdToken();
+      _userId = _auth.currentUser.uid;
+    } catch(e){
+      throw HttpException(e.code);
+    }
+  }
+
+  Future<void> newlogout() async {
+    _token = null;
+    _userId = null;
+    await _auth.signOut();
+  }
+
   Future<void> _authenticate(String email, String password, String urlSegment, [String uname]) async {
+
     final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyCuJULdoB0HrxZokrt2_E_siSQ9f-Ijd3Y');
     try {
       var postbody;
       if(urlSegment == 'signInWithIdp')
-          postbody =  json.encode(
+          postbody = json.encode(
             {
               'requestUri': 'http://localhost',
               'postBody' : 'id_token=$password&providerId=google.com',
@@ -48,7 +80,7 @@ class Auth with ChangeNotifier {
             },
           );
       else
-          postbody =  json.encode(
+          postbody = json.encode(
             {
               'email': email,
               'password': password,
