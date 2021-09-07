@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +10,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   UserCredential authResult;
@@ -44,6 +47,7 @@ class Auth with ChangeNotifier {
       authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
       _token = await _auth.currentUser.getIdToken();
       _userId = _auth.currentUser.uid;
+      _username = await firestore.collection('users').doc(_userId).get().then((documentSnapshot) => documentSnapshot.data()['username']);
     } catch(e){
       throw HttpException(e.code);
     }
@@ -57,15 +61,26 @@ class Auth with ChangeNotifier {
       idToken: googleAuth.idToken,
     );
     authResult = await _auth.signInWithCredential(credential);
+    final user = authResult.user;
     _token = await _auth.currentUser.getIdToken();
     _userId = _auth.currentUser.uid;
+    await firestore.collection('users').doc(_userId).set({
+        'username': user.displayName,
+        'email': user.email
+    });
+    _username = user.displayName;
   }
 
-  Future<void> newsignUp(String email, String password) async {
+  Future<void> newsignUp(String email, String password, String username) async {
     try{
       authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       _token = await _auth.currentUser.getIdToken();
       _userId = _auth.currentUser.uid;
+      await firestore.collection('users').doc(_userId).set({
+        'username': username,
+        'email': email
+      });
+      _username = username;
     } catch(e){
       throw HttpException(e.code);
     }
