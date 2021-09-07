@@ -57,6 +57,8 @@ class Auth with ChangeNotifier {
       idToken: googleAuth.idToken,
     );
     authResult = await _auth.signInWithCredential(credential);
+    _token = await _auth.currentUser.getIdToken();
+    _userId = _auth.currentUser.uid;
   }
 
   Future<void> newsignUp(String email, String password) async {

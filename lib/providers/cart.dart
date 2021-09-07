@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,6 +19,9 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   Map<String, CartItem> _items = {};
   final String authToken;
   final String userId;
@@ -30,6 +34,23 @@ class Cart with ChangeNotifier {
 
   int get itemCount {
     return _items.length;
+  }
+
+  Future<void> newfetchAndSetCartItems() async {
+    QuerySnapshot querySnapshot = await firestore.collection('cart/$userId/mycart').get();
+    final Map<String, CartItem> loadedItems = {};
+    final extractedData = querySnapshot.docs as Map<String, dynamic>;
+    if (extractedData == null) {
+      return;
+    }
+    extractedData.forEach((itemId, itemData) {
+      loadedItems[itemData['productId']] = CartItem(id: itemId, 
+                                                title: itemData['title'], 
+                                                quantity: itemData['quantity'], 
+                                                price: itemData['price']);
+    });
+    _items = loadedItems;
+    notifyListeners();
   }
 
   Future<void> fetchAndSetCartItems() async {
@@ -47,6 +68,55 @@ class Cart with ChangeNotifier {
                                                 price: itemData['price']);
     });
     _items = loadedItems;
+    notifyListeners();
+  }
+
+  Future<void> newaddItem(String productId,double price,String title,[int q = 1]) async {
+    
+    if (_items.containsKey(productId)) {
+      // change quantity...
+      final String id1 = _items[productId].id;
+      int quant = _items[productId].quantity;
+      try
+      {
+        await firestore.collection('cart/$userId/mycart').doc(id1).update({
+            'quantity': quant + q,
+        });
+        _items.update(
+          productId,
+          (existingCartItem) => CartItem(
+                id: existingCartItem.id,
+                title: existingCartItem.title,
+                price: existingCartItem.price,
+                quantity: existingCartItem.quantity + q,
+              ),
+        );
+      } catch(e){
+        throw HttpException('Could not add cart item.');
+      }
+    } else {
+      try
+      {
+        DocumentReference docRef = await firestore.collection('cart/$userId/mycart').add({
+            'title': title,
+            'price': price,
+            'productId': productId,
+            'quantity': q,
+        });
+        _items.putIfAbsent(
+            productId,
+            () => CartItem(
+                  id: docRef.id,
+                  title: title,
+                  price: price,
+                  quantity: q,
+                ),
+        );
+      } catch (error) {
+        print(error);
+        throw error;
+      }
+    }
     notifyListeners();
   }
 
@@ -117,6 +187,22 @@ class Cart with ChangeNotifier {
     return total;
   }
 
+  Future<void> newremoveItem(String productId) async {
+    final id1 = _items[productId].id;
+    var existingItem = _items[productId];
+    _items.remove(productId);
+    notifyListeners();
+
+    try{
+      await firestore.collection('cart/$userId/mycart').doc(id1).delete();
+    } catch(e){
+      _items[productId] = existingItem;
+      notifyListeners();
+      throw HttpException('Could not delete cart item.');
+    }
+    existingItem = null;
+  }
+
   Future<void> removeItem(String productId) async {
     final id1 = _items[productId].id;
     final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/cart/$userId/$id1.json?auth=$authToken');
@@ -130,6 +216,48 @@ class Cart with ChangeNotifier {
       throw HttpException('Could not delete cart item.');
     }
     existingItem = null;
+  }
+
+  Future<void> newremoveSingleItem(String productId, [int q = 1]) async {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+
+    final id1 = _items[productId].id;
+    int quant = _items[productId].quantity;
+
+    if (quant > q) {
+      try
+      {
+        await firestore.collection('cart/$userId/mycart').doc(id1).update({
+            'quantity': quant - q,
+        });
+        _items.update(
+          productId,
+          (existingCartItem) => CartItem(
+                id: existingCartItem.id,
+                title: existingCartItem.title,
+                price: existingCartItem.price,
+                quantity: existingCartItem.quantity - q,
+              ),
+        );
+      } catch(e){
+        throw HttpException('Could not delete cart item.');
+      }
+      notifyListeners();
+    } else {
+      var existingItem = _items[productId];
+      _items.remove(productId);
+      notifyListeners();
+      try{
+        await firestore.collection('cart/$userId/mycart').doc(id1).delete();
+      } catch(e){
+        _items[productId] = existingItem;
+        notifyListeners();
+        throw HttpException('Could not delete cart item.');
+      }
+      existingItem = null;
+    }
   }
 
   Future<void> removeSingleItem(String productId, [int q = 1]) async {
@@ -178,6 +306,12 @@ class Cart with ChangeNotifier {
       }
       existingItem = null;
     }
+  }
+
+  Future<void> newclear() async {
+    await firestore.collection('cart').doc(userId).delete();
+    _items = {};
+    notifyListeners();
   }
 
   Future<void> clear() async {

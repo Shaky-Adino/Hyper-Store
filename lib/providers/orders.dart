@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,6 +21,9 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   List<OrderItem> _orders = [];
   final String authToken;
   final String userId;
@@ -28,6 +32,36 @@ class Orders with ChangeNotifier {
 
   List<OrderItem> get orders {
     return [..._orders];
+  }
+
+  Future<void> newfetchAndSetOrders() async {
+    final List<OrderItem> loadedOrders = [];
+    QuerySnapshot querySnapshot = await firestore.collection('orders/$userId/myorder').get();
+    final extractedData = querySnapshot.docs as Map<String, dynamic>;
+    if (extractedData == null) {
+      return;
+    }
+    extractedData.forEach((orderId, orderData) {
+      loadedOrders.add(
+        OrderItem(
+          id: orderId,
+          amount: orderData['amount'],
+          dateTime: DateTime.parse(orderData['dateTime']),
+          products: (orderData['products'] as List<dynamic>)
+              .map(
+                (item) => CartItem(
+                  id: item['id'],
+                  price: item['price'],
+                  quantity: item['quantity'],
+                  title: item['title'],
+                ),
+              )
+              .toList(),
+        ),
+      );
+    });
+    _orders = loadedOrders.reversed.toList();
+    notifyListeners();
   }
 
   Future<void> fetchAndSetOrders() async {
@@ -58,6 +92,33 @@ class Orders with ChangeNotifier {
       );
     });
     _orders = loadedOrders.reversed.toList();
+    notifyListeners();
+  }
+
+  Future<void> newaddOrder(List<CartItem> cartProducts, double total) async {
+    final timestamp = DateTime.now();
+
+    DocumentReference docRef = await firestore.collection('orders/$userId/myorder').add({
+        'amount': total,
+        'dateTime': timestamp.toIso8601String(),
+        'products': cartProducts.map((cp) => {
+                      'id': cp.id,
+                      'title': cp.title,
+                      'quantity': cp.quantity,
+                      'price': cp.price,
+                    }).toList(),
+    });
+
+    _orders.insert(
+      0,
+      OrderItem(
+        id: docRef.id,
+        amount: total,
+        dateTime: timestamp,
+        products: cartProducts,
+      ),
+    );
+
     notifyListeners();
   }
 

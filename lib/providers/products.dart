@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/image_upload_model.dart';
 import '../models/http_exception.dart';
 import './product.dart';
 
 class Products with ChangeNotifier {
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -69,6 +72,40 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  Future<void> newfetchAndSetProducts([bool filterByUser = false]) async {
+    var extractedData;
+    QuerySnapshot querySnapshot1, querySnapshot2;
+    try {
+
+      if(filterByUser)
+        querySnapshot1 = await firestore.collection('products').where('creatorId', isEqualTo: userId).get();
+      else
+        querySnapshot1 = await firestore.collection('products').get();
+
+      extractedData = querySnapshot1.docs as Map<String, dynamic>;
+      if (extractedData == null) {
+        return;
+      }
+      querySnapshot2 = await firestore.collection('userFavorites/$userId/myFav').get();
+      final favoriteData = querySnapshot2.docs as Map<String, dynamic>;
+      final List<Product> loadedProducts = [];
+      extractedData.forEach((prodId, prodData) {
+        loadedProducts.add(Product(
+          id: prodId,
+          title: prodData['title'],
+          description: prodData['description'],
+          price: prodData['price'],
+          isFavorite: favoriteData == null ? false : favoriteData[prodId] ?? false,
+          imageUrl: prodData['imageUrl'],
+        ));
+      });
+      _items = loadedProducts;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     Uri url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products.json?auth=$authToken&$filterString');
@@ -97,6 +134,31 @@ class Products with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       throw (error);
+    }
+  }
+
+  Future<void> newaddProduct(Product product, List<ImageUploadModel> images) async{
+    try
+    {
+      DocumentReference docRef = await firestore.collection('products').add({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'creatorId': userId,
+      });
+      final newProduct = Product(
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          id: docRef.id,
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
     }
   }
 
@@ -130,6 +192,22 @@ class Products with ChangeNotifier {
     }
   }
 
+  Future<void> newupdateProduct(String id, Product newProduct) async {
+    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    if (prodIndex >= 0) {
+      await firestore.collection('products').doc(id).update({
+          'title': newProduct.title,
+          'description': newProduct.description,
+          'imageUrl': newProduct.imageUrl,
+          'price': newProduct.price
+      });
+      _items[prodIndex] = newProduct;
+      notifyListeners();
+    } else {
+      print('...');
+    }
+  }
+
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
@@ -146,6 +224,21 @@ class Products with ChangeNotifier {
     } else {
       print('...');
     }
+  }
+
+  Future<void> newdeleteProduct(String id) async {
+    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    var existingProduct = _items[existingProductIndex];
+    _items.removeAt(existingProductIndex);
+    notifyListeners();
+    try{
+      await firestore.collection('products').doc(id).delete();
+    } catch(e){
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException('Could not delete product.');
+    }
+    existingProduct = null;
   }
 
   Future<void> deleteProduct(String id) async {

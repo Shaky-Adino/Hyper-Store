@@ -1,9 +1,13 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   final String id;
   final String title;
   final String description;
@@ -25,11 +29,26 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> newtoggleFavoriteStatus(String token, String userId) async {
+    final oldStatus = isFavorite;
+    isFavorite = !isFavorite;
+    notifyListeners();
+
+    try{
+      await firestore.collection('userFavorites/$userId/myFav').doc(id).update({
+          'isFavorite': isFavorite
+      });
+    } catch (error) {
+      _setFavValue(oldStatus);
+    }
+  }
+
   Future<void> toggleFavoriteStatus(String token, String userId) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
     final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/userFavorites/$userId/$id.json?auth=$token');
+
     try {
       final response = await http.put(
         url,
