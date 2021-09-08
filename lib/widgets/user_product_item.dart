@@ -51,7 +51,7 @@ class UserProductItem extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () async {
-                              await Provider.of<Products>(context, listen: false).deleteProduct(id);
+                              await Provider.of<Products>(context, listen: false).newdeleteProduct(id);
                               Navigator.of(context).pop();
                             }, 
                             child: Text("YES",style: TextStyle(color: Colors.orange),)

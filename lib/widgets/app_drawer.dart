@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../screens/products_overview_screen.dart';
+import '../helpers/custom_route.dart';
 
 import '../screens/chat_screen.dart';
 import '../screens/orders_screen.dart';
@@ -9,7 +11,7 @@ import '../providers/auth.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String username = Provider.of<Auth>(context, listen: false).username;
+    String username = Provider.of<Auth>(context).username;
     return Drawer(
       child: Column(
         children: <Widget>[
@@ -22,7 +24,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.shop),
             title: Text('Shop'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
+              Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
             },
           ),
           Divider(),
@@ -63,7 +65,7 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed('/');
-              Provider.of<Auth>(context, listen: false).logout();
+              Provider.of<Auth>(context,listen: false).newlogout();
             },
           ),
         ],

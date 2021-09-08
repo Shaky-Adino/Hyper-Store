@@ -17,7 +17,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
-    final authData = Provider.of<Auth>(context, listen: false);
+    final authData = Provider.of<Auth>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -46,8 +46,7 @@ class ProductItem extends StatelessWidget {
                   ),
                   color: Theme.of(context).accentColor,
                   onPressed: () {
-                    product.toggleFavoriteStatus(
-                      authData.token,
+                    product.newtoggleFavoriteStatus(
                       authData.userId,
                     );
                   },
@@ -62,7 +61,7 @@ class ProductItem extends StatelessWidget {
               Icons.shopping_cart,
             ),
             onPressed: () {
-              cart.addItem(product.id, product.price, product.title);
+              cart.newaddItem(product.id, product.price, product.title);
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -73,7 +72,7 @@ class ProductItem extends StatelessWidget {
                   action: SnackBarAction(
                     label: 'UNDO',
                     onPressed: () {
-                      cart.removeSingleItem(product.id);
+                      cart.newremoveSingleItem(product.id);
                     },
                   ),
                 ),

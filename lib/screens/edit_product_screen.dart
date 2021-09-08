@@ -132,11 +132,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
     if (_editedProduct.id != null) {
       await Provider.of<Products>(context, listen: false)
-          .updateProduct(_editedProduct.id, _editedProduct);
+          .newupdateProduct(_editedProduct.id, _editedProduct);
     } else {
       try {
         await Provider.of<Products>(context, listen: false)
-            .addProduct(_editedProduct, img);
+            .newaddProduct(_editedProduct, img);
       } catch (error) {
         await showDialog(
           context: context,

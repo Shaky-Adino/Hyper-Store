@@ -88,14 +88,14 @@ class _OrderButtonState extends State<OrderButton> {
               setState(() {
                 _isLoading = true;
               });
-              await Provider.of<Orders>(context, listen: false).addOrder(
+              await Provider.of<Orders>(context, listen: false).newaddOrder(
                 widget.cart.items.values.toList(),
                 widget.cart.totalAmount,
               );
               setState(() {
                 _isLoading = false;
               });
-              widget.cart.clear();
+              widget.cart.newclear();
             },
       textColor: Theme.of(context).primaryColor,
     );

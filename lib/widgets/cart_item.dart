@@ -65,7 +65,7 @@ class CartItem extends StatelessWidget {
         );
       },
       onDismissed: (direction) {
-        Provider.of<Cart>(context, listen: false).removeItem(productId);
+        Provider.of<Cart>(context, listen: false).newremoveItem(productId);
       },
       child: GestureDetector(
         onTap: () {

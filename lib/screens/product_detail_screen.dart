@@ -22,7 +22,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final authData = Provider.of<Auth>(context, listen: false);
+    final authData = Provider.of<Auth>(context);
     final productId = ModalRoute.of(context).settings.arguments as String; 
     final loadedProduct = Provider.of<Products>(context, listen: false).findById(productId);
     final cart = Provider.of<Cart>(context, listen: false);
@@ -110,8 +110,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                               ElevatedButton(
                                 onPressed: (){
-                                  loadedProduct.toggleFavoriteStatus(
-                                    authData.token,
+                                  loadedProduct.newtoggleFavoriteStatus(
                                     authData.userId,
                                   );
                                   setState(() {});
@@ -286,7 +285,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 child: InkWell(
                                           onTap: () {
-                                            cart.addItem(loadedProduct.id, loadedProduct.price, loadedProduct.title, _quantity);
+                                            cart.newaddItem(loadedProduct.id, loadedProduct.price, loadedProduct.title, _quantity);
 
                                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                             ScaffoldMessenger.of(context).showSnackBar(
@@ -298,7 +297,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                   action: SnackBarAction(
                                                     label: 'UNDO',
                                                     onPressed: () {
-                                                      cart.removeSingleItem(loadedProduct.id, _quantity);
+                                                      cart.newremoveSingleItem(loadedProduct.id, _quantity);
                                                     },
                                                   ),
                                                 ),

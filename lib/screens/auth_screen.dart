@@ -1,11 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../helpers/scale_route.dart';
 
 import '../widgets/wave_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopapp/screens/splash_screen.dart';
 import './intro_screen.dart';
@@ -35,27 +35,31 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   Animation<double> _opacityAnimation, anime;
 
   bool showPassword1 = false, showPassword2 = false;
-  bool isLoading1 = true;
+  bool isLoading1 = false;
   VideoPlayerController _vcontroller;
 
-  void checkFirstSeen() async {
-    final prefs = await SharedPreferences.getInstance();
-    bool _seen = (prefs.getBool('seen') ?? false);
+  // void checkFirstSeen() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   bool _seen = (prefs.getBool('seen') ?? false);
 
-    if (!_seen) {
-      await prefs.setBool('seen', true);
-      Navigator.push(context,SlideRightRoute(page: IntroScreen()));
-    }
-    setState(() {
-        isLoading1 = false;
-    });
+  //   if (!_seen) {
+  //     await prefs.setBool('seen', true);
+  //     Navigator.push(context,SlideRightRoute(page: IntroScreen()));
+  //   }
+  //   setState(() {
+  //       isLoading1 = false;
+  //   });
+  // }
+  
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
   }
 
   @override
   void initState() {
     flag = false;
     super.initState();
-    isLoading1 = true;
+    // isLoading1 = true;
     _vcontroller = VideoPlayerController.asset(
         'assets/fire.mp4')
       ..initialize().then((_) {
@@ -65,7 +69,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
         // Ensure the first frame is shown after the video is initialized
         setState(() {});
       });
-    checkFirstSeen();
+    // checkFirstSeen();
     _controller = AnimationController(
       vsync: this,
       duration: Duration(
@@ -131,12 +135,12 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   Future<void> _submit(bool googleSignin) async {
 
     if(googleSignin){
-      setState(() {
+      setStateIfMounted(() {
         _isLoading = true;
       });
 
       try {
-        await Provider.of<Auth>(context,listen: false).googleLogin();
+        await Provider.of<Auth>(context,listen: false).newgoogleLogin();
       } on HttpException catch (error) {
         handleError(error);
       } catch (error) {
@@ -144,7 +148,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
         _showErrorDialog(errorMessage);
       }
 
-      setState(() {
+      setStateIfMounted(() {
         _isLoading = false;
       });
 
@@ -155,19 +159,19 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       return;
     }
     _formKey.currentState.save();
-    setState(() {
+    setStateIfMounted(() {
       _isLoading = true;
     });
     try {
       if (_authMode == AuthMode.Login) {
         // Log user in
-        await Provider.of<Auth>(context, listen: false).login(
+        await Provider.of<Auth>(context,listen: false).newlogin(
           _authData['email'].trim(),
           _authData['password'].trim(),
         );
       } else {
         // Sign user up
-        await Provider.of<Auth>(context, listen: false).signup(
+        await Provider.of<Auth>(context,listen: false).newsignUp(
           username.trim(),
           _authData['email'].trim(),
           _authData['password'].trim(),
@@ -176,11 +180,12 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     } on HttpException catch (error) {
       handleError(error);
     } catch (error) {
+      print(error);
        const errorMessage = 'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);
     }
 
-    setState(() {
+    setStateIfMounted(() {
       _isLoading = false;
     });
   }
@@ -203,12 +208,12 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
   void _switchAuthMode() {
     if (_authMode == AuthMode.Login) {
-      setState(() {
+      setStateIfMounted(() {
         _authMode = AuthMode.Signup;
       });
       _controller.forward();
     } else {
-      setState(() {
+      setStateIfMounted(() {
         _authMode = AuthMode.Login;
       });
       _controller.reverse();
@@ -394,7 +399,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                   ),
                                   suffixIcon: GestureDetector(
                                     onTap: (){
-                                      setState(() {
+                                      setStateIfMounted(() {
                                            showPassword1 = !showPassword1;                             
                                       });
                                     },
@@ -453,7 +458,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                         ),
                                         suffixIcon: GestureDetector(
                                           onTap: (){
-                                            setState(() {
+                                            setStateIfMounted(() {
                                                   showPassword2 = !showPassword2;                                  
                                             });
                                           },

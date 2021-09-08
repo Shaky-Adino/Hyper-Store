@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-class Product with ChangeNotifier {
+class Product with ChangeNotifier{
 
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore firestore;
 
   final String id;
   final String title;
@@ -29,11 +29,11 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> newtoggleFavoriteStatus(String token, String userId) async {
+  Future<void> newtoggleFavoriteStatus(String userId) async {
+    firestore = FirebaseFirestore.instance;
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
-
     try{
       await firestore.collection('userFavorites/$userId/myFav').doc(id).update({
           'isFavorite': isFavorite
@@ -43,24 +43,24 @@ class Product with ChangeNotifier {
     }
   }
 
-  Future<void> toggleFavoriteStatus(String token, String userId) async {
-    final oldStatus = isFavorite;
-    isFavorite = !isFavorite;
-    notifyListeners();
-    final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/userFavorites/$userId/$id.json?auth=$token');
+  // Future<void> toggleFavoriteStatus(String token, String userId) async {
+  //   final oldStatus = isFavorite;
+  //   isFavorite = !isFavorite;
+  //   notifyListeners();
+  //   final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/userFavorites/$userId/$id.json?auth=$token');
 
-    try {
-      final response = await http.put(
-        url,
-        body: json.encode(
-          isFavorite,
-        ),
-      );
-      if (response.statusCode >= 400) {
-        _setFavValue(oldStatus);
-      }
-    } catch (error) {
-      _setFavValue(oldStatus);
-    }
-  }
+  //   try {
+  //     final response = await http.put(
+  //       url,
+  //       body: json.encode(
+  //         isFavorite,
+  //       ),
+  //     );
+  //     if (response.statusCode >= 400) {
+  //       _setFavValue(oldStatus);
+  //     }
+  //   } catch (error) {
+  //     _setFavValue(oldStatus);
+  //   }
+  // }
 }

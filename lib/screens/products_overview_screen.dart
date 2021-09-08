@@ -14,6 +14,7 @@ enum FilterOptions {
 }
 
 class ProductsOverviewScreen extends StatefulWidget {
+  static const routeName = '/product-overview';
   @override
   _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
 }
@@ -32,18 +33,24 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     super.initState();
   }
 
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
+  }
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      setState(() {
+      setStateIfMounted(() {
         _isLoading = true;
       });
-      Provider.of<Cart>(context, listen: false).fetchAndSetCartItems();
-      Provider.of<Products>(context, listen: false).fetchAndSetProducts().then((_) {
-          setState(() {
-            _isLoading = false;
-          });
-      });
+      if(mounted){
+        Provider.of<Cart>(context, listen: false).newfetchAndSetCartItems();
+        Provider.of<Products>(context, listen: false).newfetchAndSetProducts().then((_) {
+            setStateIfMounted(() {
+                _isLoading = false;
+            });
+        });
+      }
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -58,7 +65,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
-              setState(() {
+              setStateIfMounted(() {
                 if (selectedValue == FilterOptions.Favorites) {
                   _showOnlyFavorites = true;
                 } else {

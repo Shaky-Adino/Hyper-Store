@@ -7,7 +7,7 @@ import '../models/image_upload_model.dart';
 import '../models/http_exception.dart';
 import './product.dart';
 
-class Products with ChangeNotifier {
+class Products with ChangeNotifier{
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -45,10 +45,10 @@ class Products with ChangeNotifier {
     //       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     // ),
   ];
-  final String authToken;
-  final String userId;
+  // final String authToken;
+  String userId;
 
-  Products(this.authToken, this.userId, this._items);
+  Products(this.userId, this._items);
 
   List<Product> get items {
     return [..._items];
@@ -60,6 +60,10 @@ class Products with ChangeNotifier {
 
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
+  }
+
+  void updates(String uid){
+    userId = uid;
   }
 
   // void showFavoritesOnly() {
@@ -82,20 +86,20 @@ class Products with ChangeNotifier {
       else
         querySnapshot1 = await firestore.collection('products').get();
 
-      extractedData = querySnapshot1.docs as Map<String, dynamic>;
+      extractedData = querySnapshot1.docs;
       if (extractedData == null) {
         return;
       }
-      querySnapshot2 = await firestore.collection('userFavorites/$userId/myFav').get();
-      final favoriteData = querySnapshot2.docs as Map<String, dynamic>;
+      querySnapshot2 = await firestore.collection('userFavorites').doc(userId).collection('myFav').get();
+      final favoriteData = querySnapshot2.docs;
       final List<Product> loadedProducts = [];
-      extractedData.forEach((prodId, prodData) {
+      extractedData.forEach((prodData) {
         loadedProducts.add(Product(
-          id: prodId,
+          id: prodData.id,
           title: prodData['title'],
           description: prodData['description'],
           price: prodData['price'],
-          isFavorite: favoriteData == null ? false : favoriteData[prodId] ?? false,
+          isFavorite: favoriteData == null ? false : favoriteData[prodData.id]['isfavorite'] ?? false,
           imageUrl: prodData['imageUrl'],
         ));
       });
@@ -106,36 +110,36 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
-    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
-    Uri url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products.json?auth=$authToken&$filterString');
-    try {
-      final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      if (extractedData == null) {
-        return;
-      }
-      url = Uri.parse('https://shop-app-9aa36.firebaseio.com/userFavorites/$userId.json?auth=$authToken');
-      final favoriteResponse = await http.get(url);
-      final favoriteData = json.decode(favoriteResponse.body);
-      final List<Product> loadedProducts = [];
-      extractedData.forEach((prodId, prodData) {
-        loadedProducts.add(Product(
-          id: prodId,
-          title: prodData['title'],
-          description: prodData['description'],
-          price: prodData['price'],
-          isFavorite:
-              favoriteData == null ? false : favoriteData[prodId] ?? false,
-          imageUrl: prodData['imageUrl'],
-        ));
-      });
-      _items = loadedProducts;
-      notifyListeners();
-    } catch (error) {
-      throw (error);
-    }
-  }
+  // Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+  //   final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+  //   Uri url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products.json?auth=$authToken&$filterString');
+  //   try {
+  //     final response = await http.get(url);
+  //     final extractedData = json.decode(response.body) as Map<String, dynamic>;
+  //     if (extractedData == null) {
+  //       return;
+  //     }
+  //     url = Uri.parse('https://shop-app-9aa36.firebaseio.com/userFavorites/$userId.json?auth=$authToken');
+  //     final favoriteResponse = await http.get(url);
+  //     final favoriteData = json.decode(favoriteResponse.body);
+  //     final List<Product> loadedProducts = [];
+  //     extractedData.forEach((prodId, prodData) {
+  //       loadedProducts.add(Product(
+  //         id: prodId,
+  //         title: prodData['title'],
+  //         description: prodData['description'],
+  //         price: prodData['price'],
+  //         isFavorite:
+  //             favoriteData == null ? false : favoriteData[prodId] ?? false,
+  //         imageUrl: prodData['imageUrl'],
+  //       ));
+  //     });
+  //     _items = loadedProducts;
+  //     notifyListeners();
+  //   } catch (error) {
+  //     throw (error);
+  //   }
+  // }
 
   Future<void> newaddProduct(Product product, List<ImageUploadModel> images) async{
     try
@@ -162,35 +166,35 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> addProduct(Product product, List<ImageUploadModel> images) async {
-    final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products.json?auth=$authToken');
-    try {
-      final response = await http.post(
-        url,
-        body: json.encode({
-          'title': product.title,
-          'description': product.description,
-          'imageUrl': product.imageUrl,
-          'price': product.price,
-          'creatorId': userId,
-        }),
-      );
-      final newProduct = Product(
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        id: json.decode(response.body)['name'],
-      );
-      _items.add(newProduct);
-      // _items.insert(0, newProduct); // at the start of the list
-      notifyListeners();
+  // Future<void> addProduct(Product product, List<ImageUploadModel> images) async {
+  //   final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products.json?auth=$authToken');
+  //   try {
+  //     final response = await http.post(
+  //       url,
+  //       body: json.encode({
+  //         'title': product.title,
+  //         'description': product.description,
+  //         'imageUrl': product.imageUrl,
+  //         'price': product.price,
+  //         'creatorId': userId,
+  //       }),
+  //     );
+  //     final newProduct = Product(
+  //       title: product.title,
+  //       description: product.description,
+  //       price: product.price,
+  //       imageUrl: product.imageUrl,
+  //       id: json.decode(response.body)['name'],
+  //     );
+  //     _items.add(newProduct);
+  //     // _items.insert(0, newProduct); // at the start of the list
+  //     notifyListeners();
       
-    } catch (error) {
-      print(error);
-      throw error;
-    }
-  }
+  //   } catch (error) {
+  //     print(error);
+  //     throw error;
+  //   }
+  // }
 
   Future<void> newupdateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
@@ -208,23 +212,23 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> updateProduct(String id, Product newProduct) async {
-    final prodIndex = _items.indexWhere((prod) => prod.id == id);
-    if (prodIndex >= 0) {
-      final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products/$id.json?auth=$authToken');
-      await http.patch(url,
-          body: json.encode({
-            'title': newProduct.title,
-            'description': newProduct.description,
-            'imageUrl': newProduct.imageUrl,
-            'price': newProduct.price
-          }));
-      _items[prodIndex] = newProduct;
-      notifyListeners();
-    } else {
-      print('...');
-    }
-  }
+  // Future<void> updateProduct(String id, Product newProduct) async {
+  //   final prodIndex = _items.indexWhere((prod) => prod.id == id);
+  //   if (prodIndex >= 0) {
+  //     final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products/$id.json?auth=$authToken');
+  //     await http.patch(url,
+  //         body: json.encode({
+  //           'title': newProduct.title,
+  //           'description': newProduct.description,
+  //           'imageUrl': newProduct.imageUrl,
+  //           'price': newProduct.price
+  //         }));
+  //     _items[prodIndex] = newProduct;
+  //     notifyListeners();
+  //   } else {
+  //     print('...');
+  //   }
+  // }
 
   Future<void> newdeleteProduct(String id) async {
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
@@ -241,18 +245,18 @@ class Products with ChangeNotifier {
     existingProduct = null;
   }
 
-  Future<void> deleteProduct(String id) async {
-    final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products/$id.json?auth=$authToken');
-    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
-    var existingProduct = _items[existingProductIndex];
-    _items.removeAt(existingProductIndex);
-    notifyListeners();
-    final response = await http.delete(url);
-    if (response.statusCode >= 400) {
-      _items.insert(existingProductIndex, existingProduct);
-      notifyListeners();
-      throw HttpException('Could not delete product.');
-    }
-    existingProduct = null;
-  }
+  // Future<void> deleteProduct(String id) async {
+  //   final url = Uri.parse('https://shop-app-9aa36.firebaseio.com/products/$id.json?auth=$authToken');
+  //   final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+  //   var existingProduct = _items[existingProductIndex];
+  //   _items.removeAt(existingProductIndex);
+  //   notifyListeners();
+  //   final response = await http.delete(url);
+  //   if (response.statusCode >= 400) {
+  //     _items.insert(existingProductIndex, existingProduct);
+  //     notifyListeners();
+  //     throw HttpException('Could not delete product.');
+  //   }
+  //   existingProduct = null;
+  // }
 }
