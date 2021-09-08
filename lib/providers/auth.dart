@@ -52,16 +52,20 @@ class Auth with ChangeNotifier{
     return _username;
   }
 
+  Future<void> setUserDetails() async {
+    _auth = FirebaseAuth.instance;
+    _userId = _auth.currentUser.uid;
+    _username = await firestore.collection('users').doc(_userId).get().then((documentSnapshot) => documentSnapshot.data()['username']);
+    notifyListeners();
+  }
+
   Future<void> newlogin(String email, String password) async {
     _auth = FirebaseAuth.instance;
     try{
       authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      _userId = _auth.currentUser.uid;
-      _username = await firestore.collection('users').doc(_userId).get().then((documentSnapshot) => documentSnapshot.data()['username']);
     } catch(e){
       throw HttpException(e.code);
     }
-    notifyListeners();
   }
 
   Future<void> newgoogleLogin() async {
@@ -74,29 +78,23 @@ class Auth with ChangeNotifier{
     );
     authResult = await _auth.signInWithCredential(credential);
     final user = authResult.user;
-    _userId = _auth.currentUser.uid;
     await firestore.collection('users').doc(_userId).set({
         'username': user.displayName,
         'email': user.email
     });
-    _username = user.displayName;
-    notifyListeners();
   }
 
   Future<void> newsignUp(String username, String email, String password) async {
     _auth = FirebaseAuth.instance;
     try{
       authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      _userId = _auth.currentUser.uid;
       await firestore.collection('users').doc(_userId).set({
         'username': username,
         'email': email
       });
-      _username = username;
     } catch(e){
       throw HttpException(e.code);
     }
-    notifyListeners();
   }
 
   Future<void> newlogout() async {

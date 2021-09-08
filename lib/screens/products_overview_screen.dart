@@ -40,17 +40,15 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      setStateIfMounted(() {
+      setState(() {
         _isLoading = true;
       });
-      if(mounted){
-        Provider.of<Cart>(context, listen: false).newfetchAndSetCartItems();
-        Provider.of<Products>(context, listen: false).newfetchAndSetProducts().then((_) {
-            setStateIfMounted(() {
-                _isLoading = false;
-            });
-        });
-      }
+      Provider.of<Cart>(context, listen: false).newfetchAndSetCartItems();
+      Provider.of<Products>(context, listen: false).newfetchAndSetProducts().then((_) {
+          setState(() {
+              _isLoading = false;
+          });
+      });
     }
     _isInit = false;
     super.didChangeDependencies();

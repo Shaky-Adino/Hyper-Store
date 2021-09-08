@@ -77,6 +77,7 @@ class MyApp extends StatelessWidget {
                           stream: FirebaseAuth.instance.authStateChanges(),
                           builder: (ctx, userSnapshot){
                             if(userSnapshot.hasData){
+                              Provider.of<Auth>(ctx, listen: false).setUserDetails();
                                     // return Scaffold(appBar: AppBar(title: Text('successful'),),);
                               return ProductsOverviewScreen();
                             }
