@@ -102,7 +102,12 @@ class Auth with ChangeNotifier{
   Future<void> newlogout() async {
     _auth = FirebaseAuth.instance;
     _userId = null;
-    await _auth.signOut();
+    final GoogleSignIn googleSignIn = new GoogleSignIn();
+    bool google = await googleSignIn.isSignedIn();
+    if(google)
+      await googleSignIn.signOut();
+    else
+      await _auth.signOut();
   }
 
   // Future<void> _authenticate(String email, String password, String urlSegment, [String uname]) async {
