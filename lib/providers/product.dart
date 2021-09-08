@@ -35,10 +35,11 @@ class Product with ChangeNotifier{
     isFavorite = !isFavorite;
     notifyListeners();
     try{
-      await firestore.collection('userFavorites/$userId/myFav').doc(id).update({
+      await firestore.collection('userFavorites').doc(userId).collection('myFav').doc(id).set({
           'isFavorite': isFavorite
       });
     } catch (error) {
+      print(error);
       _setFavValue(oldStatus);
     }
   }

@@ -92,6 +92,11 @@ class Products with ChangeNotifier{
       }
       querySnapshot2 = await firestore.collection('userFavorites').doc(userId).collection('myFav').get();
       final favoriteData = querySnapshot2.docs;
+      print(favoriteData[0].data());
+      Map<String,bool> favs = {};
+      favoriteData.forEach((element) {
+        favs[element.id] = element['isFavorite'];
+      });
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodData) {
         loadedProducts.add(Product(
@@ -99,7 +104,7 @@ class Products with ChangeNotifier{
           title: prodData['title'],
           description: prodData['description'],
           price: prodData['price'],
-          isFavorite: favoriteData == null ? false : favoriteData[prodData.id]['isfavorite'] ?? false,
+          isFavorite: favoriteData.isEmpty ? false : favs[prodData.id] ?? false,
           imageUrl: prodData['imageUrl'],
         ));
       });
