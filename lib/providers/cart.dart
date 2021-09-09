@@ -312,7 +312,15 @@ class Cart with ChangeNotifier{
   // }
 
   Future<void> newclear() async {
-    await firestore.collection('cart').doc(userId).delete();
+    try{
+      var snapshots = await firestore.collection('cart').doc(userId).collection('mycart').get();
+      for (var doc in snapshots.docs) {
+        await doc.reference.delete();
+      }
+    } catch(e){
+      print('Could not clear cart');
+    }
+    
     _items = {};
     notifyListeners();
   }

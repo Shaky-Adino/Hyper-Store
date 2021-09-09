@@ -102,7 +102,7 @@ class Orders with ChangeNotifier{
   Future<void> newaddOrder(List<CartItem> cartProducts, double total) async {
     final timestamp = DateTime.now();
 
-    DocumentReference docRef = await firestore.collection('orders/$userId/myorder').add({
+    DocumentReference docRef = await firestore.collection('orders').doc(userId).collection('myorder').add({
         'amount': total,
         'dateTime': timestamp.toIso8601String(),
         'products': cartProducts.map((cp) => {
