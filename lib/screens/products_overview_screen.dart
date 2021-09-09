@@ -43,12 +43,14 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Cart>(context, listen: false).newfetchAndSetCartItems();
+      if(mounted){
+        Provider.of<Cart>(context, listen: false).newfetchAndSetCartItems();
       Provider.of<Products>(context, listen: false).newfetchAndSetProducts().then((_) {
           setState(() {
               _isLoading = false;
           });
       });
+      }
     }
     _isInit = false;
     super.didChangeDependencies();

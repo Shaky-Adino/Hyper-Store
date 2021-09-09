@@ -48,7 +48,7 @@ class Products with ChangeNotifier{
   // final String authToken;
   String userId;
 
-  Products(this.userId, this._items);
+  // Products(this.userId, this._items);
 
   List<Product> get items {
     return [..._items];
@@ -92,7 +92,6 @@ class Products with ChangeNotifier{
       }
       querySnapshot2 = await firestore.collection('userFavorites').doc(userId).collection('myFav').get();
       final favoriteData = querySnapshot2.docs;
-      print(favoriteData[0].data());
       Map<String,bool> favs = {};
       favoriteData.forEach((element) {
         favs[element.id] = element['isFavorite'];

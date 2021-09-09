@@ -26,7 +26,7 @@ class Cart with ChangeNotifier{
   // final String authToken;
   String userId;
 
-  Cart(this.userId, this._items);
+  // Cart(this.userId, this._items);
 
   void updates(String uid){
     userId = uid;

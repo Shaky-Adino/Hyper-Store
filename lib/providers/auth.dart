@@ -28,7 +28,8 @@ class Auth with ChangeNotifier{
 
   // String _token;
   // DateTime _expiryDate;
-  String _userId, _username;
+  // String _userId;
+  String _username;
   // Timer _authTimer;
 
   // bool get isAuth {
@@ -44,9 +45,9 @@ class Auth with ChangeNotifier{
   //   return null;
   // }
 
-  String get userId {
-    return _userId;
-  }
+  // String get userId {
+  //   return _userId;
+  // }
 
   String get username{
     return _username;
@@ -54,8 +55,9 @@ class Auth with ChangeNotifier{
 
   Future<void> setUserDetails() async {
     _auth = FirebaseAuth.instance;
-    _userId = _auth.currentUser.uid;
-    _username = await firestore.collection('users').doc(_userId).get().then((documentSnapshot) => documentSnapshot.data()['username']);
+    if(_auth.currentUser == null)
+      return;
+    _username = await firestore.collection('users').doc(_auth.currentUser.uid).get().then((documentSnapshot) => documentSnapshot.data()['username']);
     notifyListeners();
   }
 
@@ -78,7 +80,7 @@ class Auth with ChangeNotifier{
     );
     authResult = await _auth.signInWithCredential(credential);
     final user = authResult.user;
-    await firestore.collection('users').doc(_userId).set({
+    await firestore.collection('users').doc(_auth.currentUser.uid).set({
         'username': user.displayName,
         'email': user.email
     });
@@ -88,7 +90,7 @@ class Auth with ChangeNotifier{
     _auth = FirebaseAuth.instance;
     try{
       authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      await firestore.collection('users').doc(_userId).set({
+      await firestore.collection('users').doc(_auth.currentUser.uid).set({
         'username': username,
         'email': email
       });
@@ -99,7 +101,6 @@ class Auth with ChangeNotifier{
 
   Future<void> newlogout() async {
     _auth = FirebaseAuth.instance;
-    _userId = null;
     final GoogleSignIn googleSignIn = new GoogleSignIn();
     bool google = await googleSignIn.isSignedIn();
     if(google)

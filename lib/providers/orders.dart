@@ -28,7 +28,7 @@ class Orders with ChangeNotifier{
   // final String authToken;
   String userId;
 
-  Orders(this.userId, this._orders);
+  // Orders(this.userId, this._orders);
 
   void updates(String uid){
     userId = uid;
@@ -40,7 +40,7 @@ class Orders with ChangeNotifier{
 
   Future<void> newfetchAndSetOrders() async {
     final List<OrderItem> loadedOrders = [];
-    QuerySnapshot querySnapshot = await firestore.collection('orders').doc(userId).collection('myorder').get();
+    QuerySnapshot querySnapshot = await firestore.collection('orders').doc(userId).collection('myorder').orderBy('dateTime').get();
     final extractedData = querySnapshot.docs;
     if (extractedData == null) {
       return;

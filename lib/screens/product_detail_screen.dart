@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/products.dart';
@@ -22,7 +23,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final authData = Provider.of<Auth>(context);
     final productId = ModalRoute.of(context).settings.arguments as String; 
     final loadedProduct = Provider.of<Products>(context, listen: false).findById(productId);
     final cart = Provider.of<Cart>(context, listen: false);
@@ -111,7 +111,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ElevatedButton(
                                 onPressed: (){
                                   loadedProduct.newtoggleFavoriteStatus(
-                                    authData.userId,
+                                    FirebaseAuth.instance.currentUser.uid,
                                   );
                                   setState(() {});
                                 }, 

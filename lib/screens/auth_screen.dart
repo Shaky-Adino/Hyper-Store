@@ -15,6 +15,7 @@ import '../models/http_exception.dart';
 enum AuthMode { Signup, Login }
 
 class AuthScreen extends StatefulWidget {
+  static const routeName = '/auth-screen';
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
