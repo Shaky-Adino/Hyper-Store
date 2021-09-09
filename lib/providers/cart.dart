@@ -83,7 +83,7 @@ class Cart with ChangeNotifier{
       int quant = _items[productId].quantity;
       try
       {
-        await firestore.collection('cart/$userId/mycart').doc(id1).update({
+        await firestore.collection('cart').doc(userId).collection('mycart').doc(id1).update({
             'quantity': quant + q,
         });
         _items.update(
@@ -101,7 +101,7 @@ class Cart with ChangeNotifier{
     } else {
       try
       {
-        DocumentReference docRef = await firestore.collection('cart/$userId/mycart').add({
+        DocumentReference docRef = await firestore.collection('cart').doc(userId).collection('mycart').add({
             'title': title,
             'price': price,
             'productId': productId,
@@ -197,7 +197,7 @@ class Cart with ChangeNotifier{
     _items.remove(productId);
     notifyListeners();
     try{
-      await firestore.collection('cart/$userId/mycart').doc(id1).delete();
+      await firestore.collection('cart').doc(userId).collection('mycart').doc(id1).delete();
     } catch(e){
       _items[productId] = existingItem;
       notifyListeners();
@@ -232,7 +232,7 @@ class Cart with ChangeNotifier{
     if (quant > q) {
       try
       {
-        await firestore.collection('cart/$userId/mycart').doc(id1).update({
+        await firestore.collection('cart').doc(userId).collection('mycart').doc(id1).update({
             'quantity': quant - q,
         });
         _items.update(
@@ -253,7 +253,7 @@ class Cart with ChangeNotifier{
       _items.remove(productId);
       notifyListeners();
       try{
-        await firestore.collection('cart/$userId/mycart').doc(id1).delete();
+        await firestore.collection('cart').doc(userId).collection('mycart').doc(id1).delete();
       } catch(e){
         _items[productId] = existingItem;
         notifyListeners();
