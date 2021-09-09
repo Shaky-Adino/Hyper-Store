@@ -10,7 +10,6 @@ import './screens/products_overview_screen.dart';
 import './screens/product_detail_screen.dart';
 import './providers/products.dart';
 import './providers/cart.dart';
-import './providers/user_id.dart';
 import './providers/orders.dart';
 import './providers/auth.dart';
 import './screens/orders_screen.dart';
