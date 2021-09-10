@@ -16,19 +16,19 @@ class LandingScreen extends StatelessWidget {
     return StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (ctx, userSnapshot){
-                        if(userSnapshot.hasData){
+                if(userSnapshot.hasData){
 
-                            Provider.of<Products>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
-                            Provider.of<Cart>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
-                            Provider.of<Orders>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
+                  Provider.of<Products>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
+                  Provider.of<Cart>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
+                  Provider.of<Orders>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
 
-                            Future.delayed(const Duration(milliseconds: 300), (){
-                              Provider.of<Auth>(ctx, listen: false).setUserDetails();
-                            });
+                  Future.delayed(const Duration(milliseconds: 300), (){
+                    Provider.of<Auth>(ctx, listen: false).setUserDetails();
+                  });
                                     // return Scaffold(appBar: AppBar(title: Text('successful'),),);
-                            return ProductsOverviewScreen();
-                          }
-                          return AuthScreen();
+                  return ProductsOverviewScreen();
+                }
+                return AuthScreen();
             },
     );
   }
