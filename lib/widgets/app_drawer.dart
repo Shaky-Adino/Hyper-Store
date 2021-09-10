@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../screens/LandingScreen.dart';
+import '../screens/landingScreen.dart';
 import '../screens/products_overview_screen.dart';
 import '../helpers/custom_route.dart';
 
