@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     'password': '',
   };
   String username;
+  File _userImageFile;
   var _isLoading = false;
   final _passwordController = TextEditingController();
   AnimationController _controller;
@@ -52,6 +54,10 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   //       isLoading1 = false;
   //   });
   // }
+
+  void _pickedImage(File image) {
+    _userImageFile = image;
+  }
   
   void setStateIfMounted(f) {
     if (mounted) setState(f);
@@ -156,6 +162,17 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
       return;
     }
+
+    if(_userImageFile == null && _authMode == AuthMode.Signup){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please pick an image'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      return;
+    }
+
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
@@ -311,7 +328,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     opacity: _opacityAnimation,
                                     child: SlideTransition(
                                       position: _slideAnimation2,
-                                      child: UserImagePicker(),
+                                      child: UserImagePicker(_pickedImage)
                                       ),
                                   ),
                                 ),
