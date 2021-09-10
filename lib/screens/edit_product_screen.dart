@@ -415,7 +415,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   Future _onAddImageClick(int index) async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
     setState(() {
       _imageFile = File(pickedImage.path);
       getFileImage(index);
