@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-                    ChangeNotifierProvider(create: (ctx) => Auth()),
+                    ChangeNotifierProvider(create: (ctx) => Auth(false)),
                     ChangeNotifierProvider(create: (ctx) => Products()),
                     // ChangeNotifierProxyProvider<UserId, Products>(
                     //       create: (_) => Products(null, []),

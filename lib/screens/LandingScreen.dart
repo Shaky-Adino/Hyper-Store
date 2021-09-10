@@ -22,10 +22,8 @@ class LandingScreen extends StatelessWidget {
                   Provider.of<Cart>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
                   Provider.of<Orders>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
 
-                  Future.delayed(const Duration(milliseconds: 300), (){
-                    Provider.of<Auth>(ctx, listen: false).setUserDetails();
-                  });
-                                    // return Scaffold(appBar: AppBar(title: Text('successful'),),);
+                  Provider.of<Auth>(ctx, listen: false).setUserDetails();
+                  
                   return ProductsOverviewScreen();
                 }
                 return AuthScreen();

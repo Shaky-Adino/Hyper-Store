@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,9 @@ class Auth with ChangeNotifier{
   //   return token != null;
   // }
 
+  bool new_user;
+  Auth(this.new_user);
+
   // String get token {
   //   if (_expiryDate != null &&
   //       _expiryDate.isAfter(DateTime.now()) &&
@@ -57,8 +61,13 @@ class Auth with ChangeNotifier{
     _auth = FirebaseAuth.instance;
     if(_auth.currentUser == null)
       return;
-    _username = await firestore.collection('users').doc(_auth.currentUser.uid).get().then((documentSnapshot) => documentSnapshot.data()['username']);
-    notifyListeners();
+      if(!new_user){
+        _username = await firestore.collection('users')
+                            .doc(_auth.currentUser.uid).get()
+                            .then((documentSnapshot) => documentSnapshot.data()['username']);
+        notifyListeners();
+      }
+    new_user = false;
   }
 
   Future<void> newlogin(String email, String password) async {
@@ -71,6 +80,7 @@ class Auth with ChangeNotifier{
   }
 
   Future<void> newgoogleLogin() async {
+    new_user = true;
     _auth = FirebaseAuth.instance;
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -86,16 +96,28 @@ class Auth with ChangeNotifier{
                         : user.displayName,
         'email': user.email
     });
+    _username = user.displayName.contains(' ') ? 
+                      user.displayName.substring(0, user.displayName.indexOf(' '))
+                        : user.displayName;
+    notifyListeners();
   }
 
-  Future<void> newsignUp(String username, String email, String password) async {
+  Future<void> newsignUp(String username,File image, String email, String password) async {
+    new_user = true;
     _auth = FirebaseAuth.instance;
     try{
       authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+
+      final ref = FirebaseStorage.instance.ref().child('user_image').child(authResult.user.uid + '.jpg');
+
+      await ref.putFile(image);
+
       await firestore.collection('users').doc(_auth.currentUser.uid).set({
         'username': username,
         'email': email
       });
+      _username = username;
+      notifyListeners();
     } catch(e){
       throw HttpException(e.code);
     }

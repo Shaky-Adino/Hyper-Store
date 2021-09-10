@@ -192,6 +192,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
         // Sign user up
         await Provider.of<Auth>(context,listen: false).newsignUp(
           username.trim(),
+          _userImageFile,
           _authData['email'].trim(),
           _authData['password'].trim(),
         );
@@ -371,6 +372,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                             ? (value) {
                                                 if (value.isEmpty || value.length < 3) {
                                                   return 'username is too short!!';
+                                                }
+                                                if(value.contains(' ')){
+                                                  return 'no spaces allowed';
                                                 }
                                                 return null;
                                               }
