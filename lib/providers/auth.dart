@@ -81,7 +81,9 @@ class Auth with ChangeNotifier{
     authResult = await _auth.signInWithCredential(credential);
     final user = authResult.user;
     await firestore.collection('users').doc(_auth.currentUser.uid).set({
-        'username': user.displayName,
+        'username': user.displayName.contains(' ') ? 
+                      user.displayName.substring(0, user.displayName.indexOf(' '))
+                        : user.displayName,
         'email': user.email
     });
   }
