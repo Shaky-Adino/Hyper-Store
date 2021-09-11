@@ -12,8 +12,9 @@ import '../providers/auth.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String username = Provider.of<Auth>(context).username;
-    String url = Provider.of<Auth>(context).userImage;
+    final authData = Provider.of<Auth>(context);
+    String username = authData.username;
+    String url = authData.userImage;
     return Drawer(
       child: Column(
         children: <Widget>[
