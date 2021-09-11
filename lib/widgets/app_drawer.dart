@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../screens/landingScreen.dart';
@@ -26,7 +27,7 @@ class AppDrawer extends StatelessWidget {
                   radius: 22,
                   child: CircleAvatar(
                     backgroundColor: Colors.black,
-                    backgroundImage: url != null ? NetworkImage(url) : null,
+                    backgroundImage: url != null ? CachedNetworkImageProvider(url) : null,
                     radius: 20,
                     child: url == null ? Padding(
                       padding: const EdgeInsets.all(6.0),

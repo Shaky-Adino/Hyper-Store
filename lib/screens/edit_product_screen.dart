@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -364,14 +365,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         ),
                       ),
                       buildGridView(),
-                      Padding(
-                        padding: EdgeInsets.only(left: deviceSize.width*0.75 - 70.0),
-                        child: ElevatedButton(
-                          onPressed: (){
-                            _saveForm(context);
-                          }, 
-                          child: Text("$buttonText product",style: TextStyle(fontWeight: FontWeight.bold),)
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8)),
+                            onPressed: (){
+                              _saveForm(context);
+                            }, 
+                            child: Text("$buttonText product",style: TextStyle(fontWeight: FontWeight.bold),softWrap: false,)
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -388,17 +392,23 @@ class _EditProductScreenState extends State<EditProductScreen> {
       childAspectRatio: 1,
       children: List.generate(images.length, (index) {
         if (images[index] is ImageUploadModel || urls[index] != null) {
-          ImageUploadModel uploadModel = images[index];
+          ImageUploadModel uploadModel;
+          if(images[index] is ImageUploadModel)
+            uploadModel = images[index];
+          else
+            uploadModel = ImageUploadModel();
           return Card(
             clipBehavior: Clip.antiAlias,
             child: Stack(
               children: <Widget>[
               if(urls[index] != null)
-                Image.network(
-                  urls[index],
+                CachedNetworkImage(
+                  imageUrl: urls[index],
+                  progressIndicatorBuilder: (context, url, downloadProgress) => 
+                            Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                  fit: BoxFit.cover,
                   width: 300,
                   height: 300,
-                  fit: BoxFit.fill,
                 ),
               if(urls[index] == null)
                 Image.file(
@@ -407,6 +417,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     height: 300,
                     fit: BoxFit.fill,
                   ),
+                Positioned(
+                  right: 5,
+                  top: 5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
                 Positioned(
                   right: 5,
                   top: 5,

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../providers/products.dart';
 import '../providers/auth.dart';
 import '../providers/cart.dart';
@@ -67,32 +68,40 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     tag: loadedProduct.id,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
-                                      child: Image.network(
-                                          loadedProduct.imageUrl0,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: loadedProduct.imageUrl0,
+                                        progressIndicatorBuilder: (context, url, downloadProgress) => 
+                                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                   ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
-                                      child: Image.network(
-                                          loadedProduct.imageUrl1,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: loadedProduct.imageUrl1,
+                                        progressIndicatorBuilder: (context, url, downloadProgress) => 
+                                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                        fit: BoxFit.cover,
+                                      ),
                                   ),
                                   ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
-                                      child: Image.network(
-                                          loadedProduct.imageUrl2,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: loadedProduct.imageUrl2,
+                                        progressIndicatorBuilder: (context, url, downloadProgress) => 
+                                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                        fit: BoxFit.cover,
+                                      ),
                                   ),
                                   ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
-                                      child: Image.network(
-                                          loadedProduct.imageUrl3,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      child: CachedNetworkImage(
+                                        imageUrl: loadedProduct.imageUrl3,
+                                        progressIndicatorBuilder: (context, url, downloadProgress) => 
+                                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                        fit: BoxFit.cover,
+                                      ),
                                   ),
                               ],
                             ),

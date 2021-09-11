@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget{
@@ -51,7 +52,7 @@ class MessageBubble extends StatelessWidget{
           left: isMe ? null : 120,
           right: isMe ? 120 : null,
           child: CircleAvatar(
-            backgroundImage: NetworkImage(userImage),
+            backgroundImage: CachedNetworkImageProvider(userImage),
           ),
         ),
       ],

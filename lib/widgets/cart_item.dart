@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../screens/product_detail_screen.dart';
@@ -91,9 +92,10 @@ class CartItem extends StatelessWidget {
                                           tag: productId,
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(8.0),
-                                            child: Image.network(
-                                              product.imageUrl0,
-                                              fit: BoxFit.cover,
+                                            child: CachedNetworkImage(
+                                                imageUrl: product.imageUrl0,
+                                                placeholder: (context, url) => CircularProgressIndicator(),
+                                                fit: BoxFit.cover,
                                             ),
                                           ),
                                         ),
