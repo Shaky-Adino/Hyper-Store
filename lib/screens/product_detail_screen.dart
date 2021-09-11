@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:share_plus/share_plus.dart';
+import '../helpers/convert_image_to_file.dart';
 import '../providers/products.dart';
 import '../providers/auth.dart';
 import '../providers/cart.dart';
@@ -20,6 +24,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   int _selectedPage = 0, _quantity = 1;
+  bool _converting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -151,17 +156,36 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   onPrimary: Colors.redAccent
                                 ),
                               ),
-                              Text(
-                                '₹${loadedProduct.price}',
-                                style: TextStyle(
-                                  color: Colors.deepOrange,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+
+                              if(!_converting)
+                                Text(
+                                  '₹${loadedProduct.price}',
+                                  style: TextStyle(
+                                    color: Colors.deepOrange,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
+
+                              if(_converting)
+                                Center(child: CircularProgressIndicator()),
+
                               ElevatedButton(
-                                onPressed: (){}, 
+                                onPressed: () async {
+                                  setState(() {
+                                    _converting = true;
+                                  });
+                                  File img = await ConvertImageToFile.urlToFile(loadedProduct.imageUrl0);
+                                  setState(() {
+                                    _converting = false;
+                                  });
+                                  Share.shareFiles(
+                                    [img.path], 
+                                    text: 'Check out this product on Hyper Store',
+                                    subject: 'Hyper Store product'
+                                  );
+                                }, 
                                 child: Icon(Icons.share),
                                 style: ElevatedButton.styleFrom(
                                   shape: CircleBorder(),
