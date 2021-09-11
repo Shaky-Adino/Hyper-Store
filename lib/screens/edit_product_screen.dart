@@ -17,38 +17,42 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
 
   List<Object> images = [];
+  List<String> urls = [];
   File _imageFile;
+  String buttonText = "Add";
 
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
-  final _imageUrlController = TextEditingController();
-  final _imageUrlFocusNode = FocusNode();
+  // final _imageUrlController = TextEditingController();
+  // final _imageUrlFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
   var _editedProduct = Product(
     id: null,
     title: '',
     price: 0,
     description: '',
-    imageUrl: '',
+    imageUrl0: null,
+    imageUrl1: null,
+    imageUrl2: null,
+    imageUrl3: null,
   );
   var _initValues = {
     'title': '',
     'description': '',
     'price': '',
-    'imageUrl': '',
   };
   var _isInit = true;
   var _isLoading = false;
 
   @override
   void initState() {
-    _imageUrlFocusNode.addListener(_updateImageUrl);
+    // _imageUrlFocusNode.addListener(_updateImageUrl);
     super.initState();
     setState(() {
-      images.add("Add Image");
-      images.add("Add Image");
-      images.add("Add Image");
-      images.add("Add Image");
+      for(var i=0;i<4;i++)
+        images.add("Add Image");
+      for(var i=0;i<4;i++)
+        urls.add(null);
     });
   }
 
@@ -57,16 +61,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_isInit) {
       final productId = ModalRoute.of(context).settings.arguments as String;
       if (productId != null) {
-        _editedProduct =
-            Provider.of<Products>(context, listen: false).findById(productId);
+        buttonText = "Update";
+        _editedProduct = Provider.of<Products>(context, listen: false).findById(productId);
         _initValues = {
           'title': _editedProduct.title,
           'description': _editedProduct.description,
           'price': _editedProduct.price.toString(),
-          // 'imageUrl': _editedProduct.imageUrl,
-          'imageUrl': '',
         };
-        _imageUrlController.text = _editedProduct.imageUrl;
+        urls[0] = _editedProduct.imageUrl0;
+        urls[1] = _editedProduct.imageUrl1;
+        urls[2] = _editedProduct.imageUrl2;
+        urls[3] = _editedProduct.imageUrl3;
+        // _imageUrlController.text = _editedProduct.imageUrl;
       }
     }
     _isInit = false;
@@ -75,26 +81,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   void dispose() {
-    _imageUrlFocusNode.removeListener(_updateImageUrl);
+    // _imageUrlFocusNode.removeListener(_updateImageUrl);
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
-    _imageUrlController.dispose();
-    _imageUrlFocusNode.dispose();
+    // _imageUrlController.dispose();
+    // _imageUrlFocusNode.dispose();
     super.dispose();
   }
 
-  void _updateImageUrl() {
-    if (!_imageUrlFocusNode.hasFocus) {
-      if ((!_imageUrlController.text.startsWith('http') &&
-              !_imageUrlController.text.startsWith('https')) ||
-          (!_imageUrlController.text.endsWith('.png') &&
-              !_imageUrlController.text.endsWith('.jpg') &&
-              !_imageUrlController.text.endsWith('.jpeg'))) {
-        return;
-      }
-      setState(() {});
-    }
-  }
+  // void _updateImageUrl() {
+  //   if (!_imageUrlFocusNode.hasFocus) {
+  //     if ((!_imageUrlController.text.startsWith('http') &&
+  //             !_imageUrlController.text.startsWith('https')) ||
+  //         (!_imageUrlController.text.endsWith('.png') &&
+  //             !_imageUrlController.text.endsWith('.jpg') &&
+  //             !_imageUrlController.text.endsWith('.jpeg'))) {
+  //       return;
+  //     }
+  //     setState(() {});
+  //   }
+  // }
 
   Future<void> _saveForm(BuildContext ctx) async {
     List<ImageUploadModel> img = [];
@@ -103,7 +109,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     for(var i=0;i<4;i++){
-      if(!(images[i] is ImageUploadModel)){
+      if(!(images[i] is ImageUploadModel) && urls[i] == null){
         await showDialog(
           context: ctx, 
           barrierDismissible: false,
@@ -123,8 +129,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
         );
         return;
       }
-      for(var i=0;i<4;i++)
-        img.add(images[i]);
+    }
+    for(var i=0;i<4;i++){
+        if(images[i] is ImageUploadModel)
+          img.add(images[i]);
+        else
+          img.add(ImageUploadModel());
     }
     _form.currentState.save();
     setState(() {
@@ -132,7 +142,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
     if (_editedProduct.id != null) {
       await Provider.of<Products>(context, listen: false)
-          .newupdateProduct(_editedProduct.id, _editedProduct);
+          .newupdateProduct(_editedProduct.id, _editedProduct, img, urls);
     } else {
       try {
         await Provider.of<Products>(context, listen: false)
@@ -210,7 +220,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               title: value,
                               price: _editedProduct.price,
                               description: _editedProduct.description,
-                              imageUrl: _editedProduct.imageUrl,
+                              imageUrl0: _editedProduct.imageUrl0,
+                              imageUrl1: _editedProduct.imageUrl1,
+                              imageUrl2: _editedProduct.imageUrl2,
+                              imageUrl3: _editedProduct.imageUrl3,
                               id: _editedProduct.id,
                               isFavorite: _editedProduct.isFavorite);
                         },
@@ -242,7 +255,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               title: _editedProduct.title,
                               price: double.parse(value),
                               description: _editedProduct.description,
-                              imageUrl: _editedProduct.imageUrl,
+                              imageUrl0: _editedProduct.imageUrl0,
+                              imageUrl1: _editedProduct.imageUrl1,
+                              imageUrl2: _editedProduct.imageUrl2,
+                              imageUrl3: _editedProduct.imageUrl3,
                               id: _editedProduct.id,
                               isFavorite: _editedProduct.isFavorite);
                         },
@@ -267,76 +283,79 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             title: _editedProduct.title,
                             price: _editedProduct.price,
                             description: value,
-                            imageUrl: _editedProduct.imageUrl,
+                            imageUrl0: _editedProduct.imageUrl0,
+                            imageUrl1: _editedProduct.imageUrl1,
+                            imageUrl2: _editedProduct.imageUrl2,
+                            imageUrl3: _editedProduct.imageUrl3,
                             id: _editedProduct.id,
                             isFavorite: _editedProduct.isFavorite,
                           );
                         },
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            width: 100,
-                            height: 100,
-                            margin: EdgeInsets.only(
-                              top: 8,
-                              right: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            child: _imageUrlController.text.isEmpty
-                                ? Text('Enter a URL')
-                                : FittedBox(
-                                    child: Image.network(
-                                      _imageUrlController.text,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              decoration: InputDecoration(labelText: 'Image URL'),
-                              keyboardType: TextInputType.url,
-                              textInputAction: TextInputAction.done,
-                              controller: _imageUrlController,
-                              focusNode: _imageUrlFocusNode,
-                              onFieldSubmitted: (_) {
-                                _saveForm(context);
-                              },
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter an image URL.';
-                                }
-                                if (!value.startsWith('http') &&
-                                    !value.startsWith('https')) {
-                                  return 'Please enter a valid URL.';
-                                }
-                                if (!value.endsWith('.png') &&
-                                    !value.endsWith('.jpg') &&
-                                    !value.endsWith('.jpeg')) {
-                                  return 'Please enter a valid image URL.';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _editedProduct = Product(
-                                  title: _editedProduct.title,
-                                  price: _editedProduct.price,
-                                  description: _editedProduct.description,
-                                  imageUrl: value,
-                                  id: _editedProduct.id,
-                                  isFavorite: _editedProduct.isFavorite,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   crossAxisAlignment: CrossAxisAlignment.end,
+                      //   children: <Widget>[
+                      //     Container(
+                      //       width: 100,
+                      //       height: 100,
+                      //       margin: EdgeInsets.only(
+                      //         top: 8,
+                      //         right: 10,
+                      //       ),
+                      //       decoration: BoxDecoration(
+                      //         border: Border.all(
+                      //           width: 1,
+                      //           color: Colors.grey,
+                      //         ),
+                      //       ),
+                      //       child: _imageUrlController.text.isEmpty
+                      //           ? Text('Enter a URL')
+                      //           : FittedBox(
+                      //               child: Image.network(
+                      //                 _imageUrlController.text,
+                      //                 fit: BoxFit.cover,
+                      //               ),
+                      //             ),
+                      //     ),
+                      //     Expanded(
+                      //       child: TextFormField(
+                      //         decoration: InputDecoration(labelText: 'Image URL'),
+                      //         keyboardType: TextInputType.url,
+                      //         textInputAction: TextInputAction.done,
+                      //         controller: _imageUrlController,
+                      //         focusNode: _imageUrlFocusNode,
+                      //         onFieldSubmitted: (_) {
+                      //           _saveForm(context);
+                      //         },
+                      //         validator: (value) {
+                      //           if (value.isEmpty) {
+                      //             return 'Please enter an image URL.';
+                      //           }
+                      //           if (!value.startsWith('http') &&
+                      //               !value.startsWith('https')) {
+                      //             return 'Please enter a valid URL.';
+                      //           }
+                      //           if (!value.endsWith('.png') &&
+                      //               !value.endsWith('.jpg') &&
+                      //               !value.endsWith('.jpeg')) {
+                      //             return 'Please enter a valid image URL.';
+                      //           }
+                      //           return null;
+                      //         },
+                      //         onSaved: (value) {
+                      //           _editedProduct = Product(
+                      //             title: _editedProduct.title,
+                      //             price: _editedProduct.price,
+                      //             description: _editedProduct.description,
+                      //             imageUrl: value,
+                      //             id: _editedProduct.id,
+                      //             isFavorite: _editedProduct.isFavorite,
+                      //           );
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       Padding(
                         padding: const EdgeInsets.all(14.0),
                         child: Text(
@@ -351,7 +370,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           onPressed: (){
                             _saveForm(context);
                           }, 
-                          child: Text("Add product",style: TextStyle(fontWeight: FontWeight.bold),)
+                          child: Text("$buttonText product",style: TextStyle(fontWeight: FontWeight.bold),)
                         ),
                       ),
                     ],
@@ -368,18 +387,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
       crossAxisCount: 3,
       childAspectRatio: 1,
       children: List.generate(images.length, (index) {
-        if (images[index] is ImageUploadModel) {
+        if (images[index] is ImageUploadModel || urls[index] != null) {
           ImageUploadModel uploadModel = images[index];
           return Card(
             clipBehavior: Clip.antiAlias,
             child: Stack(
               children: <Widget>[
-              Image.file(
-                  uploadModel.imageFile,
+              if(urls[index] != null)
+                Image.network(
+                  urls[index],
                   width: 300,
                   height: 300,
                   fit: BoxFit.fill,
                 ),
+              if(urls[index] == null)
+                Image.file(
+                    uploadModel.imageFile,
+                    width: 300,
+                    height: 300,
+                    fit: BoxFit.fill,
+                  ),
                 Positioned(
                   right: 5,
                   top: 5,
@@ -391,6 +418,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                     onTap: () {
                       setState(() {
+                        urls[index] = null;
                         images.replaceRange(index, index + 1, ['Add Image']);
                       });
                     },
@@ -415,7 +443,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   Future _onAddImageClick(int index) async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.camera);
+    final pickedImage = await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     setState(() {
       _imageFile = File(pickedImage.path);
       getFileImage(index);

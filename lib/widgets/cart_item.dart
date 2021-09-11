@@ -92,7 +92,7 @@ class CartItem extends StatelessWidget {
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(8.0),
                                             child: Image.network(
-                                              product.imageUrl,
+                                              product.imageUrl0,
                                               fit: BoxFit.cover,
                                             ),
                                           ),

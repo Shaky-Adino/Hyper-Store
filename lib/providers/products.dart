@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/image_upload_model.dart';
@@ -104,7 +106,10 @@ class Products with ChangeNotifier{
           description: prodData['description'],
           price: prodData['price'],
           isFavorite: favoriteData.isEmpty ? false : favs[prodData.id] ?? false,
-          imageUrl: prodData['imageUrl'],
+          imageUrl0: prodData['imageUrl0'],
+          imageUrl1: prodData['imageUrl1'],
+          imageUrl2: prodData['imageUrl2'],
+          imageUrl3: prodData['imageUrl3'],
         ));
       });
       _items = loadedProducts;
@@ -148,18 +153,38 @@ class Products with ChangeNotifier{
   Future<void> newaddProduct(Product product, List<ImageUploadModel> images) async{
     try
     {
+
+      List<String> urls = [];
+
+      final store = FirebaseStorage.instance.ref().child('products');
+
+      for(var i=0;i<4;i++){
+        var ref = store.child(userId + i.toString() + '.jpg');
+        await ref.putFile(images[i].imageFile);
+        var imgUrl = await ref.getDownloadURL();
+        urls.add(imgUrl);
+      }
+
       DocumentReference docRef = await firestore.collection('products').add({
           'title': product.title,
           'description': product.description,
-          'imageUrl': product.imageUrl,
+          'imageUrl0': urls[0],
+          'imageUrl1': urls[1],
+          'imageUrl2': urls[2],
+          'imageUrl3': urls[3],
           'price': product.price,
           'creatorId': userId,
       });
+
+
       final newProduct = Product(
           title: product.title,
           description: product.description,
           price: product.price,
-          imageUrl: product.imageUrl,
+          imageUrl0: urls[0],
+          imageUrl1: urls[1],
+          imageUrl2: urls[2],
+          imageUrl3: urls[3],
           id: docRef.id,
       );
       _items.add(newProduct);
@@ -200,13 +225,50 @@ class Products with ChangeNotifier{
   //   }
   // }
 
-  Future<void> newupdateProduct(String id, Product newProduct) async {
+  Future<void> newupdateProduct(String id, Product newProduct, 
+                    List<ImageUploadModel> images, List<String> urls) async {
+                      
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
+
+      List<String> newUrls = [];
+      
+      final store = FirebaseStorage.instance.ref().child('products');
+
+      for(var i=0;i<4;i++){
+        if(urls[i] != null){
+          newUrls.add(urls[i]);
+          continue;
+        }
+        String delurl;
+        switch (i) {
+          case 0:
+            delurl = newProduct.imageUrl0;
+            break;
+          case 1:
+            delurl = newProduct.imageUrl1;
+            break;
+          case 2:
+            delurl = newProduct.imageUrl2;
+            break;
+          case 3:
+            delurl = newProduct.imageUrl3;
+            break;
+        }
+        await FirebaseStorage.instance.refFromURL(delurl).delete();
+        var ref = store.child(userId + i.toString() + '.jpg');
+        await ref.putFile(images[i].imageFile);
+        var imgUrl = await ref.getDownloadURL();
+        newUrls.add(imgUrl);
+      }
+
       await firestore.collection('products').doc(id).update({
           'title': newProduct.title,
           'description': newProduct.description,
-          'imageUrl': newProduct.imageUrl,
+          'imageUrl0': newUrls[0],
+          'imageUrl1': newUrls[1],
+          'imageUrl2': newUrls[2],
+          'imageUrl3': newUrls[3],
           'price': newProduct.price
       });
       _items[prodIndex] = newProduct;

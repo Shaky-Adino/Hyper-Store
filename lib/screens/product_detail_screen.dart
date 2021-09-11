@@ -63,16 +63,36 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 });
                               },
                               children: [
-                                for(var i=0;i<4;i++)
                                   Hero(
                                     tag: loadedProduct.id,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(
-                                          loadedProduct.imageUrl,
+                                          loadedProduct.imageUrl0,
                                           fit: BoxFit.cover,
                                         ),
                                     ),
+                                  ),
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.network(
+                                          loadedProduct.imageUrl1,
+                                          fit: BoxFit.cover,
+                                        ),
+                                  ),
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.network(
+                                          loadedProduct.imageUrl2,
+                                          fit: BoxFit.cover,
+                                        ),
+                                  ),
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.network(
+                                          loadedProduct.imageUrl3,
+                                          fit: BoxFit.cover,
+                                        ),
                                   ),
                               ],
                             ),
