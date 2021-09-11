@@ -51,6 +51,7 @@ flutter:
   assets:
    - assets/images/product-placeholder.png
    - assets/images/search.png
+   - assets/images/profile_pic.png
    - assets/fire.mp4 
   #  - images/a_dot_ham.jpeg
 

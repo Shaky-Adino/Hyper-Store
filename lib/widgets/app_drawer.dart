@@ -13,11 +13,32 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String username = Provider.of<Auth>(context).username;
+    String url = Provider.of<Auth>(context).userImage;
     return Drawer(
       child: Column(
         children: <Widget>[
           AppBar(
-            title: username != null ? Text('Hello $username!') : Text('Hello friend!'),
+            title: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.black,
+                  radius: 22,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black,
+                    backgroundImage: url != null ? NetworkImage(url) : null,
+                    radius: 20,
+                    child: url == null ? Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: ClipOval(
+                        child: Image.asset('assets/images/profile_pic.png'),
+                      ),
+                    ) : null,
+                  ),
+                ),
+                SizedBox(width: 8),
+                username != null ? Text('Hello $username!') : Text('Hello friend!'),
+              ],
+            ),
             automaticallyImplyLeading: false,
           ),
           Divider(),

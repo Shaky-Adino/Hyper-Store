@@ -30,15 +30,15 @@ class Auth with ChangeNotifier{
   // String _token;
   // DateTime _expiryDate;
   // String _userId;
-  String _username;
+  String _username, _profilePic;
   // Timer _authTimer;
 
   // bool get isAuth {
   //   return token != null;
   // }
 
-  bool new_user;
-  Auth(this.new_user);
+  bool newUser;
+  Auth(this.newUser);
 
   // String get token {
   //   if (_expiryDate != null &&
@@ -57,17 +57,21 @@ class Auth with ChangeNotifier{
     return _username;
   }
 
+  String get userImage{
+    return _profilePic;
+  }
+
   Future<void> setUserDetails() async {
     _auth = FirebaseAuth.instance;
     if(_auth.currentUser == null)
       return;
-      if(!new_user){
-        _username = await firestore.collection('users')
-                            .doc(_auth.currentUser.uid).get()
-                            .then((documentSnapshot) => documentSnapshot.data()['username']);
+      if(!newUser){
+        final userData = await firestore.collection('users').doc(_auth.currentUser.uid).get();
+        _username = userData.data()['username'];
+        _profilePic = userData.data()['image_url'];
         notifyListeners();
       }
-    new_user = false;
+    newUser = false;
   }
 
   Future<void> newlogin(String email, String password) async {
@@ -80,7 +84,7 @@ class Auth with ChangeNotifier{
   }
 
   Future<void> newgoogleLogin() async {
-    new_user = true;
+    newUser = true;
     _auth = FirebaseAuth.instance;
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -100,11 +104,12 @@ class Auth with ChangeNotifier{
     _username = user.displayName.contains(' ') ? 
                       user.displayName.substring(0, user.displayName.indexOf(' '))
                         : user.displayName;
+    _profilePic = user.photoURL;
     notifyListeners();
   }
 
   Future<void> newsignUp(String username,File image, String email, String password) async {
-    new_user = true;
+    newUser = true;
     _auth = FirebaseAuth.instance;
     try{
       authResult = await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -121,6 +126,7 @@ class Auth with ChangeNotifier{
         'image_url': url,
       });
       _username = username;
+      _profilePic = url;
       notifyListeners();
     } catch(e){
       throw HttpException(e.code);
@@ -128,6 +134,8 @@ class Auth with ChangeNotifier{
   }
 
   Future<void> newlogout() async {
+    _username = null;
+    _profilePic = null;
     _auth = FirebaseAuth.instance;
     await _auth.signOut();
     await GoogleSignIn().signOut();

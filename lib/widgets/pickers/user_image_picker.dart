@@ -19,7 +19,6 @@ class _UserImagePickerState extends State<UserImagePicker> {
     final img = await picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
-      maxWidth: 150,
     );
     final pickedImageFile = File(img.path);
     setState(() {
@@ -35,9 +34,15 @@ class _UserImagePickerState extends State<UserImagePicker> {
         Flexible(
           flex: 3,
           child: CircleAvatar(
+            backgroundColor: Colors.grey.withOpacity(0.2),
             radius: 50,
-            backgroundColor: Colors.grey.withOpacity(0.5),
             backgroundImage: _pickedImage != null ? FileImage(_pickedImage) : null,
+            child: _pickedImage == null ? Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: ClipOval(
+                child: Image.asset('assets/images/profile_pic.png'),
+              ),
+            ) : null,
           ),
         ),
         Flexible(
