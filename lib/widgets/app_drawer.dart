@@ -17,7 +17,7 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AppBar(
-            title: Text('Hello $username!'),
+            title: username != null ? Text('Hello $username!') : Text('Hello friend!'),
             automaticallyImplyLeading: false,
           ),
           Divider(),

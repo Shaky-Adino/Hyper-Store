@@ -94,7 +94,8 @@ class Auth with ChangeNotifier{
         'username': user.displayName.contains(' ') ? 
                       user.displayName.substring(0, user.displayName.indexOf(' '))
                         : user.displayName,
-        'email': user.email
+        'email': user.email,
+        'image_url': user.photoURL,
     });
     _username = user.displayName.contains(' ') ? 
                       user.displayName.substring(0, user.displayName.indexOf(' '))
@@ -112,9 +113,12 @@ class Auth with ChangeNotifier{
 
       await ref.putFile(image);
 
+      final url = await ref.getDownloadURL();
+
       await firestore.collection('users').doc(_auth.currentUser.uid).set({
         'username': username,
-        'email': email
+        'email': email,
+        'image_url': url,
       });
       _username = username;
       notifyListeners();
