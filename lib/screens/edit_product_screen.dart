@@ -361,10 +361,113 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         padding: const EdgeInsets.all(14.0),
                         child: Text(
                           "Add images of your product",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
+
+                      Row(
+                        children: [
+                          if(images[0] is ImageUploadModel || urls[0] != null)
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                minHeight: 109,
+                                minWidth: 109,
+                                maxHeight: 109,
+                                maxWidth: 109,
+                              ),
+                              child: Card(
+                                clipBehavior: Clip.antiAlias,
+                                child: Stack(
+                                  children: <Widget>[
+                                  if(urls[0] != null)
+                                    CachedNetworkImage(
+                                      imageUrl: urls[0],
+                                      progressIndicatorBuilder: (context, url, downloadProgress) => 
+                                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                      fit: BoxFit.cover,
+                                      width: 300,
+                                      height: 300,
+                                    ),
+                                  if(urls[0] == null)
+                                    Image.file(
+                                        (images[0] as ImageUploadModel).imageFile,
+                                        width: 300,
+                                        height: 300,
+                                        fit: BoxFit.fill,
+                                    ),
+                                    Positioned(
+                                      right: 5,
+                                      top: 5,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: Colors.white,
+                                        ),
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 5,
+                                      top: 5,
+                                      child: InkWell(
+                                        child: Icon(
+                                          Icons.remove_circle,
+                                          size: 20,
+                                          color: Colors.red,
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            urls[0] = null;
+                                            images.replaceRange(0, 1, ['Add Image']);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          if(!(images[0] is ImageUploadModel) && urls[0] == null)
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                minHeight: 109,
+                                minWidth: 109,
+                                maxHeight: 109,
+                                maxWidth: 109,
+                              ),
+                              child: Card(
+                                child: IconButton(
+                                  icon: Icon(Icons.add_a_photo),
+                                  onPressed: () {
+                                    _onAddImageClick(0);
+                                  },
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  leading: Icon(Icons.arrow_left, size: 35,),
+                                  title: const Text(
+                                    "(This image will be used as preview)",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      letterSpacing: 1,
+                                      fontStyle: FontStyle.italic
+                                    ),
+                                  )
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+
                       buildGridView(),
+
+                      SizedBox(height: 20),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -390,7 +493,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
       shrinkWrap: true,
       crossAxisCount: 3,
       childAspectRatio: 1,
-      children: List.generate(images.length, (index) {
+      children: List.generate(images.length - 1, (index1) {
+        var index = index1 + 1;
         if (images[index] is ImageUploadModel || urls[index] != null) {
           ImageUploadModel uploadModel;
           if(images[index] is ImageUploadModel)
@@ -452,7 +556,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         } else {
           return Card(
             child: IconButton(
-              icon: Icon(Icons.add),
+              icon: Icon(Icons.add_a_photo),
               onPressed: () {
                 _onAddImageClick(index);
               },
