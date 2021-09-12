@@ -2,10 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget{
-  final String message, username, userImage;
+  final String message, username, userImage, productTitle, productImage, productId;
   final bool isMe;
   final Key key;
-  MessageBubble(this.message, this.username, this.userImage, this.isMe, this.key);
+  MessageBubble(this.message, this.username, this.userImage,
+   this.productTitle, this.productImage, this.productId, this.isMe, this.key);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -34,6 +35,17 @@ class MessageBubble extends StatelessWidget{
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isMe ? Colors.black : Theme.of(context).accentTextTheme.headline1.color,
+                    ),
+                  ),
+                  Text(productTitle),
+                  Container(
+                    width: 100,
+                    height: 100,
+                    child: CachedNetworkImage(
+                      imageUrl: productImage,
+                      progressIndicatorBuilder: (context, url, downloadProgress) => 
+                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                      fit: BoxFit.cover,
                     ),
                   ),
                   Text(message, 

@@ -47,6 +47,9 @@ class Products with ChangeNotifier{
     //       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     // ),
   ];
+
+  List<Product> _userItems = [];
+
   // final String authToken;
   String userId;
 
@@ -54,6 +57,10 @@ class Products with ChangeNotifier{
 
   List<Product> get items {
     return [..._items];
+  }
+
+  List<Product> get userItems {
+    return [..._userItems];
   }
 
   List<Product> get favoriteItems {
@@ -325,4 +332,31 @@ class Products with ChangeNotifier{
   //   }
   //   existingProduct = null;
   // }
+
+  Future<void> fetchUserProducts() async {
+    try
+    {
+      QuerySnapshot querySnapshot = await firestore.collection('products').where('creatorId', isEqualTo: userId).get();
+      var extractedData = querySnapshot.docs;
+      final List<Product> loadedProducts = [];
+      if(extractedData != null){
+        extractedData.forEach((prodData) {
+            loadedProducts.add(Product(
+              id: prodData.id,
+              title: prodData['title'],
+              description: prodData['description'],
+              price: prodData['price'],
+              imageUrl0: prodData['imageUrl0'],
+              imageUrl1: prodData['imageUrl1'],
+              imageUrl2: prodData['imageUrl2'],
+              imageUrl3: prodData['imageUrl3'],
+            ));
+        });
+      }
+      _userItems = loadedProducts;
+      notifyListeners();
+    } catch(error){
+      throw(error);
+    }
+  }
 }
