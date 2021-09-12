@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/providers/auth.dart';
 
@@ -53,56 +54,86 @@ class _NewMessageState extends State<NewMessage> {
       padding: EdgeInsets.all(8),
       child: Column(
         children: [
-          Row(
-            children: [
-                PopupMenuButton(
-                  onSelected: (int index){
-                    setState(() {
-                      selectedIndex = index;
-                    });
-                  },
-                  itemBuilder: (_) => widget.items,
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                      child: Text('Select your product!', style: TextStyle(color: Colors.yellow),),
-                    )
-                  ),
-                  // child: OutlinedButton(
-                  //   onPressed: (){},
-                  //   style: ButtonStyle(
-                  //     shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
-                  //   ),
-                  //   child: const Text("Select your product"),
-                  // ),
-                ),
-            ],
-          ),
             Row(
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      PopupMenuButton(
+                        onSelected: (int index){
+                          setState(() {
+                            selectedIndex = index;
+                          });
+                        },
+                        itemBuilder: (_) => widget.items,
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                            child: Text('Select your product!', style: TextStyle(color: Colors.yellow),),
+                          )
+                        ),
+                      ),
                       if(selectedIndex >= 0)
-                        Text(widget.products[selectedIndex].title),
-                      if(selectedIndex >= 0)
-                        Container(
-                          width: 100,
-                          height: 100,
-                          child: CachedNetworkImage(
-                            imageUrl: widget.products[selectedIndex].imageUrl0,
-                            progressIndicatorBuilder: (context, url, downloadProgress) => 
-                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                            fit: BoxFit.cover,
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(minWidth: 141, maxWidth: 141),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.yellow[200],
+                              borderRadius: const BorderRadius.only(
+                                  // topLeft: Radius.circular(10),
+                                  // topRight: Radius.circular(10),
+                                ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if(selectedIndex >= 0)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 1, top: 5),
+                                      child: Text(
+                                        widget.products[selectedIndex].title,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  if(selectedIndex >= 0)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                                      child: Container(
+                                        width: 80,
+                                        height: 80,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: CachedNetworkImage(
+                                            imageUrl: widget.products[selectedIndex].imageUrl0,
+                                            progressIndicatorBuilder: (context, url, downloadProgress) => 
+                                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  if(selectedIndex >= 0)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 1, bottom: 5),
+                                      child: Text(_enteredMessage),
+                                    ),
+                                ],
+                            ),
                           ),
                         ),
                       Row(
@@ -119,6 +150,7 @@ class _NewMessageState extends State<NewMessage> {
                               ),
                               padding: const EdgeInsets.only(left: 8),
                               child: TextField(
+                                inputFormatters: [LengthLimitingTextInputFormatter(60)],
                                 enabled: (selectedIndex >= 0),
                                 controller: _controller,
                                 decoration: InputDecoration(
