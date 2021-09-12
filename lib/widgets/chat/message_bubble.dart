@@ -1,28 +1,70 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopapp/providers/products.dart';
 import 'package:shopapp/screens/product_detail_screen.dart';
 
 class MessageBubble extends StatelessWidget{
-  final String message, username, userImage, productTitle, productImage, productId;
+  final String message, username, userImage, productTitle, productImage, productId, id;
   final bool isMe;
   final Key key;
   MessageBubble(this.message, this.username, this.userImage,
-   this.productTitle, this.productImage, this.productId, this.isMe, this.key);
+   this.productTitle, this.productImage, this.productId, this.isMe, this.id, this.key);
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        InkWell(
-          onTap: (){
-            Navigator.of(context).pushNamed(
-              ProductDetailScreen.routeName,
-              arguments: productId,
-            );
-          },
-          child: Row(
-            mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-            children: [
-              Container(
+        Row(
+          mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: (){
+                if(Provider.of<Products>(context, listen: false).findById(productId) == null)
+                  return;
+                Navigator.of(context).pushNamed(
+                  ProductDetailScreen.routeName,
+                  arguments: productId,
+                );
+              },
+              onLongPress: () async {
+                if(!isMe)
+                  return;
+                try {
+                  await showDialog(
+                    context: context, 
+                    barrierDismissible: false,
+                    builder: (BuildContext context){
+                      return AlertDialog(
+                        title: const Text("Delete this message?"),
+                        content: const Text("This action is permanent and can't be undone !"),
+                        actions: [
+                          TextButton(
+                            onPressed: (){
+                              Navigator.of(context).pop();
+                            }, 
+                            child: const Text("CANCEL",style: TextStyle(color: Colors.orange),)
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await FirebaseFirestore.instance.collection('chat').doc(id).delete();
+                              Navigator.of(context).pop();
+                            }, 
+                            child: const Text("YES",style: TextStyle(color: Colors.orange),)
+                          ),
+                        ],
+                      );
+                    }
+                  );
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Deleting failed!', textAlign: TextAlign.center,),
+                    ),
+                  );
+                }
+              },
+              child: Container(
                 decoration: BoxDecoration(
                   color: isMe ? Colors.grey[300] : Theme.of(context).accentColor,
                   borderRadius: BorderRadius.only(
@@ -80,8 +122,8 @@ class MessageBubble extends StatelessWidget{
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         Positioned(
           top: 0,

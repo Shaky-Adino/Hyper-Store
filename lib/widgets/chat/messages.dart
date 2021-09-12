@@ -16,21 +16,25 @@ class Messages extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
         }
-        final chatDocs = chatSnapshot.data.docs;
-        return ListView.builder(
-          reverse: true,
-          itemCount: chatDocs.length,
-          itemBuilder: (ctx, index) => MessageBubble(
-            chatDocs[index].data()['text'], 
-            chatDocs[index].data()['username'],
-            chatDocs[index].data()['userImage'],
-            chatDocs[index].data()['productTitle'],
-            chatDocs[index].data()['productImage'],
-            chatDocs[index].data()['productId'],
-            chatDocs[index].data()['userId'] == FirebaseAuth.instance.currentUser.uid,
-            ValueKey(chatDocs[index].id),
-          ),
-        );
+        if(chatSnapshot.hasData){
+          final chatDocs = chatSnapshot.data.docs;
+          return ListView.builder(
+            reverse: true,
+            itemCount: chatDocs.length,
+            itemBuilder: (ctx, index) => MessageBubble(
+              chatDocs[index].data()['text'], 
+              chatDocs[index].data()['username'],
+              chatDocs[index].data()['userImage'],
+              chatDocs[index].data()['productTitle'],
+              chatDocs[index].data()['productImage'],
+              chatDocs[index].data()['productId'],
+              chatDocs[index].data()['userId'] == FirebaseAuth.instance.currentUser.uid,
+              chatDocs[index].id,
+              ValueKey(chatDocs[index].id),
+            ),
+          );
+        }
+        return CircularProgressIndicator();
       }
     );
   }
