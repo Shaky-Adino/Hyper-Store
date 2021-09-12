@@ -68,7 +68,7 @@ class _NewMessageState extends State<NewMessage> {
                         },
                         itemBuilder: (_) => widget.items,
                         child: Container(
-                          padding: const EdgeInsets.only(top: 8),
+                          // padding: const EdgeInsets.only(top: 8),
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: const BorderRadius.only(
@@ -76,15 +76,39 @@ class _NewMessageState extends State<NewMessage> {
                               topRight: Radius.circular(12),
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                            child: Text('Select your product!', style: TextStyle(color: Colors.yellow),),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Text('Select your product!', style: TextStyle(color: Colors.yellow),),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 3),
+                                child: SizedBox(
+                                  height: 28,
+                                  width: 28,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.close,
+                                      size: 18,
+                                      color: Colors.yellow,
+                                    ), 
+                                    onPressed: (){
+                                      setState(() {
+                                        selectedIndex = -1;
+                                      });
+                                    }
+                                  ),
+                                ),
+                              ),
+                            ],
                           )
                         ),
                       ),
                       if(selectedIndex >= 0)
                         ConstrainedBox(
-                          constraints: const BoxConstraints(minWidth: 141, maxWidth: 141),
+                          constraints: const BoxConstraints(minWidth: 161, maxWidth: 161),
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
