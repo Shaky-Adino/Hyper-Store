@@ -91,72 +91,96 @@ class _OrderButtonState extends State<OrderButton> {
               setState(() {
                 _isLoading = true;
               });
-              await showDialog(
+              await showModalBottomSheet(
                 context: context, 
                 builder: (BuildContext context){
-                  return AlertDialog(
-                    title: const Text('Summary'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Estimated Shipping Date:'),
-                            Text(DateFormat('EEE, MMM d').format(DateTime.now().add(const Duration(days: 7)))),
-                          ],
-                        ),
-                        Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Subtotal:'),
-                            Text('₹${widget.cart.totalAmount.toString()}'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Delivery Charge:'),
-                            Text('₹80'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Tax:'),
-                            Text('₹$tax'),
-                          ],
-                        ),
-                        Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Order Total:'),
-                            Text('₹$total'),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: (){
-                            
-                          }, 
-                          child: Text('Confirm Order')
-                        ),
-                      ],
-                    ),
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Summary', style: TextStyle(fontSize: 20)),
+                          SizedBox(height: 10),
+                          Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Estimated Shipping Date:'),
+                              Text(DateFormat('EEE, MMM d').format(DateTime.now().add(const Duration(days: 7)))),
+                            ],
+                          ),
+                          SizedBox(height: 2),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Mode of payment:'),
+                              Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: Colors.yellow[200],
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(40.0),
+                                    bottomRight: Radius.circular(40.0),
+                                    topLeft: Radius.circular(40.0),
+                                    bottomLeft: Radius.circular(40.0)
+                                  ),
+                                ),
+                                child: const Text('Cash On Delivery'),
+                              ),
+                            ],
+                          ),
+                          Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Subtotal:'),
+                              Text('₹${widget.cart.totalAmount.toString()}'),
+                            ],
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Delivery Charge:'),
+                              const Text('₹80'),
+                            ],
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Tax:'),
+                              Text('₹$tax'),
+                            ],
+                          ),
+                          Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Order Total:', style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text('₹$total', style: TextStyle(fontWeight: FontWeight.bold),),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await Provider.of<Orders>(context, listen: false).newaddOrder(
+                                widget.cart.items.values.toList(),
+                                total,
+                              );
+                              widget.cart.newclear();
+                              Navigator.of(context).pop();
+                            }, 
+                            child: Text('Confirm Order', style: TextStyle(fontWeight: FontWeight.bold),)
+                          ),
+                        ],
+                      ),
                   );
                 }
-              );
-              await Provider.of<Orders>(context, listen: false).newaddOrder(
-                widget.cart.items.values.toList(),
-                total,
               );
               setState(() {
                 _isLoading = false;
               });
-              widget.cart.newclear();
             },
       textColor: Theme.of(context).primaryColor,
     );
