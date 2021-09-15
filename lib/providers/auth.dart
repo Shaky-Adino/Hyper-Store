@@ -30,7 +30,7 @@ class Auth with ChangeNotifier{
   // String _token;
   // DateTime _expiryDate;
   // String _userId;
-  String _username, _profilePic;
+  String _username, _profilePic, _email;
   // Timer _authTimer;
 
   // bool get isAuth {
@@ -57,6 +57,10 @@ class Auth with ChangeNotifier{
     return _username;
   }
 
+  String get userEmail{
+    return _email;
+  }
+
   String get userImage{
     return _profilePic;
   }
@@ -69,6 +73,7 @@ class Auth with ChangeNotifier{
         final userData = await firestore.collection('users').doc(_auth.currentUser.uid).get();
         _username = userData.data()['username'];
         _profilePic = userData.data()['image_url'];
+        _email = userData.data()['email'];
         notifyListeners();
       }
     newUser = false;
@@ -98,6 +103,7 @@ class Auth with ChangeNotifier{
     if(userData.exists){
       _username = userData.data()['username'];
       _profilePic = userData.data()['image_url'];
+      _email = userData.data()['email'];
     }
     else{
       await firestore.collection('users').doc(_auth.currentUser.uid).set({
@@ -111,6 +117,7 @@ class Auth with ChangeNotifier{
                         user.displayName.substring(0, user.displayName.indexOf(' '))
                           : user.displayName;
       _profilePic = user.photoURL;
+      _email = user.email;
     }
     notifyListeners();
   }
@@ -134,6 +141,7 @@ class Auth with ChangeNotifier{
       });
       _username = username;
       _profilePic = url;
+      _email = email;
       notifyListeners();
     } catch(e){
       throw HttpException(e.code);

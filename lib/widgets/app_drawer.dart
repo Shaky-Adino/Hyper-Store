@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../screens/account.dart';
 import '../screens/landingScreen.dart';
 import '../screens/products_overview_screen.dart';
 import '../helpers/custom_route.dart';
@@ -80,6 +81,15 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(ChatScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.account_circle, size: 28,),
+            title: Text('Your Account'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(Account.routeName);
             },
           ),
           Divider(),
