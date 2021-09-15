@@ -94,17 +94,24 @@ class Auth with ChangeNotifier{
     );
     authResult = await _auth.signInWithCredential(credential);
     final user = authResult.user;
-    await firestore.collection('users').doc(_auth.currentUser.uid).set({
+    final userData = await firestore.collection('users').doc(_auth.currentUser.uid).get();
+    if(userData.exists){
+      _username = userData.data()['username'];
+      _profilePic = userData.data()['image_url'];
+    }
+    else{
+      await firestore.collection('users').doc(_auth.currentUser.uid).set({
         'username': user.displayName.contains(' ') ? 
-                      user.displayName.substring(0, user.displayName.indexOf(' '))
-                        : user.displayName,
+                        user.displayName.substring(0, user.displayName.indexOf(' '))
+                          : user.displayName,
         'email': user.email,
         'image_url': user.photoURL,
-    });
-    _username = user.displayName.contains(' ') ? 
-                      user.displayName.substring(0, user.displayName.indexOf(' '))
-                        : user.displayName;
-    _profilePic = user.photoURL;
+      });
+      _username = user.displayName.contains(' ') ? 
+                        user.displayName.substring(0, user.displayName.indexOf(' '))
+                          : user.displayName;
+      _profilePic = user.photoURL;
+    }
     notifyListeners();
   }
 
