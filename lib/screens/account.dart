@@ -14,6 +14,8 @@ class Account extends StatelessWidget {
     String username = authData.username;
     String url = authData.userImage;
     String email = authData.userEmail;
+    String phone = authData.userPhone;
+    String address = authData.userAddress;
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Account'),
@@ -30,66 +32,80 @@ class Account extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: Card(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Column(
+                  child: SizedBox(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              horizontalTitleGap: 5,
-                              leading: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                            Expanded(
+                              child: Column(
                                 children: [
-                                  Text('Username:'),
+                                  ListTile(
+                                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                    horizontalTitleGap: 5,
+                                    leading: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [Text('Username:')],
+                                    ),
+                                    title: username == null ? Text('Loading...') : Padding(
+                                      padding: const EdgeInsets.only(bottom: 2),
+                                      child: Text(username),
+                                    ),
+                                  ),
+                                  Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
+                                  ListTile(
+                                    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                    horizontalTitleGap: 5,
+                                    leading: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [Text('Email:')],
+                                    ),
+                                    title: username == null ? Text('Loading...') : Padding(
+                                      padding: const EdgeInsets.only(bottom: 2),
+                                      child: Text(email),
+                                    ),
+                                  ),
                                 ],
-                              ),
-                              title: username == null ? Text('Loading...') : Padding(
-                                padding: const EdgeInsets.only(bottom: 2),
-                                child: Text(username),
                               ),
                             ),
-                            Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
-                            ListTile(
-                              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                              horizontalTitleGap: 5,
-                              leading: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Email:'),
-                                ],
-                              ),
-                              title: username == null ? Text('Loading...') : Padding(
-                                padding: const EdgeInsets.only(bottom: 2),
-                                child: Text(email),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5),
+                              child: CircleAvatar(
+                                radius: 35,
+                                backgroundImage: url == null ? AssetImage('assets/images/profile_pic.png') : null,
+                                child: url != null ? 
+                                  CachedNetworkImage(
+                                    imageUrl: url,
+                                    imageBuilder: (context, imageProvider) => Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: imageProvider, fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                    progressIndicatorBuilder: (context, url, downloadProgress) => 
+                                          Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                    fit: BoxFit.cover,
+                                  ) : null,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundImage: url == null ? AssetImage('assets/images/profile_pic.png') : null,
-                          child: url != null ? 
-                            CachedNetworkImage(
-                              imageUrl: url,
-                              imageBuilder: (context, imageProvider) => Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: imageProvider, fit: BoxFit.cover),
-                                ),
-                              ),
-                              progressIndicatorBuilder: (context, url, downloadProgress) => 
-                                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                              fit: BoxFit.cover,
-                            ) : null,
+                        ListTile(
+                            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                            horizontalTitleGap: 5,
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text('Username:')],
+                            ),
+                            title: username == null ? Text('Loading...') : Padding(
+                              padding: const EdgeInsets.only(bottom: 2),
+                              child: Text(username),
+                            ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -61,6 +61,14 @@ class Auth with ChangeNotifier{
     return _email;
   }
 
+  String get userPhone{
+    return _phone;
+  }
+
+  String get userAddress{
+    return _address;
+  }
+
   String get userImage{
     return _profilePic;
   }
