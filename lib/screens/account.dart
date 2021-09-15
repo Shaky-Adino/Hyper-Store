@@ -77,8 +77,6 @@ class Account extends StatelessWidget {
                             CachedNetworkImage(
                               imageUrl: url,
                               imageBuilder: (context, imageProvider) => Container(
-                                width: 70.0,
-                                height: 70.0,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
@@ -100,7 +98,7 @@ class Account extends StatelessWidget {
                 onTap: (){
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) => UserProfile())
+                    MaterialPageRoute(builder: (context) => UserProfile(username, url))
                   );
                 },
                 child: Container(

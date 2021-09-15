@@ -7,6 +7,9 @@ import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 
 class UserProfile extends StatefulWidget {
+  final String username, url;
+
+  UserProfile(this.username, this.url);
 
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -15,7 +18,7 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   File _pickedImage;
-  bool _edit = false;
+  String _newUsername;
 
   void _pickImage() async {
     final picker = ImagePicker();
@@ -36,16 +39,6 @@ class _UserProfileState extends State<UserProfile> {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit), 
-            onPressed: (){
-              setState(() {
-                _edit = true;
-              });
-            }
-          )
-        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(10),
@@ -53,21 +46,28 @@ class _UserProfileState extends State<UserProfile> {
           children: [
             CircleAvatar(
               radius: 60,
-              backgroundImage: _pickedImage == null ? CachedNetworkImage(
-                                  imageUrl: url,
-                                  progressIndicatorBuilder: (context, url, downloadProgress) => 
-                                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                                  fit: BoxFit.cover,
-                                ) : FileImage(_pickedImage),
+              backgroundImage: _pickedImage == null ? null : FileImage(_pickedImage),
+              child: _pickedImage == null ?
+                CachedNetworkImage(
+                      imageUrl: url,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      progressIndicatorBuilder: (context, url, downloadProgress) => 
+                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                      fit: BoxFit.cover,
+                    ) : null,
             ),
-
-            SizedBox(height: 5),
 
             TextButton.icon(
               style: TextButton.styleFrom(
                 primary: Colors.orange,
+                padding: EdgeInsets.zero,
               ),
-              onPressed: _edit ? _pickImage : null,
+              onPressed: _pickImage,
               icon: Icon(Icons.image, size: 19,),
               label: Text('Edit Image', overflow: TextOverflow.visible),
             ),
@@ -79,7 +79,7 @@ class _UserProfileState extends State<UserProfile> {
               child: Column(
                 children: [
                   TextFormField(
-                    enabled: _edit,
+                    initialValue: widget.username,
                     style: TextStyle(fontSize: 14.0),
                     decoration: InputDecoration(
                       prefixIcon: Icon(
@@ -107,7 +107,7 @@ class _UserProfileState extends State<UserProfile> {
                                   return null;
                               },
                     onSaved: (value){
-                                username = value;
+                                _newUsername = value;
                             },
                   ),                
                 ],
