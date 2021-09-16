@@ -37,6 +37,9 @@ class MessageBubble extends StatelessWidget{
                     builder: (BuildContext context){
                       return AlertDialog(
                         title: const Text("Delete this message?"),
+                        shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                         content: const Text("This action is permanent and can't be undone !"),
                         actions: [
                           TextButton(

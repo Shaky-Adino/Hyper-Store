@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './change_password.dart';
 import './user_profile.dart';
 import '../providers/auth.dart';
 import '../widgets/app_drawer.dart';
@@ -153,7 +154,10 @@ class Account extends StatelessWidget {
               SizedBox(height: 8),
               GestureDetector(
                 onTap: (){
-
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => ChangePassword())
+                  );
                 },
                 child: Container(
                   margin: EdgeInsets.only(left: deviceSize.width*0.50),

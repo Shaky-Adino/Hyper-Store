@@ -127,7 +127,10 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('An Error Occurred!'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: const Text('An Error Occurred!'),
         content: Text(message),
         actions: <Widget>[
           FlatButton(

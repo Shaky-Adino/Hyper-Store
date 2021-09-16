@@ -117,6 +117,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
           builder: (BuildContext context){
             return AlertDialog(
               title: Text("Images missing!"),
+              shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
               content: Text("Please attach all 4 images"),
               actions: [
                 TextButton(
@@ -152,8 +155,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-                title: Text('An error occurred!'),
-                content: Text('Something went wrong.'),
+                title: const Text('An error occurred!'),
+                shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                content: const Text('Something went wrong.'),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('Okay'),

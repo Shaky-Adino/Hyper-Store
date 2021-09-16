@@ -42,6 +42,9 @@ class UserProductItem extends StatelessWidget {
                     builder: (BuildContext context){
                       return AlertDialog(
                         title: Text("Are you sure?"),
+                        shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                         content: Text("This action is permanent and can't be undone !"),
                         actions: [
                           TextButton(

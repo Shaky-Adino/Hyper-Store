@@ -48,6 +48,9 @@ class _UserProfileState extends State<UserProfile> {
       barrierDismissible: false,
       builder: (BuildContext context){
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
           content: Row(
             children: [
               CircularProgressIndicator(),

@@ -45,6 +45,9 @@ class CartItem extends StatelessWidget {
           context: context,
           builder: (ctx) => AlertDialog(
             title: Text('Are you sure?'),
+            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
             content: Text(
               'Do you want to remove the item from the cart?',
             ),
