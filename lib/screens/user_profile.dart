@@ -79,174 +79,177 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('User Profile'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 60,
-                backgroundImage: _pickedImage == null ? null : FileImage(_pickedImage),
-                child: _pickedImage == null ?
-                  CachedNetworkImage(
-                        imageUrl: widget.url,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Hyper Store'),
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(10),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 60,
+                  backgroundImage: _pickedImage == null ? null : FileImage(_pickedImage),
+                  child: _pickedImage == null ?
+                    CachedNetworkImage(
+                          imageUrl: widget.url,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                            ),
                           ),
+                          progressIndicatorBuilder: (context, url, downloadProgress) => 
+                            Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                          fit: BoxFit.cover,
+                        ) : null,
+                ),
+
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    primary: Colors.orange,
+                    padding: EdgeInsets.zero,
+                  ),
+                  onPressed: _pickImage,
+                  icon: Icon(Icons.image, size: 19,),
+                  label: Text('Edit Image', overflow: TextOverflow.visible),
+                ),
+
+                SizedBox(height: 10),
+
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        initialValue: widget.username,
+                        style: TextStyle(fontSize: 14.0),
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                                        Icons.account_circle,
+                                        size: 18,
+                                        color: Colors.black,
+                                      ),
+                          filled: true,
+                          enabledBorder: UnderlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none,
+                                          ),
+                          focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                          labelText: 'Username'
                         ),
-                        progressIndicatorBuilder: (context, url, downloadProgress) => 
-                          Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                        fit: BoxFit.cover,
-                      ) : null,
-              ),
+                        validator: (value) {
+                                      if (value.isEmpty || value.length < 3) {
+                                          return 'Username is too short!!';
+                                      }
+                                      if(value.contains(' ')){
+                                        return 'No spaces allowed';
+                                      }
+                                      return null;
+                                  },
+                        onSaved: (value){
+                                    _newUsername = value;
+                                    _newPhone = _newPhone;
+                                    _newAddress = _newAddress;
+                                },
+                      ),
 
-              TextButton.icon(
-                style: TextButton.styleFrom(
-                  primary: Colors.orange,
-                  padding: EdgeInsets.zero,
+                      SizedBox(height: 10),
+
+                      TextFormField(
+                        keyboardType: TextInputType.phone,
+                        initialValue: widget.phone,
+                        style: TextStyle(fontSize: 14.0),
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                                        Icons.phone,
+                                        size: 18,
+                                        color: Colors.black,
+                                      ),
+                          filled: true,
+                          enabledBorder: UnderlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none,
+                                          ),
+                          focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                          labelText: 'Phone No'
+                        ),
+                        validator: (value) {
+                                      if (value.isEmpty || value.length < 10 || value.length > 10) {
+                                          return 'Enter a valid phone no.';
+                                      }
+                                      if(value.contains(' ')){
+                                        return 'no spaces allowed';
+                                      }
+                                      return null;
+                                  },
+                        onSaved: (value){
+                                    _newUsername = _newUsername;
+                                    _newPhone = value;
+                                    _newAddress = _newAddress;
+                                },
+                      ),
+
+                      SizedBox(height: 10),
+
+                      TextFormField(
+                        initialValue: widget.address,
+                        maxLines: 3,
+                        keyboardType: TextInputType.multiline,
+                        style: TextStyle(fontSize: 14.0),
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                                        Icons.home,
+                                        size: 18,
+                                        color: Colors.black,
+                                      ),
+                          filled: true,
+                          enabledBorder: UnderlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide.none,
+                                          ),
+                          focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                          labelText: 'Address'
+                        ),
+                        validator: (value) {
+                                      if (value.isEmpty || value.length < 10) {
+                                          return 'Should be at least 10 characters long.';
+                                      }
+                                      return null;
+                                  },
+                        onSaved: (value){
+                                    _newUsername = _newUsername;
+                                    _newPhone = _newPhone;
+                                    _newAddress = value;
+                                },
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8)),
+                              onPressed: (){
+                                _saveForm(context);
+                              }, 
+                              child: Text("SAVE",style: TextStyle(fontWeight: FontWeight.bold),softWrap: false,)
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
                 ),
-                onPressed: _pickImage,
-                icon: Icon(Icons.image, size: 19,),
-                label: Text('Edit Image', overflow: TextOverflow.visible),
-              ),
-
-              SizedBox(height: 10),
-
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      initialValue: widget.username,
-                      style: TextStyle(fontSize: 14.0),
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                                      Icons.account_circle,
-                                      size: 18,
-                                      color: Colors.black,
-                                    ),
-                        filled: true,
-                        enabledBorder: UnderlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none,
-                                        ),
-                        focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                        labelText: 'Username'
-                      ),
-                      validator: (value) {
-                                    if (value.isEmpty || value.length < 3) {
-                                        return 'Username is too short!!';
-                                    }
-                                    if(value.contains(' ')){
-                                      return 'No spaces allowed';
-                                    }
-                                    return null;
-                                },
-                      onSaved: (value){
-                                  _newUsername = value;
-                                  _newPhone = _newPhone;
-                                  _newAddress = _newAddress;
-                              },
-                    ),
-
-                    SizedBox(height: 10),
-
-                    TextFormField(
-                      keyboardType: TextInputType.phone,
-                      initialValue: widget.phone,
-                      style: TextStyle(fontSize: 14.0),
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                                      Icons.phone,
-                                      size: 18,
-                                      color: Colors.black,
-                                    ),
-                        filled: true,
-                        enabledBorder: UnderlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none,
-                                        ),
-                        focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                        labelText: 'Phone No'
-                      ),
-                      validator: (value) {
-                                    if (value.isEmpty || value.length < 10 || value.length > 10) {
-                                        return 'Enter a valid phone no.';
-                                    }
-                                    if(value.contains(' ')){
-                                      return 'no spaces allowed';
-                                    }
-                                    return null;
-                                },
-                      onSaved: (value){
-                                  _newUsername = _newUsername;
-                                  _newPhone = value;
-                                  _newAddress = _newAddress;
-                              },
-                    ),
-
-                    SizedBox(height: 10),
-
-                    TextFormField(
-                      initialValue: widget.address,
-                      maxLines: 3,
-                      keyboardType: TextInputType.multiline,
-                      style: TextStyle(fontSize: 14.0),
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                                      Icons.home,
-                                      size: 18,
-                                      color: Colors.black,
-                                    ),
-                        filled: true,
-                        enabledBorder: UnderlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide.none,
-                                        ),
-                        focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                        labelText: 'Address'
-                      ),
-                      validator: (value) {
-                                    if (value.isEmpty || value.length < 10) {
-                                        return 'Should be at least 10 characters long.';
-                                    }
-                                    return null;
-                                },
-                      onSaved: (value){
-                                  _newUsername = _newUsername;
-                                  _newPhone = _newPhone;
-                                  _newAddress = value;
-                              },
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(8)),
-                            onPressed: (){
-                              _saveForm(context);
-                            }, 
-                            child: Text("SAVE",style: TextStyle(fontWeight: FontWeight.bold),softWrap: false,)
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

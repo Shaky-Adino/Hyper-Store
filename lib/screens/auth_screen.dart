@@ -119,6 +119,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   void dispose() {
     _controller.dispose();
     _vcontroller.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -260,385 +261,388 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       return SplashScreen();
 
     else
-      return Scaffold(
-        body: Stack(
-          children: [
+      return GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          body: Stack(
+            children: [
 
-            Container(
-              height: deviceSize.height - 400,
-              color: Colors.yellow,
-            ),
-
-            AnimatedPositioned(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeOutQuad,
-              top: keyBoardOpen ? -deviceSize.height / 3.5 : 0.0,
-              child: WaveWidget(
-                size: deviceSize,
-                yOffset: deviceSize.height/3.0,
-                color: Colors.white,
+              Container(
+                height: deviceSize.height - 400,
+                color: Colors.yellow,
               ),
-            ),
 
-            AnimatedPositioned(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeOutQuad,
-              top: keyBoardOpen ? -deviceSize.height / 3.7 : 0.0,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 100.0, left: 66.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeOutQuad,
+                top: keyBoardOpen ? -deviceSize.height / 3.5 : 0.0,
+                child: WaveWidget(
+                  size: deviceSize,
+                  yOffset: deviceSize.height/3.0,
+                  color: Colors.white,
+                ),
+              ),
+
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOutQuad,
+                top: keyBoardOpen ? -deviceSize.height / 3.7 : 0.0,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 100.0, left: 66.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            width: 230,
+                            height: 230,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000)),
+                            child: ClipOval(
+                                    child: VideoPlayer(_vcontroller)
+                                  ),
+                        ),
+                      ],
+                    ),
+                ),
+              ),
+
+              Container(
+                margin: keyBoardOpen ? EdgeInsets.only(top: deviceSize.height/16) : EdgeInsets.only(top: deviceSize.height/3),
+                padding: const EdgeInsets.fromLTRB(30.0, 25.0, 30.0, 8.0),
+                child: SizedBox(
+                  height: 500,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Container(
-                          width: 230,
-                          height: 230,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000)),
-                          child: ClipOval(
-                                  child: VideoPlayer(_vcontroller)
-                                ),
-                      ),
-                    ],
-                  ),
-              ),
-            ),
-
-            Container(
-              margin: keyBoardOpen ? EdgeInsets.only(top: deviceSize.height/16) : EdgeInsets.only(top: deviceSize.height/3),
-              padding: const EdgeInsets.fromLTRB(30.0, 25.0, 30.0, 8.0),
-              child: SizedBox(
-                height: 500,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(),
-                    Flexible(
-                      child: Form(
-                        key: _formKey,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                AnimatedContainer(
-                                  constraints: BoxConstraints(
-                                    minHeight: _authMode == AuthMode.Signup ? 60 : 0,
-                                    maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
-                                  ),
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn,
-                                  child: FadeTransition(
-                                    opacity: _opacityAnimation,
-                                    child: SlideTransition(
-                                      position: _slideAnimation2,
-                                      child: UserImagePicker(_pickedImage)
-                                      ),
-                                  ),
-                                ),
-
-                                SizedBox(height: 10),
-                                
-                                AnimatedContainer(
-                                  constraints: BoxConstraints(
-                                    minHeight: _authMode == AuthMode.Signup ? 60 : 0,
-                                    maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
-                                  ),
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn,
-                                  child: FadeTransition(
-                                    opacity: _opacityAnimation,
-                                    child: SlideTransition(
-                                      position: _slideAnimation2,
-                                      child: TextFormField(
-                                        enabled: _authMode == AuthMode.Signup,
-                                        style: TextStyle(
-                                          fontSize: 14.0,
+                      SizedBox(),
+                      Flexible(
+                        child: Form(
+                          key: _formKey,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  AnimatedContainer(
+                                    constraints: BoxConstraints(
+                                      minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                                      maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
+                                    ),
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeIn,
+                                    child: FadeTransition(
+                                      opacity: _opacityAnimation,
+                                      child: SlideTransition(
+                                        position: _slideAnimation2,
+                                        child: UserImagePicker(_pickedImage)
                                         ),
-                                        decoration: InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.account_circle,
-                                            size: 18,
-                                            color: Colors.black,
-                                          ),
-                                          filled: true,
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                            borderSide: BorderSide.none,
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          labelText: 'Username'
-                                        ),
-                                        validator: _authMode == AuthMode.Signup
-                                            ? (value) {
-                                                if (value.isEmpty || value.length < 3) {
-                                                  return 'username is too short!!';
-                                                }
-                                                if(value.contains(' ')){
-                                                  return 'no spaces allowed';
-                                                }
-                                                return null;
-                                              }
-                                            : null,
-                                        onSaved: (value){
-                                          username = value;
-                                        },
-                                      ),
                                     ),
                                   ),
-                                ),
 
-                                SizedBox(height: 5,),
-
-                                TextFormField(
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                  ),
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.mail,
-                                      size: 18,
-                                      color: Colors.black,
+                                  SizedBox(height: 10),
+                                  
+                                  AnimatedContainer(
+                                    constraints: BoxConstraints(
+                                      minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                                      maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
                                     ),
-                                    filled: true,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    labelText: 'E-Mail'
-                                  ),
-                                  keyboardType: TextInputType.emailAddress,
-                                  validator: (value) {
-                                    if (value.isEmpty || !value.contains('@')) {
-                                      return 'Invalid email!';
-                                    }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    _authData['email'] = value;
-                                  },
-                                ),
-
-                                SizedBox(height: 10.0),
-
-                                TextFormField(
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                  ),
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.vpn_key,
-                                      size: 18,
-                                      color: Colors.black,
-                                    ),
-                                    filled: true,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    suffixIcon: GestureDetector(
-                                      onTap: (){
-                                        setStateIfMounted(() {
-                                             showPassword1 = !showPassword1;                             
-                                        });
-                                      },
-                                      child: Icon(
-                                        showPassword1 ? Icons.visibility : Icons.visibility_off,
-                                        size: 18,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    labelText: 'Password'
-                                  ),
-                                  obscureText: !showPassword1,
-                                  controller: _passwordController,
-                                  validator: (value) {
-                                    if (value.isEmpty || value.length < 5) {
-                                      return 'Password is too short!';
-                                    }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    _authData['password'] = value;
-                                  },
-                                ),
-
-                                SizedBox(height: 10.0),
-
-                                AnimatedContainer(
-                                  constraints: BoxConstraints(
-                                    minHeight: _authMode == AuthMode.Signup ? 60 : 0,
-                                    maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
-                                  ),
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn,
-                                  child: FadeTransition(
-                                    opacity: _opacityAnimation,
-                                    child: SlideTransition(
-                                      position: _slideAnimation,
-                                      child: TextFormField(
-                                        enabled: _authMode == AuthMode.Signup,
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                        ),
-                                        decoration: InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.vpn_key,
-                                            size: 18,
-                                            color: Colors.black,
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeIn,
+                                    child: FadeTransition(
+                                      opacity: _opacityAnimation,
+                                      child: SlideTransition(
+                                        position: _slideAnimation2,
+                                        child: TextFormField(
+                                          enabled: _authMode == AuthMode.Signup,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
                                           ),
-                                          filled: true,
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                            borderSide: BorderSide.none,
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          suffixIcon: GestureDetector(
-                                            onTap: (){
-                                              setStateIfMounted(() {
-                                                    showPassword2 = !showPassword2;                                  
-                                              });
-                                            },
-                                            child: Icon(
-                                              showPassword2 ? Icons.visibility : Icons.visibility_off,
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.account_circle,
                                               size: 18,
                                               color: Colors.black,
                                             ),
+                                            filled: true,
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                              borderSide: BorderSide.none,
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            labelText: 'Username'
                                           ),
-                                          labelText: 'Confirm Password'
-                                        ),
-                                        obscureText: !showPassword2,
-                                        validator: _authMode == AuthMode.Signup
-                                            ? (value) {
-                                                if (value != _passwordController.text) {
-                                                  return 'Passwords do not match!';
+                                          validator: _authMode == AuthMode.Signup
+                                              ? (value) {
+                                                  if (value.isEmpty || value.length < 3) {
+                                                    return 'username is too short!!';
+                                                  }
+                                                  if(value.contains(' ')){
+                                                    return 'no spaces allowed';
+                                                  }
+                                                  return null;
                                                 }
-                                                return null;
-                                              }
-                                            : null,
+                                              : null,
+                                          onSaved: (value){
+                                            username = value;
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                
-                                SizedBox(
-                                  height: 10,
-                                ),
 
-                                // if(_authMode == AuthMode.Login)
-                                AnimatedContainer(
-                                    constraints: BoxConstraints(
-                                    minHeight: _authMode == AuthMode.Login ? 40 : 0,
-                                    maxHeight: _authMode == AuthMode.Login ? 50 : 0,
+                                  SizedBox(height: 5,),
+
+                                  TextFormField(
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                    ),
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(
+                                        Icons.mail,
+                                        size: 18,
+                                        color: Colors.black,
+                                      ),
+                                      filled: true,
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      labelText: 'E-Mail'
+                                    ),
+                                    keyboardType: TextInputType.emailAddress,
+                                    validator: (value) {
+                                      if (value.isEmpty || !value.contains('@')) {
+                                        return 'Invalid email!';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value) {
+                                      _authData['email'] = value;
+                                    },
                                   ),
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn,
+
+                                  SizedBox(height: 10.0),
+
+                                  TextFormField(
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                    ),
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(
+                                        Icons.vpn_key,
+                                        size: 18,
+                                        color: Colors.black,
+                                      ),
+                                      filled: true,
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      suffixIcon: GestureDetector(
+                                        onTap: (){
+                                          setStateIfMounted(() {
+                                               showPassword1 = !showPassword1;                             
+                                          });
+                                        },
+                                        child: Icon(
+                                          showPassword1 ? Icons.visibility : Icons.visibility_off,
+                                          size: 18,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      labelText: 'Password'
+                                    ),
+                                    obscureText: !showPassword1,
+                                    controller: _passwordController,
+                                    validator: (value) {
+                                      if (value.isEmpty || value.length < 5) {
+                                        return 'Password is too short!';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value) {
+                                      _authData['password'] = value;
+                                    },
+                                  ),
+
+                                  SizedBox(height: 10.0),
+
+                                  AnimatedContainer(
+                                    constraints: BoxConstraints(
+                                      minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                                      maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
+                                    ),
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeIn,
                                     child: FadeTransition(
-                                      opacity: anime,
-                                      child: Container(
+                                      opacity: _opacityAnimation,
+                                      child: SlideTransition(
+                                        position: _slideAnimation,
+                                        child: TextFormField(
+                                          enabled: _authMode == AuthMode.Signup,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                          ),
+                                          decoration: InputDecoration(
+                                            prefixIcon: Icon(
+                                              Icons.vpn_key,
+                                              size: 18,
+                                              color: Colors.black,
+                                            ),
+                                            filled: true,
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                              borderSide: BorderSide.none,
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            suffixIcon: GestureDetector(
+                                              onTap: (){
+                                                setStateIfMounted(() {
+                                                    showPassword2 = !showPassword2;                                  
+                                                });
+                                              },
+                                              child: Icon(
+                                                showPassword2 ? Icons.visibility : Icons.visibility_off,
+                                                size: 18,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            labelText: 'Confirm Password'
+                                          ),
+                                          obscureText: !showPassword2,
+                                          validator: _authMode == AuthMode.Signup
+                                              ? (value) {
+                                                  if (value != _passwordController.text) {
+                                                    return 'Passwords do not match!';
+                                                  }
+                                                  return null;
+                                                }
+                                              : null,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+
+                                  // if(_authMode == AuthMode.Login)
+                                  AnimatedContainer(
+                                      constraints: BoxConstraints(
+                                      minHeight: _authMode == AuthMode.Login ? 40 : 0,
+                                      maxHeight: _authMode == AuthMode.Login ? 50 : 0,
+                                    ),
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeIn,
+                                      child: FadeTransition(
+                                        opacity: anime,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                                        color: Colors.yellow,
+                                                        borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child: InkWell(
+                                            onTap: () => _submit(true),
+                                            child: Ink(
+                                              color: Colors.white,
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(6),
+                                                  child: Wrap(
+                                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius: BorderRadius.circular(10)
+                                                        ),
+                                                        padding: EdgeInsets.all(2),
+                                                        child: Image.asset(
+                                                          'assets/images/search.png',
+                                                           height: 28,
+                                                           width: 28,
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 12),
+                                                      Text(
+                                                        ' Sign in with Google',
+                                                        style: TextStyle(
+                                                          fontSize: 16.0,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                if(_authMode == AuthMode.Login)
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+
+                                  if (_isLoading)
+                                    CircularProgressIndicator()
+                                  else
+                                    Material(
+                                      child: Ink(
                                         decoration: BoxDecoration(
-                                                      color: Colors.yellow,
-                                                      borderRadius: BorderRadius.circular(10)
+                                          color: Colors.yellow,
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.fromBorderSide(BorderSide.none),
                                         ),
                                         child: InkWell(
-                                          onTap: () => _submit(true),
-                                          child: Ink(
-                                            color: Colors.white,
-                                            child: Padding(
-                                                padding: EdgeInsets.all(6),
-                                                child: Wrap(
-                                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.circular(10)
-                                                      ),
-                                                      padding: EdgeInsets.all(2),
-                                                      child: Image.asset(
-                                                        'assets/images/search.png',
-                                                         height: 28,
-                                                         width: 28,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 12),
-                                                    Text(
-                                                      ' Sign in with Google',
-                                                      style: TextStyle(
-                                                        fontSize: 16.0,
-                                                      ),
-                                                    ),
-                                                  ],
+                                          onTap: () => _submit(false),
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Container(
+                                            height: 50.0,
+                                            child: Center(
+                                              child: Text(
+                                                _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,fontSize: 16.0,
                                                 ),
-                                              ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                              if(_authMode == AuthMode.Login)
-                                SizedBox(
-                                  height: 10,
-                                ),
-
-                                if (_isLoading)
-                                  CircularProgressIndicator()
-                                else
-                                  Material(
-                                    child: Ink(
-                                      decoration: BoxDecoration(
-                                        color: Colors.yellow,
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.fromBorderSide(BorderSide.none),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () => _submit(false),
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Container(
-                                          height: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,fontSize: 16.0,
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
+                                  SizedBox(
+                                    height: 7,
                                   ),
-                                SizedBox(
-                                  height: 7,
-                                ),
-                                FlatButton(
-                                  child: Text(
-                                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
-                                      style: TextStyle(fontWeight: FontWeight.w800),
-                                      ),
-                                  onPressed: _switchAuthMode,
-                                  padding: EdgeInsets.symmetric(horizontal: 30.0),
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  // textColor: Colors.yellow,
-                                ),
-                              ],
-                            ),
+                                  FlatButton(
+                                    child: Text(
+                                        '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
+                                        style: TextStyle(fontWeight: FontWeight.w800),
+                                        ),
+                                    onPressed: _switchAuthMode,
+                                    padding: EdgeInsets.symmetric(horizontal: 30.0),
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    // textColor: Colors.yellow,
+                                  ),
+                                ],
+                              ),
+                          ),
                         ),
                       ),
+                    ],
                     ),
-                  ],
-                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
   }
