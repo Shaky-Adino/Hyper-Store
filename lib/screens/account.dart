@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './change_password.dart';
@@ -154,10 +155,30 @@ class Account extends StatelessWidget {
               SizedBox(height: 8),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => ChangePassword())
-                  );
+                  if(FirebaseAuth.instance.currentUser.providerData[0].providerId.toString().contains('google.com')){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      duration: Duration(milliseconds: 2500),
+                      content: Text(
+                        'You are signed in through Google', 
+                        textAlign: TextAlign.center, 
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      backgroundColor: Colors.orange,
+                      elevation: 3,
+                      padding: EdgeInsets.all(3),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(50), 
+                          topRight: Radius.circular(50)
+                        ),
+                      ),
+                    ));
+                  }
+                  else{
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => ChangePassword())
+                    );
+                  }
                 },
                 child: Container(
                   margin: EdgeInsets.only(left: deviceSize.width*0.50),

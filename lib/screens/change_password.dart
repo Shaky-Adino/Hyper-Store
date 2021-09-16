@@ -273,7 +273,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       // FirebaseAuth.instance.sendPasswordResetEmail(email: FirebaseAuth.instance.currentUser!.email!);
                       showDialog(
                         context: context,
-                        builder:  (BuildContext context)
+                        builder: (BuildContext context)
                         {
                           return AlertDialog(
                             title: const Text('Reset Password'),
