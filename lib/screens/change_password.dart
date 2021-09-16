@@ -270,7 +270,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   margin: EdgeInsets.all(0),
                   child: TextButton(
                     onPressed: () {
-                      // FirebaseAuth.instance.sendPasswordResetEmail(email: FirebaseAuth.instance.currentUser!.email!);
+                      FirebaseAuth.instance.sendPasswordResetEmail(email: FirebaseAuth.instance.currentUser.email);
                       showDialog(
                         context: context,
                         builder: (BuildContext context)
@@ -283,7 +283,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  Text("Password reset link sent successfully !"),
+                                  Text("Password reset link sent to registered email."),
                                 ],
                               ),
                             ),

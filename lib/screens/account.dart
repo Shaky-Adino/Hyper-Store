@@ -29,7 +29,7 @@ class Account extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('User Profile'),
+              Text('User Profile', style: TextStyle(fontSize: 18)),
               SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(right: 8),

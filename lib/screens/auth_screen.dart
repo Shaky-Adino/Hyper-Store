@@ -134,7 +134,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
         content: Text(message),
         actions: <Widget>[
           FlatButton(
-            child: Text('Okay'),
+            child: Text('Okay', style: TextStyle(color: Colors.black),),
             onPressed: () {
               Navigator.of(ctx).pop();
             },
@@ -170,7 +170,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     if(_userImageFile == null && _authMode == AuthMode.Signup){
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please pick an image'),
+          content: Text('Please pick an image', textAlign: TextAlign.center),
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
