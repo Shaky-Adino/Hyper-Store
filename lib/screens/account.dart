@@ -92,16 +92,30 @@ class Account extends StatelessWidget {
                             ),
                           ],
                         ),
+                        Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
                         ListTile(
                             visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                             horizontalTitleGap: 5,
                             leading: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [Text('Username:')],
+                              children: [Text('Phone No:')],
                             ),
-                            title: username == null ? Text('Loading...') : Padding(
+                            title: phone == null ? Text('Loading...') : Padding(
                               padding: const EdgeInsets.only(bottom: 2),
-                              child: Text(username),
+                              child: Text(phone),
+                            ),
+                        ),
+                        Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
+                        ListTile(
+                            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                            horizontalTitleGap: 5,
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text('Address:')],
+                            ),
+                            title: address == null ? Text('Loading...') : Padding(
+                              padding: const EdgeInsets.only(bottom: 2),
+                              child: Text(address),
                             ),
                         ),
                       ],
@@ -114,7 +128,7 @@ class Account extends StatelessWidget {
                 onTap: (){
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) => UserProfile(username, url))
+                    MaterialPageRoute(builder: (context) => UserProfile(username, url, phone, address))
                   );
                 },
                 child: Container(

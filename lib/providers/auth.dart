@@ -176,6 +176,21 @@ class Auth with ChangeNotifier{
     await GoogleSignIn().signOut();
   }
 
+  Future<void> updateUserInfo(String username, String url, String phone, String address) async {
+    await firestore.collection('users').doc(_auth.currentUser.uid).set({
+      'username': username,
+      'email': _email,
+      'image_url': url,
+      'phone': phone,
+      'address': address,
+    });
+    _username = username;
+    _profilePic = url;
+    _phone = phone;
+    _address = address;
+    notifyListeners();
+  }
+
   // Future<void> _authenticate(String email, String password, String urlSegment, [String uname]) async {
 
   //   final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyCuJULdoB0HrxZokrt2_E_siSQ9f-Ijd3Y');
