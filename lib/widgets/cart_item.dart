@@ -91,9 +91,7 @@ class CartItem extends StatelessWidget {
                                       Container(
                                         width: 90,
                                         height: 90,
-                                        child: Hero(
-                                          tag: productId,
-                                          child: ClipRRect(
+                                        child: ClipRRect(
                                             borderRadius: BorderRadius.circular(8.0),
                                             child: CachedNetworkImage(
                                                 imageUrl: product.imageUrl0,
@@ -101,7 +99,6 @@ class CartItem extends StatelessWidget {
                                                 fit: BoxFit.cover,
                                             ),
                                           ),
-                                        ),
                                       ),
                                       Padding(
                                           padding: const EdgeInsets.only(left: 16.0),
