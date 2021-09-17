@@ -3,6 +3,9 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../screens/product_detail_screen.dart';
+import '../providers/products.dart';
 
 import '../providers/orders.dart' as ord;
 
@@ -51,66 +54,59 @@ class _OrderItemState extends State<OrderItem> {
               child: ListView(
                 children: widget.order.products
                     .map(
-                      (prod) => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            width: 90,
-                            height: 90,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: CachedNetworkImage(
-                                  imageUrl: prod.imageUrl,
-                                  placeholder: (context, url) => CircularProgressIndicator(),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                          ),
-                          Text(
-                            prod.title,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600
+                      (prod) => InkWell(
+                        onTap: (){
+                          if(Provider.of<Products>(context, listen: false).findById(prod.prodId) == null)
+                            return;
+                          Navigator.of(context).pushNamed(
+                            ProductDetailScreen.routeName,
+                            arguments: prod.prodId,
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                                width: 90,
+                                height: 90,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl: prod.imageUrl,
+                                      placeholder: (context, url) => CircularProgressIndicator(),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                             ),
-                          ),
-                          Chip(
-                            labelPadding: const EdgeInsets.all(2),
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.yellowAccent,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  '${prod.quantity}x',
-                                  style: TextStyle(color: Colors.black)
-                                ),
+                            Text(
+                              prod.title,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600
                               ),
                             ),
-                            label: Text('₹${prod.price}'),
-                            elevation: 6.0,
-                            backgroundColor: Colors.yellow,
-                            padding: const EdgeInsets.all(8.0),
-                          ),
-                          // CircleAvatar(
-                          //     backgroundColor: Colors.yellow,
-                          //     child: Padding(
-                          //     padding: EdgeInsets.all(4.0),
-                          //       child: FittedBox(
-                          //         child: Text(
-                          //           '${prod.quantity}x  ₹${prod.price}', 
-                          //           style: TextStyle(color: Colors.black),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // Text(
-                          //   '${prod.quantity}x  ₹${prod.price}',
-                          //   style: TextStyle(
-                          //     fontSize: 18,
-                          //     color: Colors.grey,
-                          //   ),
-                          // )
-                        ],
+                            // CircleAvatar(
+                            //     backgroundColor: Colors.yellow,
+                            //     child: Padding(
+                            //     padding: EdgeInsets.all(4.0),
+                            //       child: FittedBox(
+                            //         child: Text(
+                            //           '${prod.quantity}x  ₹${prod.price}', 
+                            //           style: TextStyle(color: Colors.black),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            Text(
+                              '${prod.quantity}x  ₹${prod.price}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black.withOpacity(0.7),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ).toList(),
               ),
