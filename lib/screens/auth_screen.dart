@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import './forgot_password.dart';
 import '../widgets/pickers/user_image_picker.dart';
 import '../helpers/scale_route.dart';
 
@@ -417,7 +418,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     ),
                                     keyboardType: TextInputType.emailAddress,
                                     validator: (value) {
-                                      if (value.isEmpty || !value.contains('@')) {
+                                      if (value.isEmpty || !value.contains('@') || !value.contains('.com')) {
                                         return 'Invalid email!';
                                       }
                                       return null;
@@ -474,7 +475,27 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     },
                                   ),
 
-                                  SizedBox(height: 10.0),
+                                if(_authMode == AuthMode.Login)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      TextButton(
+                                        onPressed: (){
+                                          Navigator.push(
+                                            context, 
+                                            MaterialPageRoute(builder: (context) => ForgotPassword())
+                                          );
+                                        }, 
+                                        style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                        child: Text('Forgot password?', style: TextStyle(color: Colors.blue))
+                                      )
+                                    ],
+                                  ),
+
+                                  if(_authMode == AuthMode.Signup)
+                                    SizedBox(height: 10),
 
                                   AnimatedContainer(
                                     constraints: BoxConstraints(

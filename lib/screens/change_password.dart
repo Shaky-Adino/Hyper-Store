@@ -282,9 +282,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             ),
                             content: SingleChildScrollView(
                               child: ListBody(
-                                children: <Widget>[
-                                  Text("Password reset link sent to registered email."),
-                                ],
+                                children: <Widget>[const Text("Password reset link sent to registered email.")]
                               ),
                             ),
                             actions: <Widget>[
