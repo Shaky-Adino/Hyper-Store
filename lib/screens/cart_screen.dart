@@ -136,7 +136,6 @@ class _OrderButtonState extends State<OrderButton> {
                                 context, 
                                 MaterialPageRoute(builder: (context) => UserProfile(username, url, phone, address))
                               );
-                              print("printing " + updated.toString());
               if(!updated)
                 return;
             }

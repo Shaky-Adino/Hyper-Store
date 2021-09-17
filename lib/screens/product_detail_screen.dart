@@ -338,7 +338,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 child: InkWell(
                                           onTap: () {
-                                            cart.newaddItem(loadedProduct.id, loadedProduct.price, loadedProduct.title, _quantity);
+                                            cart.newaddItem(loadedProduct.id, loadedProduct.imageUrl0, loadedProduct.price, loadedProduct.title, _quantity);
 
                                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                             ScaffoldMessenger.of(context).showSnackBar(

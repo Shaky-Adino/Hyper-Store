@@ -55,6 +55,8 @@ class Orders with ChangeNotifier{
               .map(
                 (item) => CartItem(
                   id: item['id'],
+                  prodId: item['productId'],
+                  imageUrl: item['imageUrl'],
                   price: item['price'],
                   quantity: item['quantity'],
                   title: item['title'],
@@ -107,7 +109,9 @@ class Orders with ChangeNotifier{
         'dateTime': timestamp.toIso8601String(),
         'products': cartProducts.map((cp) => {
                       'id': cp.id,
+                      'productId': cp.prodId,
                       'title': cp.title,
+                      'imageUrl': cp.imageUrl,
                       'quantity': cp.quantity,
                       'price': cp.price,
                     }).toList(),

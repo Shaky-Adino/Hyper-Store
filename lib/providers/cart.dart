@@ -5,14 +5,16 @@ import 'dart:convert';
 import '../models/http_exception.dart';
 
 class CartItem {
-  final String id;
-  final String title;
+  final String id, prodId;
+  final String title, imageUrl;
   final int quantity;
   final double price;
 
   CartItem({
     @required this.id,
+    @required this.prodId,
     @required this.title,
+    @required this.imageUrl,
     @required this.quantity,
     @required this.price,
   });
@@ -48,10 +50,14 @@ class Cart with ChangeNotifier{
       return;
     }
     extractedData.forEach((itemData) {
-      loadedItems[itemData['productId']] = CartItem(id: itemData.id, 
+      loadedItems[itemData['productId']] = CartItem(
+                                                id: itemData.id, 
+                                                prodId: itemData['productId'],
                                                 title: itemData['title'], 
+                                                imageUrl: itemData['imageUrl'],
                                                 quantity: itemData['quantity'], 
-                                                price: itemData['price']);
+                                                price: itemData['price']
+                                           );
     });
     _items = loadedItems;
     notifyListeners();
@@ -75,7 +81,7 @@ class Cart with ChangeNotifier{
   //   notifyListeners();
   // }
 
-  Future<void> newaddItem(String productId,double price,String title,[int q = 1]) async {
+  Future<void> newaddItem(String productId, String url, double price,String title,[int q = 1]) async {
     
     if (_items.containsKey(productId)) {
       // change quantity...
@@ -90,7 +96,9 @@ class Cart with ChangeNotifier{
           productId,
           (existingCartItem) => CartItem(
                 id: existingCartItem.id,
+                prodId: existingCartItem.prodId,
                 title: existingCartItem.title,
+                imageUrl: existingCartItem.imageUrl,
                 price: existingCartItem.price,
                 quantity: existingCartItem.quantity + q,
               ),
@@ -105,13 +113,16 @@ class Cart with ChangeNotifier{
             'title': title,
             'price': price,
             'productId': productId,
+            'imageUrl': url,
             'quantity': q,
         });
         _items.putIfAbsent(
             productId,
             () => CartItem(
                   id: docRef.id,
+                  prodId: productId,
                   title: title,
+                  imageUrl: url,
                   price: price,
                   quantity: q,
                 ),
@@ -239,7 +250,9 @@ class Cart with ChangeNotifier{
           productId,
           (existingCartItem) => CartItem(
                 id: existingCartItem.id,
+                prodId: existingCartItem.prodId,
                 title: existingCartItem.title,
+                imageUrl: existingCartItem.imageUrl,
                 price: existingCartItem.price,
                 quantity: existingCartItem.quantity - q,
               ),
