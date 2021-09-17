@@ -53,13 +53,13 @@ class CartItem extends StatelessWidget {
             ),
             actions: <Widget>[
               FlatButton(
-                child: Text('No'),
+                child: Text('No',style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
                 onPressed: () {
                   Navigator.of(ctx).pop(false);
                 },
               ),
               FlatButton(
-                child: Text('Yes'),
+                child: Text('Yes',style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
                 onPressed: () {
                   Navigator.of(ctx).pop(true);
                 },

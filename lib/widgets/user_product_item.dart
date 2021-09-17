@@ -51,14 +51,14 @@ class UserProductItem extends StatelessWidget {
                             onPressed: (){
                               Navigator.of(context).pop();
                             }, 
-                            child: Text("CANCEL",style: TextStyle(color: Colors.orange),)
+                            child: Text("CANCEL",style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold))
                           ),
                           TextButton(
                             onPressed: () async {
                               await Provider.of<Products>(context, listen: false).newdeleteProduct(id);
                               Navigator.of(context).pop();
                             }, 
-                            child: Text("YES",style: TextStyle(color: Colors.orange),)
+                            child: Text("YES",style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold))
                           ),
                         ],
                       );

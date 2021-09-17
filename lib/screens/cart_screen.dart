@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import './user_profile.dart';
+import '../providers/auth.dart';
 
 import '../providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
@@ -77,7 +79,7 @@ class OrderButton extends StatefulWidget {
 }
 
 class _OrderButtonState extends State<OrderButton> {
-  var _isLoading = false;
+  bool _isLoading = false, _done = false;
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +90,56 @@ class _OrderButtonState extends State<OrderButton> {
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
           ? null
           : () async {
+            final authData = Provider.of<Auth>(context, listen: false);
+            String username = authData.username;
+            String url = authData.userImage;
+            String phone = authData.userPhone;
+            String address = authData.userAddress;
+            if(phone == '' || address == ''){
+              await showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context)
+                {
+                  return AlertDialog(
+                    title: const Text('Add your address !'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[Text("Update your profile with your contact information.")]
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Later', style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          _done = false;
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text('Update Now', style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          _done = true;
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+              if(!_done)
+                return;
+              bool updated = await Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context) => UserProfile(username, url, phone, address))
+                              );
+                              print("printing " + updated.toString());
+              if(!updated)
+                return;
+            }
               setState(() {
                 _isLoading = true;
               });
