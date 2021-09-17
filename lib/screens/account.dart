@@ -2,6 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/products.dart';
+import '../widgets/my_orders.dart';
+import '../providers/orders.dart';
 import './change_password.dart';
 import './user_profile.dart';
 import '../providers/auth.dart';
@@ -197,6 +200,46 @@ class Account extends StatelessWidget {
                       Expanded(child: Text('Change Password', style: TextStyle(color: Colors.yellow))),
                     ],
                   ),
+                ),
+              ),
+
+              SizedBox(height: 8),
+
+              Text('Your Orders', style: TextStyle(fontSize: 18)),
+
+              SizedBox(height: 8),
+
+              Container(
+                child: FutureBuilder(
+                  future: Provider.of<Orders>(context, listen: false).newfetchAndSetOrders(),
+                  builder: (ctx, dataSnapshot) {
+                    if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      if (dataSnapshot.error != null) {
+                        // ...
+                        // Do error handling stuff
+                        return Center(
+                          child: Text('An error occurred!'),
+                        );
+                      } else {
+                        return Consumer<Orders>(
+                          builder: (ctx, orderData, child) => Container(
+                            height: 120,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: orderData.products.length,
+                              itemBuilder: (ctx, i) => MyOrder(
+                                Provider.of<Products>(context, listen: false)
+                                      .findById(orderData.products.keys.elementAt(i))
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 ),
               ),
             ],

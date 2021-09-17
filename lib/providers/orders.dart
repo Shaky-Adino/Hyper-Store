@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-
+import './product.dart';
 import './cart.dart';
 
 class OrderItem {
@@ -25,6 +22,7 @@ class Orders with ChangeNotifier{
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   List<OrderItem> _orders = [];
+  Map<String, bool> _products = {};
   // final String authToken;
   String userId;
 
@@ -36,6 +34,10 @@ class Orders with ChangeNotifier{
 
   List<OrderItem> get orders {
     return [..._orders];
+  }
+
+  Map<String, bool> get products {
+    return {..._products};
   }
 
   Future<void> newfetchAndSetOrders() async {
@@ -53,14 +55,17 @@ class Orders with ChangeNotifier{
           dateTime: DateTime.parse(orderData['dateTime']),
           products: (orderData['products'] as List<dynamic>)
               .map(
-                (item) => CartItem(
-                  id: item['id'],
-                  prodId: item['productId'],
-                  imageUrl: item['imageUrl'],
-                  price: item['price'],
-                  quantity: item['quantity'],
-                  title: item['title'],
-                ),
+                (item) {
+                  _products[item['productId']] = true;
+                  return CartItem(
+                    id: item['id'],
+                    prodId: item['productId'],
+                    imageUrl: item['imageUrl'],
+                    price: item['price'],
+                    quantity: item['quantity'],
+                    title: item['title'],
+                  );
+              }
               )
               .toList(),
         ),
@@ -115,6 +120,10 @@ class Orders with ChangeNotifier{
                       'quantity': cp.quantity,
                       'price': cp.price,
                     }).toList(),
+    });
+
+    cartProducts.map((cp) {
+      _products[cp.prodId] = true;
     });
 
     _orders.insert(
