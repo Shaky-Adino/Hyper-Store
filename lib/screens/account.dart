@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/my_favorite.dart';
 import '../providers/products.dart';
 import '../widgets/my_order.dart';
 import '../providers/orders.dart';
@@ -245,7 +246,40 @@ class Account extends StatelessWidget {
 
               SizedBox(height: 8),
 
-              
+              Text('Your Favourites', style: TextStyle(fontSize: 18)),
+
+              SizedBox(height: 8),
+
+              Container(
+                child: FutureBuilder(
+                  future: Provider.of<Products>(context, listen: false).newfetchAndSetProducts(),
+                  builder: (ctx, dataSnapshot) {
+                    if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      if (dataSnapshot.error != null) {
+                        // ...
+                        // Do error handling stuff
+                        return Center(
+                          child: Text('An error occurred!'),
+                        );
+                      } else {
+                        return Consumer<Products>(
+                          builder: (ctx, prodData, child) => Container(
+                            height: 120,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: prodData.favoriteItems.length,
+                              itemBuilder: (ctx, i) => MyFavorite(prodData.favoriteItems[i]),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         )
