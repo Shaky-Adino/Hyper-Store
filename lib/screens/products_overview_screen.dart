@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../helpers/tootipshape.dart';
 
 import '../widgets/app_drawer.dart';
 import '../widgets/products_grid.dart';
@@ -64,6 +65,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         style: TextStyle(fontWeight: FontWeight.bold),),
         actions: <Widget>[
           PopupMenuButton(
+            offset: const Offset(0, 20),
+            shape: const TooltipShape(),
             onSelected: (FilterOptions selectedValue) {
               setStateIfMounted(() {
                 if (selectedValue == FilterOptions.Favorites) {
@@ -78,7 +81,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             ),
             itemBuilder: (_) => [
                   PopupMenuItem(
-                    child: Text('Only Favorites'),
+                    child: Text('Only Favourites'),
                     value: FilterOptions.Favorites,
                   ),
                   PopupMenuItem(
