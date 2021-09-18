@@ -61,6 +61,7 @@ class _NewMessageState extends State<NewMessage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       PopupMenuButton(
+                        offset: const Offset(0, -100),
                         onSelected: (int index){
                           setState(() {
                             selectedIndex = index;
