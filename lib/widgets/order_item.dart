@@ -37,7 +37,7 @@ class _OrderItemState extends State<OrderItem> {
             ListTile(
               title: Text('₹${widget.order.amount}'),
               subtitle: Text(
-                DateFormat('dd/MM/yyyy hh:mm').format(widget.order.dateTime),
+                DateFormat('EEE, MMM d, ''yy').format(widget.order.dateTime),
               ),
               trailing: IconButton(
                 icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
@@ -119,65 +119,86 @@ class _OrderItemState extends State<OrderItem> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if(show)
-                    ElevatedButton(
-                      onPressed: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (ctx) {
-                            bool done = false, loading = false, refund = false;
-                            String contentText = 'Do you want to cancel this order from Hyper Store?';
-                            String titleText = 'Confirm the cancellation';
-                            String buttonText = 'Yes';
-                            return StatefulBuilder(
-                              builder : (context, setState){
-                                return AlertDialog(
-                                  title: loading ? null : Text(titleText),
-                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20),
-                                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [loading ? CircularProgressIndicator() : Text(contentText),]
-                                  ),
-                                  actions: <Widget>[
-                                    if(!refund && !loading)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Row(
+                        children: [
+                          Text('Arriving on ', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                          Text(
+                            DateFormat('EEE, MMM d').format(widget.order.dateTime.add(const Duration(days: 7))),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if(show)
+                    Spacer(),
+                  if(show)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 1),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                        ),
+                        onPressed: () async {
+                          await showDialog(
+                            context: context,
+                            builder: (ctx) {
+                              bool done = false, loading = false, refund = false;
+                              String contentText = 'Do you want to cancel this order from Hyper Store?';
+                              String titleText = 'Confirm the cancellation';
+                              String buttonText = 'Yes';
+                              return StatefulBuilder(
+                                builder : (context, setState){
+                                  return AlertDialog(
+                                    title: loading ? null : Text(titleText),
+                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20),
+                                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [loading ? CircularProgressIndicator() : Text(contentText),]
+                                    ),
+                                    actions: <Widget>[
+                                      if(!refund && !loading)
+                                        TextButton(
+                                          child: Text('No',style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
+                                          onPressed: () {
+                                            Navigator.of(ctx).pop(false);
+                                          },
+                                        ),
+                                      if(!loading)
                                       TextButton(
-                                        child: Text('No',style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
-                                        onPressed: () {
-                                          Navigator.of(ctx).pop(false);
+                                        child: Text(buttonText,style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
+                                        onPressed: () async {
+                                          if(refund)
+                                            done = true;
+                                          if(!refund){
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            await Provider.of<Orders>(context, listen: false).cancelOrder(widget.order.id);
+                                            setState(() {
+                                              loading = false;
+                                              refund = true;
+                                              titleText = 'Order cancelled';
+                                              contentText = 'Your amount will be refunded in 3-4 business days';
+                                              buttonText = 'OK';
+                                            });
+                                          }
+                                          if(done)
+                                            Navigator.of(ctx).pop(true);
                                         },
                                       ),
-                                    if(!loading)
-                                    TextButton(
-                                      child: Text(buttonText,style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
-                                      onPressed: () async {
-                                        if(refund)
-                                          done = true;
-                                        if(!refund){
-                                          setState(() {
-                                            loading = true;
-                                          });
-                                          await Provider.of<Orders>(context, listen: false).cancelOrder(widget.order.id);
-                                          setState(() {
-                                            loading = false;
-                                            refund = true;
-                                            titleText = 'Order cancelled';
-                                            contentText = 'Your amount will be refunded in 3-4 business days';
-                                            buttonText = 'OK';
-                                          });
-                                        }
-                                        if(done)
-                                          Navigator.of(ctx).pop(true);
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
-                          }
-                        );
-                      }, 
-                      child: Text('Cancel Order')
+                                    ],
+                                  );
+                                }
+                              );
+                            }
+                          );
+                        }, 
+                        child: Text('Cancel Order', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                      ),
                     ),
                   if(!show)
                     Container(
