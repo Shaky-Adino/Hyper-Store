@@ -280,6 +280,43 @@ class Account extends StatelessWidget {
                   },
                 ),
               ),
+
+              SizedBox(height: 8),
+
+              Text('Your Products', style: TextStyle(fontSize: 18)),
+
+              SizedBox(height: 8),
+
+              Container(
+                child: FutureBuilder(
+                  future: Provider.of<Products>(context, listen: false).fetchUserProducts(),
+                  builder: (ctx, dataSnapshot) {
+                    if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      if (dataSnapshot.error != null) {
+                        // ...
+                        // Do error handling stuff
+                        return Center(
+                          child: Text('An error occurred!'),
+                        );
+                      } else {
+                        return Consumer<Products>(
+                          builder: (ctx, prodData, child) => Container(
+                            height: 120,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: prodData.userItems.length,
+                              itemBuilder: (ctx, i) => MyFavorite(prodData.userItems[i]),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         )
