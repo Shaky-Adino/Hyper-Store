@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import './product.dart';
 import './cart.dart';
 
 class OrderItem {
@@ -8,12 +7,14 @@ class OrderItem {
   final double amount;
   final List<CartItem> products;
   final DateTime dateTime;
+  final bool cancelled;
 
   OrderItem({
     @required this.id,
     @required this.amount,
     @required this.products,
     @required this.dateTime,
+    @required this.cancelled,
   });
 }
 
@@ -53,10 +54,12 @@ class Orders with ChangeNotifier{
           id: orderData.id,
           amount: orderData['amount'],
           dateTime: DateTime.parse(orderData['dateTime']),
+          cancelled: orderData['cancelled'],
           products: (orderData['products'] as List<dynamic>)
               .map(
                 (item) {
-                  _products[item['productId']] = true;
+                  if(!orderData['cancelled'])
+                    _products[item['productId']] = true;
                   return CartItem(
                     id: item['id'],
                     prodId: item['productId'],
@@ -112,6 +115,7 @@ class Orders with ChangeNotifier{
     DocumentReference docRef = await firestore.collection('orders').doc(userId).collection('myorder').add({
         'amount': total,
         'dateTime': timestamp.toIso8601String(),
+        'cancelled': false,
         'products': cartProducts.map((cp) => {
                       'id': cp.id,
                       'productId': cp.prodId,
@@ -133,8 +137,17 @@ class Orders with ChangeNotifier{
         amount: total,
         dateTime: timestamp,
         products: cartProducts,
+        cancelled: false,
       ),
     );
+    notifyListeners();
+  }
+
+  Future<void> cancelOrder(String orderId) async {
+    await firestore.collection('orders').doc(userId)
+            .collection('myorder').doc(orderId).update({
+              'cancelled': true,
+            });
     notifyListeners();
   }
 
