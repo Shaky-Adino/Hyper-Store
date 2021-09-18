@@ -140,13 +140,14 @@ class _OrderItemState extends State<OrderItem> {
                                     children: [loading ? CircularProgressIndicator() : Text(contentText),]
                                   ),
                                   actions: <Widget>[
-                                    if(!refund)
+                                    if(!refund && !loading)
                                       TextButton(
                                         child: Text('No',style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
                                         onPressed: () {
                                           Navigator.of(ctx).pop(false);
                                         },
                                       ),
+                                    if(!loading)
                                     TextButton(
                                       child: Text(buttonText,style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
                                       onPressed: () async {

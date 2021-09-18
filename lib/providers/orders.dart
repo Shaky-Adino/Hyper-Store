@@ -7,7 +7,7 @@ class OrderItem {
   final double amount;
   final List<CartItem> products;
   final DateTime dateTime;
-  final bool cancelled;
+  bool cancelled;
 
   OrderItem({
     @required this.id,
@@ -148,6 +148,8 @@ class Orders with ChangeNotifier{
             .collection('myorder').doc(orderId).update({
               'cancelled': true,
             });
+    final index = _orders.indexWhere((order) => order.id == orderId);
+    _orders[index].cancelled = true;
     notifyListeners();
   }
 
