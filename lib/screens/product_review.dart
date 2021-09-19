@@ -13,7 +13,7 @@ class ProductReview extends StatefulWidget {
 
 class _ProductReviewState extends State<ProductReview> {
   double rating = 1;
-  String ratingText = 'Hated it';
+  String ratingText = 'Loved it';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,24 +27,39 @@ class _ProductReviewState extends State<ProductReview> {
           child: Column(
             children: [
               Container(
-                width: 100,
-                height: 100,
+                height: 200,
+                width: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: CachedNetworkImage(
-                        imageUrl: widget.imageUrl,
-                        progressIndicatorBuilder: (context, url, downloadProgress) => 
-                          Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                        fit: BoxFit.cover,
-                      ),
+                  imageUrl: widget.imageUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                    ),
+                  ),
+                  progressIndicatorBuilder: (context, url, downloadProgress) => 
+                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                  fit: BoxFit.cover,
+                ),
               ),
 
               const SizedBox(height: 10),
 
-              Text(widget.prodTitle),
+              Text(
+                widget.prodTitle,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
 
               const SizedBox(height: 20),
 
               RatingBar.builder(
-                initialRating: 1,
+                initialRating: 5,
                 minRating: 1,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4),
                 glowColor: Colors.grey,
@@ -69,7 +84,12 @@ class _ProductReviewState extends State<ProductReview> {
 
               const SizedBox(height: 10),
 
-              Text(ratingText + '!'),
+              Text(
+                ratingText + '!',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
 
               const SizedBox(height: 10),
 
