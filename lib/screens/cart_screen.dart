@@ -142,6 +142,7 @@ class _OrderButtonState extends State<OrderButton> {
               setState(() {
                 _isLoading = true;
               });
+              bool orderPlaced = false;
               await showModalBottomSheet(
                 context: context, 
                 builder: (BuildContext context){
@@ -220,6 +221,7 @@ class _OrderButtonState extends State<OrderButton> {
                                 total,
                               );
                               widget.cart.newclear();
+                              orderPlaced = true;
                               Navigator.of(context).pop();
                             }, 
                             child: Text('Confirm Order', style: TextStyle(fontWeight: FontWeight.bold),)
@@ -232,6 +234,23 @@ class _OrderButtonState extends State<OrderButton> {
               setState(() {
                 _isLoading = false;
               });
+              if(orderPlaced)
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      duration: Duration(milliseconds: 2500),
+                      content: Text(
+                        'Order placed successfully', 
+                        textAlign: TextAlign.center, 
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      backgroundColor: Colors.green,
+                      elevation: 3,
+                      padding: EdgeInsets.all(3),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(50), 
+                          topRight: Radius.circular(50)
+                        ),
+                      ),
+                    ));
             },
       textColor: Theme.of(context).primaryColor,
     );

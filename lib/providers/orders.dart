@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import './product.dart';
 import './cart.dart';
 
 class OrderItem {
@@ -108,6 +109,20 @@ class Orders with ChangeNotifier{
   //   _orders = loadedOrders.reversed.toList();
   //   notifyListeners();
   // }
+
+  Future<void> addSingleOrder(Product prod, int quantity, double total) async {
+    final item = CartItem(
+      id: DateTime.now().toIso8601String(), 
+      prodId: prod.id, 
+      title: prod.title, 
+      imageUrl: prod.imageUrl0, 
+      quantity: quantity, 
+      price: prod.price,
+    );
+    List<CartItem> cartProducts = [];
+    cartProducts.add(item);
+    await newaddOrder(cartProducts, total);
+  }
 
   Future<void> newaddOrder(List<CartItem> cartProducts, double total) async {
     final timestamp = DateTime.now();
