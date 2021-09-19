@@ -146,88 +146,97 @@ class _OrderButtonState extends State<OrderButton> {
               await showModalBottomSheet(
                 context: context, 
                 builder: (BuildContext context){
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('Summary', style: TextStyle(fontSize: 20)),
-                          const SizedBox(height: 10),
-                          const Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  bool loading = false;
+                  return StatefulBuilder(
+                    builder : (context, setState){
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text('Estimated Shipping Date:'),
-                              Text(DateFormat('EEE, MMM d').format(DateTime.now().add(const Duration(days: 7)))),
-                            ],
-                          ),
-                          const SizedBox(height: 2),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Mode of payment:'),
-                              Container(
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: Colors.yellow[200],
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(40.0),
-                                    bottomRight: Radius.circular(40.0),
-                                    topLeft: Radius.circular(40.0),
-                                    bottomLeft: Radius.circular(40.0)
+                              const Text('Summary', style: TextStyle(fontSize: 20)),
+                              const SizedBox(height: 10),
+                              const Divider(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Estimated Shipping Date:'),
+                                  Text(DateFormat('EEE, MMM d').format(DateTime.now().add(const Duration(days: 7)))),
+                                ],
+                              ),
+                              const SizedBox(height: 2),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Mode of payment:'),
+                                  Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow[200],
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(40.0),
+                                        bottomRight: Radius.circular(40.0),
+                                        topLeft: Radius.circular(40.0),
+                                        bottomLeft: Radius.circular(40.0)
+                                      ),
+                                    ),
+                                    child: const Text('Cash On Delivery'),
                                   ),
-                                ),
-                                child: const Text('Cash On Delivery'),
+                                ],
+                              ),
+                              Divider(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Subtotal:'),
+                                  Text('₹${widget.cart.totalAmount.toString()}'),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Delivery Charge:'),
+                                  const Text('₹80'),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Tax:'),
+                                  Text('₹$tax'),
+                                ],
+                              ),
+                              Divider(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Order Total:', style: TextStyle(fontWeight: FontWeight.bold),),
+                                  Text('₹$total', style: TextStyle(fontWeight: FontWeight.bold),),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  setState((){
+                                    loading = true;
+                                  });
+                                  await Provider.of<Orders>(context, listen: false).newaddOrder(
+                                    widget.cart.items.values.toList(),
+                                    total,
+                                  );
+                                  widget.cart.newclear();
+                                  orderPlaced = true;
+                                  Navigator.of(context).pop();
+                                }, 
+                                child: loading ? CircularProgressIndicator()
+                                  : Text('Confirm Order', style: TextStyle(fontWeight: FontWeight.bold))
                               ),
                             ],
-                          ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Subtotal:'),
-                              Text('₹${widget.cart.totalAmount.toString()}'),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Delivery Charge:'),
-                              const Text('₹80'),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Tax:'),
-                              Text('₹$tax'),
-                            ],
-                          ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Order Total:', style: TextStyle(fontWeight: FontWeight.bold),),
-                              Text('₹$total', style: TextStyle(fontWeight: FontWeight.bold),),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await Provider.of<Orders>(context, listen: false).newaddOrder(
-                                widget.cart.items.values.toList(),
-                                total,
-                              );
-                              widget.cart.newclear();
-                              orderPlaced = true;
-                              Navigator.of(context).pop();
-                            }, 
-                            child: Text('Confirm Order', style: TextStyle(fontWeight: FontWeight.bold),)
-                          ),
-                        ],
-                      ),
+                        ),
+                      );
+                    }
                   );
                 }
               );
@@ -235,23 +244,37 @@ class _OrderButtonState extends State<OrderButton> {
                 _isLoading = false;
               });
               if(orderPlaced)
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      duration: Duration(milliseconds: 2500),
-                      content: Text(
-                        'Order placed successfully', 
-                        textAlign: TextAlign.center, 
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      backgroundColor: Colors.green,
-                      elevation: 3,
-                      padding: EdgeInsets.all(3),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(50), 
-                          topRight: Radius.circular(50)
+                await showDialog(
+                  context: context,
+                  builder:  (BuildContext context)
+                    {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      ),
-                    ));
-            },
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: <Widget>[
+                              Icon(Icons.check, size: 45, color: Colors.green),
+                              const SizedBox(height: 15),
+                              Text("Order placed successfully!"),
+                              const SizedBox(height: 9),
+                              Text('Thank you for shopping on \nHyper Store')
+                            ],
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('Close', style: TextStyle(color:Colors.black)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                );
+          },
       textColor: Theme.of(context).primaryColor,
     );
   }

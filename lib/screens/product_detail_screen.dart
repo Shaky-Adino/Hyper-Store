@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shopapp/screens/order_confirmation.dart';
 import './product_review.dart';
 import '../helpers/convert_image_to_file.dart';
 import '../providers/products.dart';
@@ -399,7 +400,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       // )
                                 ),
                                 child: InkWell(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(
+                                              context, 
+                                              MaterialPageRoute(builder: (context) => OrderConfirmation(loadedProduct, _quantity))
+                                            );
+                                          },
                                           child: Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: Row(
