@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import './providers/rating.dart';
 import './screens/account.dart';
 import './screens/landingScreen.dart';
 import './screens/chat_screen.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       providers: [
                     ChangeNotifierProvider(create: (ctx) => Auth(false)),
                     ChangeNotifierProvider(create: (ctx) => Products()),
+                    ChangeNotifierProvider(create: (ctx) => Rating()),
                     // ChangeNotifierProxyProvider<UserId, Products>(
                     //       create: (_) => Products(null, []),
                     //       update: (ctx, user, previous) => previous..updates(user.userId)
