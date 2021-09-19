@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier{
 
-  FirebaseFirestore firestore;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final String id;
   final String title;
@@ -33,7 +33,6 @@ class Product with ChangeNotifier{
   }
 
   Future<void> newtoggleFavoriteStatus(String userId) async {
-    firestore = FirebaseFirestore.instance;
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
