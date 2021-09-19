@@ -23,6 +23,40 @@ class Rating extends ChangeNotifier{
 
   List<RatingItem> _ratings = []; 
 
+  List<RatingItem> get ratings {
+    return [..._ratings];
+  }
+
+  Future<void> fetchRatings(String prodId) async {
+    var extractedData;
+    try{
+      QuerySnapshot querySnapshot = await firestore.collection('ratings').doc(prodId).collection('prodRating').get();
+      extractedData = querySnapshot.docs;
+      if (extractedData == null) {
+        _ratings = [];
+        return;
+      }
+      final List<RatingItem> loadedRatings = [];
+      extractedData.forEach((item) {
+        loadedRatings.add(
+          RatingItem(
+            id: item.id, 
+            name: item['name'], 
+            imageUrl: item['imageUrl'], 
+            stars: item['stars'], 
+            title: item['title'], 
+            review: item['review'],
+          )
+        );
+      });
+      _ratings = loadedRatings;
+      notifyListeners();
+    } catch(e){
+      print(e);
+    }
+    
+  }
+
   Future<void> addRating(String prodId, String name, String imageUrl, 
     double stars, String title, String review) async {
     try{

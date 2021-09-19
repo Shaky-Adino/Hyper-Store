@@ -92,7 +92,6 @@ class Products with ChangeNotifier{
     var extractedData;
     QuerySnapshot querySnapshot1, querySnapshot2;
     try {
-
       if(filterByUser)
         querySnapshot1 = await firestore.collection('products').where('creatorId', isEqualTo: userId).get();
       else
@@ -100,6 +99,7 @@ class Products with ChangeNotifier{
 
       extractedData = querySnapshot1.docs;
       if (extractedData == null) {
+        _items = [];
         return;
       }
       querySnapshot2 = await firestore.collection('userFavorites').doc(userId).collection('myFav').get();
