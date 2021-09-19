@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
+import './product_review.dart';
 import '../helpers/convert_image_to_file.dart';
 import '../providers/products.dart';
 import '../providers/auth.dart';
@@ -208,7 +209,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+
+                const SizedBox(height: 15),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -299,9 +302,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     Icons.airport_shuttle,
                                     color: Colors.grey[600],
                                   ),
-                                  SizedBox(
-                                    width: 6,
-                                  ),
+
+                                  const SizedBox(width: 6),
+
                                   Text(
                                     "Standard: Friday Evening",
                                     style: TextStyle(
@@ -364,9 +367,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                 Icon(
                                                     Icons.shopping_cart,
                                                 ),
-                                                SizedBox(
-                                                    width: 10,
-                                                ),
+
+                                                const SizedBox(width: 10),
+
                                                 Text(
                                                     "Add to cart",
                                                     style: TextStyle(
@@ -405,9 +408,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                 Icon(
                                                     Icons.shopping_bag,
                                                 ),
-                                                SizedBox(
-                                                    width: 10,
-                                                ),
+
+                                                const SizedBox(width: 10),
+
                                                 Text(
                                                     "Buy Now",
                                                     style: TextStyle(
@@ -423,8 +426,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                   ),
                 ),
-                SizedBox(
-                  height: 800,
+
+                const SizedBox(height: 800),
+
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => ProductReview(
+                        loadedProduct.id, 
+                        loadedProduct.title,
+                        loadedProduct.imageUrl0,
+                        ),
+                      ),
+                    );
+                  }, 
+                  child: Text('Add Rating'),
                 ),
               ],
             ),

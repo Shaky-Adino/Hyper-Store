@@ -42,24 +42,24 @@ class _IntroScreenState extends State<IntroScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(1000)),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+
+                const SizedBox(height: 20),
                 //Texts and Styling of them
                 Text(
                   'Welcome to Hyper Store !',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.black, fontSize: 28),
                 ),
-                SizedBox(height: 20),
+
+                const SizedBox(height: 20),
+
                 Text(
                   'A one-stop portal for you to learn the latest technologies from SCRATCH',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+
+                const SizedBox(height: 30),
                 //Our MaterialButton which when pressed will take us to a new screen named as 
                 //LoginScreen
                 Container(

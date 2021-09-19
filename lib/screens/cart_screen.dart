@@ -47,7 +47,7 @@ class CartScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               itemCount: cart.items.length,
@@ -151,8 +151,8 @@ class _OrderButtonState extends State<OrderButton> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text('Summary', style: TextStyle(fontSize: 20)),
-                          SizedBox(height: 10),
-                          Divider(),
+                          const SizedBox(height: 10),
+                          const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -160,7 +160,7 @@ class _OrderButtonState extends State<OrderButton> {
                               Text(DateFormat('EEE, MMM d').format(DateTime.now().add(const Duration(days: 7)))),
                             ],
                           ),
-                          SizedBox(height: 2),
+                          const SizedBox(height: 2),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -188,7 +188,7 @@ class _OrderButtonState extends State<OrderButton> {
                               Text('₹${widget.cart.totalAmount.toString()}'),
                             ],
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -196,7 +196,7 @@ class _OrderButtonState extends State<OrderButton> {
                               const Text('₹80'),
                             ],
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -212,7 +212,7 @@ class _OrderButtonState extends State<OrderButton> {
                               Text('₹$total', style: TextStyle(fontWeight: FontWeight.bold),),
                             ],
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () async {
                               await Provider.of<Orders>(context, listen: false).newaddOrder(

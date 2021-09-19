@@ -341,7 +341,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     ),
                                   ),
 
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   
                                   AnimatedContainer(
                                     constraints: BoxConstraints(
@@ -394,7 +394,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     ),
                                   ),
 
-                                  SizedBox(height: 5,),
+                                  const SizedBox(height: 5,),
 
                                   TextFormField(
                                     style: TextStyle(
@@ -428,7 +428,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     },
                                   ),
 
-                                  SizedBox(height: 10.0),
+                                  const SizedBox(height: 10.0),
 
                                   TextFormField(
                                     style: TextStyle(
@@ -495,7 +495,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                   ),
 
                                   if(_authMode == AuthMode.Signup)
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
 
                                   AnimatedContainer(
                                     constraints: BoxConstraints(
@@ -555,9 +555,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     ),
                                   ),
                                   
-                                  SizedBox(
-                                    height: 10,
-                                  ),
+                                  const SizedBox(height: 10),
 
                                   // if(_authMode == AuthMode.Login)
                                   AnimatedContainer(
@@ -595,7 +593,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                                            width: 28,
                                                         ),
                                                       ),
-                                                      SizedBox(width: 12),
+                                                      const SizedBox(width: 12),
                                                       Text(
                                                         ' Sign in with Google',
                                                         style: TextStyle(
@@ -612,9 +610,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     ),
 
                                 if(_authMode == AuthMode.Login)
-                                  SizedBox(
-                                    height: 10,
-                                  ),
+                                  const SizedBox(height: 10),
 
                                   if (_isLoading)
                                     CircularProgressIndicator()
@@ -643,9 +639,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                         ),
                                       ),
                                     ),
-                                  SizedBox(
-                                    height: 7,
-                                  ),
+                                  const SizedBox(height: 7),
                                   FlatButton(
                                     child: Text(
                                         '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',

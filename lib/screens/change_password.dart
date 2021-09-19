@@ -59,7 +59,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       child: ListBody(
                         children: <Widget>[
                           Icon(Icons.check, size: 45, color: Colors.green),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           Text("Password Updated Successfully!"),
                         ],
                       ),

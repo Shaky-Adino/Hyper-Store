@@ -146,7 +146,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           },
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       if(_isLoading)
                         Center(child: CircularProgressIndicator()),
                       if(!_isLoading)

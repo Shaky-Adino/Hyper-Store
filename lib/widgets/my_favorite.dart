@@ -38,9 +38,12 @@ class MyFavorite extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 5),
+
+                  const SizedBox(height: 5),
+
                   Text(prod.title, style: TextStyle(fontWeight: FontWeight.w400)),
-                  SizedBox(height: 3)
+
+                  const SizedBox(height: 3)
                 ],
             ),
           ),

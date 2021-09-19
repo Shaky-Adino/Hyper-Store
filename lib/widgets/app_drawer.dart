@@ -38,7 +38,9 @@ class AppDrawer extends StatelessWidget {
                     ) : null,
                   ),
                 ),
-                SizedBox(width: 8),
+
+                const SizedBox(width: 8),
+
                 username != null ? Text('Hello $username!') : Text('Hello friend!'),
               ],
             ),

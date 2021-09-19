@@ -474,7 +474,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
                         buildGridView(),
 
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,

@@ -113,7 +113,7 @@ class _UserProfileState extends State<UserProfile> {
                             progressIndicatorBuilder: (context, url, downloadProgress) => 
                               Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                             fit: BoxFit.cover,
-                          ) : null,
+                      ) : null,
                   ),
 
                   TextButton.icon(
@@ -126,7 +126,7 @@ class _UserProfileState extends State<UserProfile> {
                     label: Text('Edit Image', overflow: TextOverflow.visible),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Form(
                     key: _formKey,
@@ -167,7 +167,7 @@ class _UserProfileState extends State<UserProfile> {
                                   },
                         ),
 
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
                         TextFormField(
                           keyboardType: TextInputType.phone,
@@ -205,7 +205,7 @@ class _UserProfileState extends State<UserProfile> {
                                   },
                         ),
 
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
                         TextFormField(
                           initialValue: widget.address,
@@ -240,7 +240,9 @@ class _UserProfileState extends State<UserProfile> {
                                       _newAddress = value;
                                   },
                         ),
-                        SizedBox(height: 20),
+
+                        const SizedBox(height: 20),
+
                         Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [

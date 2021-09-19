@@ -34,7 +34,7 @@ class Account extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text('User Profile', style: TextStyle(fontSize: 18)),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: Card(
@@ -129,7 +129,9 @@ class Account extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 5),
+
+              const SizedBox(height: 5),
+
               GestureDetector(
                 onTap: (){
                   Navigator.push(
@@ -156,7 +158,9 @@ class Account extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 8),
+
+              const SizedBox(height: 8),
+
               GestureDetector(
                 onTap: (){
                   if(FirebaseAuth.instance.currentUser.providerData[0].providerId.toString().contains('google.com')){
@@ -204,11 +208,11 @@ class Account extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               Text('Your Orders', style: TextStyle(fontSize: 18)),
 
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               Container(
                 child: FutureBuilder(
@@ -244,11 +248,11 @@ class Account extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               Text('Your Favourites', style: TextStyle(fontSize: 18)),
 
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               Container(
                 child: FutureBuilder(
@@ -281,11 +285,11 @@ class Account extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               Text('Your Products', style: TextStyle(fontSize: 18)),
 
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               Container(
                 child: FutureBuilder(
