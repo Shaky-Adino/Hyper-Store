@@ -94,13 +94,12 @@ class _ProductReviewState extends State<ProductReview> {
                             borderRadius: BorderRadius.circular(10),
                             shape: BoxShape.rectangle,
                           ),
-                          child: Form(
-                            child: Column(
+                          child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(mq.width*0.07, mq.height*0.02, mq.width*0.07, 0),
-                                  child: TextFormField(
+                                  child: TextField(
                                     style: TextStyle(fontSize: 14.0),
                                     decoration: InputDecoration(
                                       labelText: "Title",
@@ -112,7 +111,7 @@ class _ProductReviewState extends State<ProductReview> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(mq.width*0.07, 0, mq.width*0.07, 15),
-                                  child: TextFormField(
+                                  child: TextField(
                                     inputFormatters: [LengthLimitingTextInputFormatter(32)],
                                     maxLines: 2,
                                     keyboardType: TextInputType.multiline,
@@ -126,8 +125,7 @@ class _ProductReviewState extends State<ProductReview> {
                                 ),
                               ],
                             ),
-                          ),
-                        ),
+                    ),
                     Positioned(
                       left: MediaQuery.of(context).size.width*0.1,
                       top: MediaQuery.of(context).size.height*0.015,
@@ -154,8 +152,6 @@ class _ProductReviewState extends State<ProductReview> {
                       setState(() {
                         isLoading = true;
                       });
-                      if(title == '')
-                        title = ratingText;
                       final authData = Provider.of<Auth>(context, listen: false);
                       await Provider.of<Rating>(context, listen: false)
                         .addRating(widget.prodId, authData.username, authData.userImage, rating, title, description);
