@@ -6,11 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shopapp/screens/order_confirmation.dart';
+import '../widgets/prod_ratings.dart';
 import './product_review.dart';
 import '../helpers/convert_image_to_file.dart';
 import '../providers/products.dart';
 import '../providers/auth.dart';
 import '../providers/cart.dart';
+import '../providers/rating.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   // final String title;
@@ -434,6 +436,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
 
                 const SizedBox(height: 800),
+
+                Container(
+                child: FutureBuilder(
+                  future: Provider.of<Rating>(context, listen: false).fetchRatings(loadedProduct.id),
+                  builder: (ctx, dataSnapshot) {
+                    if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      if (dataSnapshot.error != null) {
+                        // ...
+                        // Do error handling stuff
+                        return Center(
+                          child: Text('An error occurred!'),
+                        );
+                      } else {
+                        return Consumer<Rating>(
+                          builder: (ctx, data, child) => Container(
+                            height: 120,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: data.ratings.length,
+                              itemBuilder: (ctx, i) => ProdRatings(
+                                data.ratings[i].title, 
+                                data.ratings[i].review, 
+                                data.ratings[i].imageUrl, 
+                                data.ratings[i].name, 
+                                data.ratings[i].stars,
+                              )
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
+              ),
 
                 ElevatedButton(
                   onPressed: (){
