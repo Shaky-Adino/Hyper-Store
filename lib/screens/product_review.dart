@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth.dart';
+import '../providers/rating.dart';
 
 class ProductReview extends StatefulWidget {
   final String prodId, prodTitle;
@@ -12,14 +15,16 @@ class ProductReview extends StatefulWidget {
 }
 
 class _ProductReviewState extends State<ProductReview> {
-  double rating = 1;
-  String ratingText = 'Loved it', title = 'Loved it', description = '';
+  double rating = 5;
+  String ratingText = 'Loved it', title = '', description = '';
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Hyper Store'),
         ),
@@ -27,6 +32,7 @@ class _ProductReviewState extends State<ProductReview> {
           padding: const EdgeInsets.all(10),
           width: double.infinity,
           child: SingleChildScrollView(
+            reverse: true,
             child: Column(
               children: [
                 Text(
@@ -107,7 +113,7 @@ class _ProductReviewState extends State<ProductReview> {
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(mq.width*0.07, 0, mq.width*0.07, 15),
                                   child: TextFormField(
-                                    inputFormatters: [LengthLimitingTextInputFormatter(12)],
+                                    inputFormatters: [LengthLimitingTextInputFormatter(32)],
                                     maxLines: 2,
                                     keyboardType: TextInputType.multiline,
                                     decoration: InputDecoration(
@@ -140,29 +146,66 @@ class _ProductReviewState extends State<ProductReview> {
                 const SizedBox(height: 8),
 
                 Material(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: InkWell(
-                                    onTap: () async {
-                                      FocusManager.instance.primaryFocus?.unfocus();
-                                      print(title);
-                                      print(description);
-                                    },
-                                    child: Container(
-                                      width: 160,
-                                      height: 40,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Add Rating",
-                                        style: TextStyle(
-                                          color: Colors.yellow, 
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(15),
+                  child: InkWell(
+                    onTap: () async {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      setState(() {
+                        isLoading = true;
+                      });
+                      final authData = Provider.of<Auth>(context, listen: false);
+                      await Provider.of<Rating>(context, listen: false)
+                        .addRating(widget.prodId, authData.username, authData.userImage, rating, title, description);
+                      await showDialog(
+                        context: context,
+                        builder:  (BuildContext context)
+                          {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    Icon(Icons.check, size: 45, color: Colors.green),
+                                    const SizedBox(height: 15),
+                                    Text("Your rating has been added successfully !"),
+                                  ],
                                 ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK', style: TextStyle(color:Colors.black)),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                      );
+                      Navigator.of(context).pop();
+                    },
+                    child: !isLoading ? Container(
+                      width: 160,
+                      height: 40,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Add Rating",
+                        style: TextStyle(
+                          color: Colors.yellow, 
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16
+                        ),
+                      ),
+                    ) : CircularProgressIndicator(),
+                  ),
+                ),
+                
+                Padding( 
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)
+                ),
               ],
             ),
           ),
