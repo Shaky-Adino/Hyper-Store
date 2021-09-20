@@ -442,7 +442,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       MaterialPageRoute(builder: (context) => ProductReview(
                         loadedProduct.id, 
                         loadedProduct.title,
-                        loadedProduct.imageUrl0,
                         ),
                       ),
                     );
