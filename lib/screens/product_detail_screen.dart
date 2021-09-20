@@ -476,22 +476,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                               itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber), 
                                               itemSize: 18.0,
                                             ),
+                                            SizedBox(height: 3),
                                             Text('${data.average} out of 5'),
                                           ],
                                         ),
                                       ],
                                     ),
                                   ),
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: data.ratings.length,
-                                    itemBuilder: (ctx, i) => ProdRatings(
-                                      data.ratings[i].title, 
-                                      data.ratings[i].review, 
-                                      data.ratings[i].imageUrl, 
-                                      data.ratings[i].name, 
-                                      data.ratings[i].stars,
-                                    )
+                                  MediaQuery.removePadding(
+                                    context: context,
+                                    removeTop: true,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: data.ratings.length,
+                                      itemBuilder: (ctx, i) => ProdRatings(
+                                        data.ratings[i].title, 
+                                        data.ratings[i].review, 
+                                        data.ratings[i].imageUrl, 
+                                        data.ratings[i].name, 
+                                        data.ratings[i].stars,
+                                      )
+                                    ),
                                   ),
                                 ],
                               ),
