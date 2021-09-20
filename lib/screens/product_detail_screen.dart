@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
@@ -435,43 +436,74 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 800),
+                const SizedBox(height: 20),
 
                 Container(
-                child: FutureBuilder(
-                  future: Provider.of<Rating>(context, listen: false).fetchRatings(loadedProduct.id),
-                  builder: (ctx, dataSnapshot) {
-                    if (dataSnapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else {
-                      if (dataSnapshot.error != null) {
-                        // ...
-                        // Do error handling stuff
-                        return Center(
-                          child: Text('An error occurred!'),
-                        );
+                  child: FutureBuilder(
+                    future: Provider.of<Rating>(context, listen: false).fetchRatings(loadedProduct.id),
+                    builder: (ctx, dataSnapshot) {
+                      if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
                       } else {
-                        return Consumer<Rating>(
-                          builder: (ctx, data, child) => Container(
-                            height: 120,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: data.ratings.length,
-                              itemBuilder: (ctx, i) => ProdRatings(
-                                data.ratings[i].title, 
-                                data.ratings[i].review, 
-                                data.ratings[i].imageUrl, 
-                                data.ratings[i].name, 
-                                data.ratings[i].stars,
-                              )
+                        if (dataSnapshot.error != null) {
+                          // ...
+                          // Do error handling stuff
+                          return Center(
+                            child: Text('An error occurred!'),
+                          );
+                        } else {
+                          return Consumer<Rating>(
+                            builder: (ctx, data, child) => Container(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Customer Reviews',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            RatingBarIndicator(
+                                              rating: data.average,
+                                              itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber), 
+                                              itemSize: 18.0,
+                                            ),
+                                            Text('${data.average} out of 5'),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: data.ratings.length,
+                                    itemBuilder: (ctx, i) => ProdRatings(
+                                      data.ratings[i].title, 
+                                      data.ratings[i].review, 
+                                      data.ratings[i].imageUrl, 
+                                      data.ratings[i].name, 
+                                      data.ratings[i].stars,
+                                    )
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       }
-                    }
-                  },
+                    },
+                  ),
                 ),
-              ),
+
+                const SizedBox(height: 10),
 
                 ElevatedButton(
                   onPressed: (){

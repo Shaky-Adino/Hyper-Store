@@ -23,6 +23,12 @@ class Rating extends ChangeNotifier{
 
   List<RatingItem> _ratings = []; 
 
+  double _avg = 0, _total = 0;
+
+  double get average {
+    return _avg;
+  }
+
   List<RatingItem> get ratings {
     return [..._ratings];
   }
@@ -37,7 +43,9 @@ class Rating extends ChangeNotifier{
         return;
       }
       final List<RatingItem> loadedRatings = [];
+      _total = 0;
       extractedData.forEach((item) {
+        _total += item['stars'];
         loadedRatings.add(
           RatingItem(
             id: item.id, 
@@ -50,6 +58,8 @@ class Rating extends ChangeNotifier{
         );
       });
       _ratings = loadedRatings;
+      if(_ratings.length > 0)
+        _avg = _total/_ratings.length;
       notifyListeners();
     } catch(e){
       print(e);
@@ -78,7 +88,9 @@ class Rating extends ChangeNotifier{
         review: review,
       );
 
+      _total += stars;
       _ratings.add(newRating);
+      _avg = _total/_ratings.length;
       notifyListeners();
     } catch(e){
       print(e);

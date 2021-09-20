@@ -154,6 +154,8 @@ class _ProductReviewState extends State<ProductReview> {
                       setState(() {
                         isLoading = true;
                       });
+                      if(title == '')
+                        title = ratingText;
                       final authData = Provider.of<Auth>(context, listen: false);
                       await Provider.of<Rating>(context, listen: false)
                         .addRating(widget.prodId, authData.username, authData.userImage, rating, title, description);

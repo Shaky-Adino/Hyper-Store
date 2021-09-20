@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProdRatings extends StatelessWidget {
   final String title, review, imageUrl, name;
@@ -9,17 +10,25 @@ class ProdRatings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(title),
-          SizedBox(height: 10),
-          Text('stars go here'),
-          SizedBox(height: 10),
-          Text(review),
-          SizedBox(height: 5),
-          Text(name),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title),
+            SizedBox(height: 10),
+            RatingBarIndicator(
+              rating: stars,
+              itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber), 
+              itemSize: 18.0,
+            ),
+            SizedBox(height: 10),
+            Text(review),
+            SizedBox(height: 5),
+            Text(name),
+          ],
+        ),
       ),
     );
   }
