@@ -79,7 +79,7 @@ class AppDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.chat),
-            title: Text('Chat Screen'),
+            title: Text('Seller\'s Arena'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(ChatScreen.routeName);

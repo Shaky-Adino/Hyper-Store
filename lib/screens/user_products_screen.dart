@@ -43,7 +43,7 @@ class UserProductsScreen extends StatelessWidget {
                     child: Consumer<Products>(
                       builder: (ctx, productsData, _) => Padding(
                             padding: const EdgeInsets.all(8),
-                            child: ListView.builder(
+                            child: productsData.items.length > 0 ? ListView.builder(
                               itemCount: productsData.items.length,
                               itemBuilder: (_, i) => Column(
                                     children: [
@@ -55,10 +55,34 @@ class UserProductsScreen extends StatelessWidget {
                                       Divider(),
                                     ],
                                   ),
-                            ),
+                            ) : SizedBox.expand(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        'You haven\'t added any products to the store yet.',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                           ),
                     ),
                   ),
+      ),
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        child: FloatingActionButton.extended(
+          onPressed: (){
+            Navigator.of(context).pushNamed(EditProductScreen.routeName);
+          }, 
+          label: const Text('Add Product', style: TextStyle(color: Colors.yellow),),
+          backgroundColor: Colors.black,
+        ),
       ),
     );
   }

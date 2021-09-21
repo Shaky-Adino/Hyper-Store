@@ -287,7 +287,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             ),
                             actions: <Widget>[
                               TextButton(
-                                child: const Text('Close', style: TextStyle(color:Colors.black)),
+                                child: Text('Close', style: TextStyle(color:Colors.orange[700])),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -300,7 +300,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     child: Text(
                       "Reset Password",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.blue,
                         fontSize: 15,
                       )
                     ),

@@ -229,7 +229,8 @@ class Account extends StatelessWidget {
                         );
                       } else {
                         return Consumer<Orders>(
-                          builder: (ctx, orderData, child) => Container(
+                          builder: (ctx, orderData, child) => orderData.products.length > 0 ?
+                          Container(
                             height: 120,
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -240,6 +241,9 @@ class Account extends StatelessWidget {
                                       .findById(orderData.products.keys.elementAt(i))
                               ),
                             ),
+                          ) : Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text('You haven\'t ordered anything yet.', style: TextStyle(color: Colors.orange),),
                           ),
                         );
                       }
@@ -269,7 +273,8 @@ class Account extends StatelessWidget {
                         );
                       } else {
                         return Consumer<Products>(
-                          builder: (ctx, prodData, child) => Container(
+                          builder: (ctx, prodData, child) => prodData.favoriteItems.length > 0 ?
+                          Container(
                             height: 120,
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -277,6 +282,9 @@ class Account extends StatelessWidget {
                               itemCount: prodData.favoriteItems.length,
                               itemBuilder: (ctx, i) => MyFavorite(prodData.favoriteItems[i]),
                             ),
+                          ) : Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text('There are no items in this.', style: TextStyle(color: Colors.orange),),
                           ),
                         );
                       }
@@ -306,7 +314,8 @@ class Account extends StatelessWidget {
                         );
                       } else {
                         return Consumer<Products>(
-                          builder: (ctx, prodData, child) => Container(
+                          builder: (ctx, prodData, child) =>prodData.userItems.length > 0 ?
+                           Container(
                             height: 120,
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -314,6 +323,9 @@ class Account extends StatelessWidget {
                               itemCount: prodData.userItems.length,
                               itemBuilder: (ctx, i) => MyFavorite(prodData.userItems[i]),
                             ),
+                          ) : Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text('You haven\'t added any products to the store yet.', style: TextStyle(color: Colors.orange),),
                           ),
                         );
                       }
