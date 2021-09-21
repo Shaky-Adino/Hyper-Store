@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './products_overview_screen.dart';
 
 import '../providers/orders.dart' show Orders;
 import '../widgets/order_item.dart';
@@ -29,6 +30,29 @@ class OrdersScreen extends StatelessWidget {
                 child: Text('An error occurred!'),
               );
             } else {
+              if(Provider.of<Orders>(context, listen: false).orders.length == 0)
+                return SizedBox.expand(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'You haven\'t ordered anything yet !',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: (){
+                          Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
+                        }, 
+                        child: const Text('Go to Store', style: TextStyle(fontWeight: FontWeight.w500),)
+                      )
+                    ],
+                  ),
+                );
               return Consumer<Orders>(
                 builder: (ctx, orderData, child) => ListView.builder(
                       itemCount: orderData.orders.length,
