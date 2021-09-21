@@ -18,7 +18,7 @@ class ChatScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Seller\'s Arena'),
+        title: const Text('Seller\'s Arena'),
       ),
       drawer: AppDrawer(),
       body: Container(
