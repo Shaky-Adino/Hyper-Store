@@ -5,14 +5,15 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 class ProdRatings extends StatelessWidget {
   final String title, review, imageUrl, name;
   final double stars;
+  final bool showDivider;
 
-  const ProdRatings(this.title, this.review, this.imageUrl, this.name, this.stars);
+  const ProdRatings(this.title, this.review, this.imageUrl, this.name, this.stars, this.showDivider);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -65,6 +66,9 @@ class ProdRatings extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 2),
                 child: Text(review),
               ),
+
+            if(showDivider)
+              Divider(),
           ],
         ),
       ),

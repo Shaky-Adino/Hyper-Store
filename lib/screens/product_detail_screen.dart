@@ -32,6 +32,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool _converting = false;
 
   @override
+    void initState() {
+      Future.delayed(Duration.zero).then((_) {
+        Provider.of<Rating>(context, listen: false).update(false);
+      });
+      super.initState();
+    }
+
+  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final productId = ModalRoute.of(context).settings.arguments as String; 
@@ -436,7 +444,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
 
                 Container(
                   child: FutureBuilder(
@@ -455,13 +463,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           return Consumer<Rating>(
                             builder: (ctx, data, child) => Container(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Customer Reviews',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -476,28 +485,95 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                               itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber), 
                                               itemSize: 18.0,
                                             ),
-                                            SizedBox(height: 3),
+                                            const SizedBox(height: 3),
                                             Text('${data.average} out of 5'),
                                           ],
                                         ),
                                       ],
                                     ),
                                   ),
-                                  MediaQuery.removePadding(
-                                    context: context,
-                                    removeTop: true,
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: data.ratings.length,
-                                      itemBuilder: (ctx, i) => ProdRatings(
-                                        data.ratings[i].title, 
-                                        data.ratings[i].review, 
-                                        data.ratings[i].imageUrl, 
-                                        data.ratings[i].name, 
-                                        data.ratings[i].stars,
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: TextButton(
+                                      onPressed: (){
+                                        Navigator.push(
+                                          context, 
+                                          MaterialPageRoute(builder: (context) => ProductReview(
+                                            loadedProduct.id, 
+                                            loadedProduct.title,
+                                            ),
+                                          ),
+                                        );
+                                      }, 
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.add, color: Colors.blue, size: 18),
+                                          const Text(
+                                            'Rate this product',
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
                                       )
                                     ),
                                   ),
+
+                                  MediaQuery.removePadding(
+                                      context: context,
+                                      removeTop: true,
+                                      child: ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: data.showAll ? data.ratings.length : 1,
+                                        itemBuilder: (ctx, i) => ProdRatings(
+                                          data.ratings[i].title, 
+                                          data.ratings[i].review, 
+                                          data.ratings[i].imageUrl, 
+                                          data.ratings[i].name, 
+                                          data.ratings[i].stars,
+                                          data.showAll && (i != data.ratings.length-1),
+                                        )
+                                      ),
+                                    ),
+
+                                  if(!data.showAll)
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          onPressed: (){
+                                            Provider.of<Rating>(context, listen: false).update(true);
+                                          }, 
+                                          child: Row(
+                                            children: [
+                                              const Text('Show All', style: TextStyle(color: Colors.blueGrey)),
+                                              const Icon(Icons.arrow_drop_down, color: Colors.blueGrey),
+                                            ],
+                                          )
+                                        )
+                                      ],
+                                    ),
+
+                                  if(data.showAll)
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          onPressed: (){
+                                            Provider.of<Rating>(context, listen: false).update(false);
+                                          }, 
+                                          child: Row(
+                                            children: [
+                                              const Text('Show less', style: TextStyle(color: Colors.blueGrey)),
+                                              const Icon(Icons.arrow_drop_up, color: Colors.blueGrey),
+                                            ],
+                                          )
+                                        )
+                                      ],
+                                    ),
                                 ],
                               ),
                             ),
@@ -509,20 +585,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
 
                 const SizedBox(height: 10),
-
-                ElevatedButton(
-                  onPressed: (){
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => ProductReview(
-                        loadedProduct.id, 
-                        loadedProduct.title,
-                        ),
-                      ),
-                    );
-                  }, 
-                  child: Text('Add Rating'),
-                ),
               ],
             ),
           ),

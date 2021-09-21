@@ -25,6 +25,17 @@ class Rating extends ChangeNotifier{
 
   double _avg = 0, _total = 0;
 
+  bool _showAll = false;
+
+  void update(bool value) {
+    _showAll = value;
+    notifyListeners();
+  } 
+
+  bool get showAll {
+    return _showAll;
+  }
+
   double get average {
     return _avg;
   }
