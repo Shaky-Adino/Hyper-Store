@@ -477,24 +477,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             fontSize: 18,
                                           ),
                                         ),
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            RatingBarIndicator(
-                                              rating: data.average,
-                                              itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber), 
-                                              itemSize: 18.0,
-                                            ),
-                                            const SizedBox(height: 3),
-                                            Text('${data.average} out of 5'),
-                                          ],
-                                        ),
+                                        if(data.ratings.length > 0)
+                                          Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              RatingBarIndicator(
+                                                rating: data.average,
+                                                itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber), 
+                                                itemSize: 18.0,
+                                              ),
+                                              const SizedBox(height: 3),
+                                              Text('${data.average} out of 5'),
+                                            ],
+                                          ),
                                       ],
                                     ),
                                   ),
 
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 8),
+                                    padding: EdgeInsets.only(bottom: data.ratings.length > 0 ? 8 : 0),
                                     child: TextButton(
                                       onPressed: (){
                                         Navigator.push(
@@ -521,7 +522,36 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     ),
                                   ),
 
-                                  MediaQuery.removePadding(
+                                  if(data.ratings.length == 0)
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Divider(),
+                                              Text(
+                                                'No reviews yet',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                'Be the first one to rate',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 14
+                                                ),
+                                              ),
+                                              Divider(),
+                                            ],
+                                          ),
+                                    ),
+
+                                  if(data.ratings.length > 0)
+                                    MediaQuery.removePadding(
                                       context: context,
                                       removeTop: true,
                                       child: ListView.builder(
@@ -539,7 +569,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       ),
                                     ),
 
-                                  if(!data.showAll)
+                                  if(!data.showAll && data.ratings.length > 0)
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
@@ -557,7 +587,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       ],
                                     ),
 
-                                  if(data.showAll)
+                                  if(data.showAll && data.ratings.length > 0)
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [

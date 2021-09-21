@@ -112,7 +112,7 @@ class _ProductReviewState extends State<ProductReview> {
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(mq.width*0.07, 0, mq.width*0.07, 15),
                                   child: TextField(
-                                    inputFormatters: [LengthLimitingTextInputFormatter(32)],
+                                    inputFormatters: [LengthLimitingTextInputFormatter(52)],
                                     maxLines: 2,
                                     keyboardType: TextInputType.multiline,
                                     decoration: InputDecoration(
@@ -155,6 +155,9 @@ class _ProductReviewState extends State<ProductReview> {
                       final authData = Provider.of<Auth>(context, listen: false);
                       await Provider.of<Rating>(context, listen: false)
                         .addRating(widget.prodId, authData.username, authData.userImage, rating, title, description);
+                      setState(() {
+                        isLoading = false;
+                      });
                       await showDialog(
                         context: context,
                         builder:  (BuildContext context)
