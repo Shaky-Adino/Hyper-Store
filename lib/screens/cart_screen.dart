@@ -48,18 +48,49 @@ class CartScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Expanded(
-            child: ListView.builder(
-              itemCount: cart.items.length,
-              itemBuilder: (ctx, i) => CartItem(
-                cart.items.values.toList()[i].id,
-                cart.items.keys.toList()[i],
-                cart.items.values.toList()[i].price,
-                cart.items.values.toList()[i].quantity,
-                cart.items.values.toList()[i].title,
-              ),
+
+          if(cart.items.length == 0)
+            Column(
+              children: [
+                CircleAvatar(
+                  radius: 92,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Image.asset(
+                      'assets/images/empty_cart.png', 
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Your Cart is empty !', 
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18)
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.of(context).pop();
+                  }, 
+                  child: const Text(
+                    'Continue shopping', 
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15)
+                  ),
+                )
+              ],
             ),
-          )
+          if(cart.items.length > 0)
+            Expanded(
+              child: ListView.builder(
+                itemCount: cart.items.length,
+                itemBuilder: (ctx, i) => CartItem(
+                  cart.items.values.toList()[i].id,
+                  cart.items.keys.toList()[i],
+                  cart.items.values.toList()[i].price,
+                  cart.items.values.toList()[i].quantity,
+                  cart.items.values.toList()[i].title,
+                ),
+              ),
+            )
         ],
       ),
     );
@@ -86,7 +117,12 @@ class _OrderButtonState extends State<OrderButton> {
     var tax = widget.cart.totalAmount*0.1;
     var total = widget.cart.totalAmount + tax + 80;
     return FlatButton(
-      child: _isLoading ? CircularProgressIndicator() : Text('ORDER NOW',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.orange),),
+      child: _isLoading ? 
+        CircularProgressIndicator() 
+          : Text(
+            'ORDER NOW',
+            style: TextStyle(fontWeight: FontWeight.bold, color: widget.cart.totalAmount <= 0 ? Colors.grey : Colors.orange),
+          ),
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
           ? null
           : () async {
