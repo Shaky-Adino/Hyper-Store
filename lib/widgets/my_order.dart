@@ -46,10 +46,6 @@ class MyOrder extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 5),
-
-                  Text(prod.title, style: TextStyle(fontWeight: FontWeight.w400)),
-
                   const SizedBox(height: 3)
                 ],
               ),

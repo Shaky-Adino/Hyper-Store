@@ -349,7 +349,7 @@ class Products with ChangeNotifier{
               id: prodData.id,
               title: prodData['title'],
               description: prodData['description'],
-              price: prodData['price'],
+              price: prodData['price'].toDouble(),
               imageUrl0: prodData['imageUrl0'],
               imageUrl1: prodData['imageUrl1'],
               imageUrl2: prodData['imageUrl2'],
