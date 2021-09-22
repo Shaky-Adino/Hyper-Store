@@ -685,43 +685,31 @@ class _ProductImageState extends State<ProductImage> {
                 children: [
                     Hero(
                       tag: widget.loadedProduct.id,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
+                      child: CachedNetworkImage(
                           imageUrl: widget.loadedProduct.imageUrl0,
                           progressIndicatorBuilder: (context, url, downloadProgress) => 
                                   Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                          fit: BoxFit.cover,
+                          fit: widget.loadedProduct.imageUrl0 == widget.loadedProduct.imageUrl1 ? BoxFit.contain : BoxFit.cover,
                         ),
-                      ),
                     ),
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
+                    CachedNetworkImage(
                           imageUrl: widget.loadedProduct.imageUrl1,
                           progressIndicatorBuilder: (context, url, downloadProgress) => 
                                   Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                          fit: BoxFit.cover,
+                          fit: widget.loadedProduct.imageUrl0 == widget.loadedProduct.imageUrl1 ? BoxFit.contain : BoxFit.cover,
                         ),
-                    ),
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
+                    CachedNetworkImage(
                           imageUrl: widget.loadedProduct.imageUrl2,
                           progressIndicatorBuilder: (context, url, downloadProgress) => 
                                   Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                          fit: BoxFit.cover,
+                          fit: widget.loadedProduct.imageUrl0 == widget.loadedProduct.imageUrl1 ? BoxFit.contain : BoxFit.cover,
                         ),
-                    ),
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
+                    CachedNetworkImage(
                           imageUrl: widget.loadedProduct.imageUrl3,
                           progressIndicatorBuilder: (context, url, downloadProgress) => 
                                   Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                          fit: BoxFit.cover,
+                          fit: widget.loadedProduct.imageUrl0 == widget.loadedProduct.imageUrl1 ? BoxFit.contain : BoxFit.cover,
                         ),
-                    ),
                 ],
               ),
             ),

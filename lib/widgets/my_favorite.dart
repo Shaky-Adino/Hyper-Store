@@ -33,7 +33,7 @@ class MyFavorite extends StatelessWidget {
                         child: CachedNetworkImage(
                           imageUrl: prod.imageUrl0,
                           placeholder: (context, url) => CircularProgressIndicator(),
-                          fit: BoxFit.cover,
+                          fit: prod.imageUrl0 == prod.imageUrl1 ? BoxFit.contain : BoxFit.cover,
                         ),
                       ),
                     ),
