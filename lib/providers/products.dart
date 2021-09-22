@@ -114,7 +114,7 @@ class Products with ChangeNotifier{
           id: prodData.id,
           title: prodData['title'],
           description: prodData['description'],
-          price: prodData['price'],
+          price: prodData['price'].toDouble(),
           isFavorite: favoriteData.isEmpty ? false : favs[prodData.id] ?? false,
           imageUrl0: prodData['imageUrl0'],
           imageUrl1: prodData['imageUrl1'],
@@ -125,6 +125,7 @@ class Products with ChangeNotifier{
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
+      print(error);
       throw (error);
     }
   }
