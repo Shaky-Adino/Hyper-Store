@@ -20,6 +20,10 @@ import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
 import './helpers/custom_route.dart';
 
+
+
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

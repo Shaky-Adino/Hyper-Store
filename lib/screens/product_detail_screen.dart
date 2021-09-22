@@ -6,7 +6,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shopapp/screens/order_confirmation.dart';
+import './order_confirmation.dart';
+import './user_profile.dart';
 import '../widgets/prod_ratings.dart';
 import './product_review.dart';
 import '../helpers/convert_image_to_file.dart';
@@ -51,15 +52,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       // appBar: AppBar(
       //   title: Text(loadedProduct.title),
       // ),
+      // appBar: AppBar(
+      //   title: const Text('Hyper Store'),
+      // ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            automaticallyImplyLeading: false,
+            // automaticallyImplyLeading: false,
             expandedHeight: 330,
+            // backgroundColor: Colors.transparent,
             pinned: true,
+            title: const Text('Hyper Store', style: TextStyle(fontWeight: FontWeight.bold)),
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(loadedProduct.title),
-              centerTitle: true,
+              // title: Text(loadedProduct.title),
+              // centerTitle: true,
               background: Container(
                 width: deviceSize.width,
                 decoration: BoxDecoration(color: Colors.white),
@@ -70,7 +76,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       Container(
                         decoration: BoxDecoration(color: Colors.yellow),
-                        padding: const EdgeInsets.only(top: 30.0,bottom: 80.0, left: 20.0, right: 20.0),
+                        padding: const EdgeInsets.only(top: 80.0,bottom: 50.0, left: 20.0, right: 20.0),
                         child: Card(
                           clipBehavior: Clip.hardEdge,
                             elevation: 5,
@@ -126,7 +132,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                       ),
                       Positioned(
-                        bottom: 57.0,
+                        bottom: 32.0,
                         child: Row(children: [
                             for(var i=0;i<4;i++)
                               AnimatedContainer(
@@ -170,19 +176,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                               ),
 
-                              if(!_converting)
-                                Text(
-                                  '₹${loadedProduct.price}',
+                              Expanded(
+                                child: Text(
+                                  '${loadedProduct.title}',
                                   style: TextStyle(
-                                    color: Colors.deepOrange,
                                     fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
+                              ),
 
-                              if(_converting)
-                                Center(child: CircularProgressIndicator()),
 
                               ElevatedButton(
                                 onPressed: () async {
@@ -210,15 +214,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: double.infinity,
-                  child: Text(
-                    '${loadedProduct.description}\n Avocado trees are partially self-pollinating and are often propogated through grafting to maintain a predictable quality of the fruit',
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                    style: TextStyle(
-                      letterSpacing: 0.2,
-                      fontSize: 14,
-                      fontFamily: 'OpenSans'
-                    ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 5),
+                      if(_converting)
+                        Center(child: CircularProgressIndicator()),
+                      if(_converting)
+                        const SizedBox(height: 15),
+                      Text(
+                        '₹${loadedProduct.price}',
+                        style: TextStyle(
+                          color: Colors.deepOrange,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        '${loadedProduct.description}\n Avocado trees are partially self-pollinating and are often propogated through grafting to maintain a predictable quality of the fruit',
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        style: TextStyle(
+                          letterSpacing: 0.2,
+                          fontSize: 14,
+                          fontFamily: 'OpenSans'
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -411,7 +435,57 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       // )
                                 ),
                                 child: InkWell(
-                                          onTap: () {
+                                          onTap: () async {
+                                            final authData = Provider.of<Auth>(context, listen: false);
+                                            String username = authData.username;
+                                            String url = authData.userImage;
+                                            String phone = authData.userPhone;
+                                            String address = authData.userAddress;
+                                            if(phone == '' || address == ''){
+                                              bool _done = false;
+                                              await showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (BuildContext context)
+                                                {
+                                                  return AlertDialog(
+                                                    title: const Text('Add your address !'),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20),
+                                                    ),
+                                                    content: SingleChildScrollView(
+                                                      child: ListBody(
+                                                        children: <Widget>[Text("Update your profile with your contact information.")]
+                                                      ),
+                                                    ),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        child: Text('Later', style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
+                                                        onPressed: () {
+                                                          _done = false;
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                      ),
+                                                      TextButton(
+                                                        child: Text('Update Now', style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
+                                                        onPressed: () {
+                                                          _done = true;
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                              if(!_done)
+                                                return;
+                                              bool updated = await Navigator.push(
+                                                                context, 
+                                                                MaterialPageRoute(builder: (context) => UserProfile(username, url, phone, address))
+                                                              );
+                                              if(!updated)
+                                                return;
+                                            }
                                             Navigator.push(
                                               context, 
                                               MaterialPageRoute(builder: (context) => OrderConfirmation(loadedProduct, _quantity))

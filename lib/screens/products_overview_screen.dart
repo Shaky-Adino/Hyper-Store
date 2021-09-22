@@ -61,8 +61,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MyShop',
-        style: TextStyle(fontWeight: FontWeight.bold),),
+        title: const Text('Hyper Store',style: TextStyle(fontWeight: FontWeight.bold)),
         actions: <Widget>[
           PopupMenuButton(
             offset: const Offset(0, 20),
