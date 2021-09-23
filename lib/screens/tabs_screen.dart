@@ -99,7 +99,7 @@ class _TabsScreenState extends State<TabsScreen> {
               ),
             ),
           ],
-          bottom: TabBar(
+          bottom: !_isLoading ? TabBar(
             isScrollable: true,
             tabs: <Widget>[
               Tab(
@@ -125,23 +125,16 @@ class _TabsScreenState extends State<TabsScreen> {
                 text: 'Others',
               ),
             ],
-          ),
+          ) : null,
         ),
         drawer: AppDrawer(),
-        body: TabBarView(
+        body: _isLoading ? Center(child: CircularProgressIndicator()) 
+          : TabBarView(
           children: <Widget>[
-            _isLoading ? 
-              Center(child: CircularProgressIndicator()) 
-                : ProductsGrid(_showOnlyFavorites, 0),
-            _isLoading ? 
-              Center(child: CircularProgressIndicator()) 
-                : ProductsGrid(_showOnlyFavorites, 1),
-            _isLoading ? 
-              Center(child: CircularProgressIndicator()) 
-                : ProductsGrid(_showOnlyFavorites, 2),
-            _isLoading ? 
-              Center(child: CircularProgressIndicator()) 
-                : ProductsGrid(_showOnlyFavorites, 3),
+            ProductsGrid(_showOnlyFavorites, 0),
+            ProductsGrid(_showOnlyFavorites, 1),
+            ProductsGrid(_showOnlyFavorites, 2),
+            ProductsGrid(_showOnlyFavorites, 3),
           ],
         ),
       ),
