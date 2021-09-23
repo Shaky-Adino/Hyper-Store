@@ -22,9 +22,10 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  var _showOnlyFavorites = false;
-  var _isInit = true;
-  var _isLoading = false;
+  bool _showOnlyFavorites = false;
+  bool _isInit = true;
+  bool _isLoading = false;
+
 
   void setStateIfMounted(f) {
     if (mounted) setState(f);
@@ -131,10 +132,16 @@ class _TabsScreenState extends State<TabsScreen> {
           children: <Widget>[
             _isLoading ? 
               Center(child: CircularProgressIndicator()) 
-                : ProductsGrid(_showOnlyFavorites),
-            Center(child: Text('Clothing')),
-            Center(child: Text('Electronics')),
-            Center(child: Text('Others')),
+                : ProductsGrid(_showOnlyFavorites, 0),
+            _isLoading ? 
+              Center(child: CircularProgressIndicator()) 
+                : ProductsGrid(_showOnlyFavorites, 1),
+            _isLoading ? 
+              Center(child: CircularProgressIndicator()) 
+                : ProductsGrid(_showOnlyFavorites, 2),
+            _isLoading ? 
+              Center(child: CircularProgressIndicator()) 
+                : ProductsGrid(_showOnlyFavorites, 3),
           ],
         ),
       ),

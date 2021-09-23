@@ -48,7 +48,8 @@ class Products with ChangeNotifier{
     // ),
   ];
 
-  List<Product> _userItems = [];
+  List<Product> _userItems = [], _clothingItems = [],
+                   _electronicItems = [], _otherItems = [];
 
   // final String authToken;
   String userId;
@@ -63,8 +64,32 @@ class Products with ChangeNotifier{
     return [..._userItems];
   }
 
+  List<Product> get clothingItems {
+    return [..._clothingItems];
+  }
+
+  List<Product> get electronicItems {
+    return [..._electronicItems];
+  }
+
+  List<Product> get otherItems {
+    return [..._otherItems];
+  }
+
   List<Product> get favoriteItems {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
+  }
+
+  List<Product> get clothingFavoriteItems {
+    return _clothingItems.where((prodItem) => prodItem.isFavorite).toList();
+  }
+
+  List<Product> get electronicFavoriteItems {
+    return _electronicItems.where((prodItem) => prodItem.isFavorite).toList();
+  }
+
+  List<Product> get otherFavoriteItems {
+    return _otherItems.where((prodItem) => prodItem.isFavorite).toList();
   }
 
   Product findById(String id) {
@@ -88,14 +113,11 @@ class Products with ChangeNotifier{
   //   notifyListeners();
   // }
 
-  Future<void> newfetchAndSetProducts([bool filterByUser = false]) async {
+  Future<void> newfetchAndSetProducts() async {
     var extractedData;
     QuerySnapshot querySnapshot1, querySnapshot2;
     try {
-      if(filterByUser)
-        querySnapshot1 = await firestore.collection('products').where('creatorId', isEqualTo: userId).get();
-      else
-        querySnapshot1 = await firestore.collection('products').get();
+      querySnapshot1 = await firestore.collection('products').get();
 
       extractedData = querySnapshot1.docs;
       if (extractedData == null) {
@@ -108,9 +130,12 @@ class Products with ChangeNotifier{
       favoriteData.forEach((element) {
         favs[element.id] = element['isFavorite'];
       });
-      final List<Product> loadedProducts = [];
+      final List<Product> loadedProducts = [], clothingProducts = [],
+        electronicProducts = [], otherProducts = [];
+
       extractedData.forEach((prodData) {
-        loadedProducts.add(Product(
+
+        final prod = Product(
           id: prodData.id,
           title: prodData['title'],
           description: prodData['description'],
@@ -120,9 +145,25 @@ class Products with ChangeNotifier{
           imageUrl1: prodData['imageUrl1'],
           imageUrl2: prodData['imageUrl2'],
           imageUrl3: prodData['imageUrl3'],
-        ));
+        );
+
+        if(prodData['category'] == 'clothing')
+          clothingProducts.add(prod);
+
+        if(prodData['category'] == 'electronics')
+          electronicProducts.add(prod);
+        
+        if(prodData['category'] == 'others')
+          otherProducts.add(prod);
+
+        loadedProducts.add(prod);
       });
+
       _items = loadedProducts;
+      _clothingItems = clothingProducts;
+      _electronicItems = electronicProducts;
+      _otherItems = otherProducts;
+
       notifyListeners();
     } catch (error) {
       print(error);
