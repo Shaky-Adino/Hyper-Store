@@ -10,6 +10,7 @@ class Product with ChangeNotifier{
 
   final String id;
   final String title;
+  final String category;
   final String description;
   final double price;
   final String imageUrl0, imageUrl1, imageUrl2, imageUrl3;
@@ -18,6 +19,7 @@ class Product with ChangeNotifier{
   Product({
     @required this.id,
     @required this.title,
+    @required this.category,
     @required this.description,
     @required this.price,
     @required this.imageUrl0,

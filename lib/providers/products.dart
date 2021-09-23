@@ -137,6 +137,7 @@ class Products with ChangeNotifier{
 
         final prod = Product(
           id: prodData.id,
+          category: prodData['category'],
           title: prodData['title'],
           description: prodData['description'],
           price: prodData['price'].toDouble(),
@@ -218,6 +219,7 @@ class Products with ChangeNotifier{
       }
 
       DocumentReference docRef = await firestore.collection('products').add({
+          'category': product.category,
           'title': product.title,
           'description': product.description,
           'imageUrl0': urls[0],
@@ -231,6 +233,7 @@ class Products with ChangeNotifier{
 
       final newProduct = Product(
           title: product.title,
+          category: product.category,
           description: product.description,
           price: product.price,
           imageUrl0: urls[0],
@@ -239,7 +242,8 @@ class Products with ChangeNotifier{
           imageUrl3: urls[3],
           id: docRef.id,
       );
-      _items.add(newProduct);
+
+      _userItems.add(newProduct);
       notifyListeners();
     } catch (error) {
       print(error);
@@ -280,7 +284,7 @@ class Products with ChangeNotifier{
   Future<void> newupdateProduct(String id, Product newProduct, 
                     List<ImageUploadModel> images, List<String> urls) async {
                       
-    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    final prodIndex = _userItems.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
 
       List<String> newUrls = [];
@@ -315,6 +319,7 @@ class Products with ChangeNotifier{
       }
 
       await firestore.collection('products').doc(id).update({
+          'category': newProduct.category,
           'title': newProduct.title,
           'description': newProduct.description,
           'imageUrl0': newUrls[0],
@@ -323,7 +328,8 @@ class Products with ChangeNotifier{
           'imageUrl3': newUrls[3],
           'price': newProduct.price
       });
-      _items[prodIndex] = newProduct;
+
+      _userItems[prodIndex] = newProduct;
       notifyListeners();
     } else {
       print('...');
@@ -349,14 +355,14 @@ class Products with ChangeNotifier{
   // }
 
   Future<void> newdeleteProduct(String id) async {
-    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
-    var existingProduct = _items[existingProductIndex];
-    _items.removeAt(existingProductIndex);
+    final existingProductIndex = _userItems.indexWhere((prod) => prod.id == id);
+    var existingProduct = _userItems[existingProductIndex];
+    _userItems.removeAt(existingProductIndex);
     notifyListeners();
     try{
       await firestore.collection('products').doc(id).delete();
     } catch(e){
-      _items.insert(existingProductIndex, existingProduct);
+      _userItems.insert(existingProductIndex, existingProduct);
       notifyListeners();
       throw HttpException('Could not delete product.');
     }
@@ -388,6 +394,7 @@ class Products with ChangeNotifier{
         extractedData.forEach((prodData) {
             loadedProducts.add(Product(
               id: prodData.id,
+              category: prodData['category'],
               title: prodData['title'],
               description: prodData['description'],
               price: prodData['price'].toDouble(),
