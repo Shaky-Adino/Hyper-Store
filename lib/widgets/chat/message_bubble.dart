@@ -69,7 +69,7 @@ class MessageBubble extends StatelessWidget{
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: isMe ? Colors.grey[300] : Theme.of(context).accentColor,
+                  color: !isMe ? Colors.grey[300] : Colors.yellow,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12),
@@ -89,7 +89,7 @@ class MessageBubble extends StatelessWidget{
                         "$productTitle  ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: isMe ? Colors.black : Theme.of(context).accentTextTheme.headline1.color,
+                          color: Colors.black,
                         ),
                       ),
                     ),
@@ -114,7 +114,7 @@ class MessageBubble extends StatelessWidget{
                     ),
                     Text(message, 
                       style: TextStyle(
-                        color: isMe ? Colors.black : Theme.of(context).accentTextTheme.headline1.color
+                        color: Colors.black,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -122,7 +122,7 @@ class MessageBubble extends StatelessWidget{
                       "- $username",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: isMe ? Colors.red : Theme.of(context).accentTextTheme.headline1.color,
+                        color: Colors.red,
                       ),
                     ),
                   ],
