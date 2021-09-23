@@ -6,7 +6,6 @@ import '../providers/auth.dart';
 import '../providers/orders.dart';
 import '../providers/cart.dart';
 import '../providers/products.dart';
-import 'products_overview_screen.dart';
 import 'auth_screen.dart';
 
 class LandingScreen extends StatelessWidget {

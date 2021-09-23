@@ -9,7 +9,6 @@ import './screens/landingScreen.dart';
 import './screens/chat_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/cart_screen.dart';
-import './screens/products_overview_screen.dart';
 import './screens/product_detail_screen.dart';
 import './providers/products.dart';
 import './providers/cart.dart';

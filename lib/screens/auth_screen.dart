@@ -557,61 +557,6 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                   
                                   const SizedBox(height: 10),
 
-                                  // if(_authMode == AuthMode.Login)
-                                  AnimatedContainer(
-                                      constraints: BoxConstraints(
-                                      minHeight: _authMode == AuthMode.Login ? 40 : 0,
-                                      maxHeight: _authMode == AuthMode.Login ? 50 : 0,
-                                    ),
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeIn,
-                                      child: FadeTransition(
-                                        opacity: anime,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                                        color: Colors.yellow,
-                                                        borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: InkWell(
-                                            onTap: () => _submit(true),
-                                            child: Ink(
-                                              color: Colors.white,
-                                              child: Padding(
-                                                  padding: EdgeInsets.all(6),
-                                                  child: Wrap(
-                                                    crossAxisAlignment: WrapCrossAlignment.center,
-                                                    children: [
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius: BorderRadius.circular(10)
-                                                        ),
-                                                        padding: EdgeInsets.all(2),
-                                                        child: Image.asset(
-                                                          'assets/images/search.png',
-                                                           height: 28,
-                                                           width: 28,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 12),
-                                                      Text(
-                                                        ' Sign in with Google',
-                                                        style: TextStyle(
-                                                          fontSize: 16.0,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                if(_authMode == AuthMode.Login)
-                                  const SizedBox(height: 10),
-
                                   if (_isLoading)
                                     CircularProgressIndicator()
                                   else
@@ -639,7 +584,67 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                         ),
                                       ),
                                     ),
+
+                                  if(_authMode == AuthMode.Login)
+                                    const SizedBox(height: 10),
+
+                                  AnimatedContainer(
+                                      constraints: BoxConstraints(
+                                      minHeight: _authMode == AuthMode.Login ? 40 : 0,
+                                      maxHeight: _authMode == AuthMode.Login ? 50 : 0,
+                                    ),
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeIn,
+                                      child: FadeTransition(
+                                        opacity: anime,
+                                        child: Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.black),
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child: InkWell(
+                                            onTap: () => _submit(true),
+                                            child: Ink(
+                                              color: Colors.white,
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(6),
+                                                  child: Center(
+                                                    child: Wrap(
+                                                      crossAxisAlignment: WrapCrossAlignment.center,
+                                                      children: [
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius: BorderRadius.circular(10)
+                                                          ),
+                                                          padding: EdgeInsets.all(2),
+                                                          child: Image.asset(
+                                                            'assets/images/search.png',
+                                                             height: 28,
+                                                             width: 28,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(width: 12),
+                                                        Text(
+                                                          ' Sign in with Google',
+                                                          style: TextStyle(
+                                                            fontSize: 16.0,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ),
+
                                   const SizedBox(height: 7),
+                                  
                                   FlatButton(
                                     child: Text(
                                         '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',

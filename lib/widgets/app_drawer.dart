@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../screens/tabs_screen.dart';
 import '../screens/account.dart';
 import '../screens/landingScreen.dart';
-import '../screens/products_overview_screen.dart';
 import '../helpers/custom_route.dart';
 
 import '../screens/chat_screen.dart';

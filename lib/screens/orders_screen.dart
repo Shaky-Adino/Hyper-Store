@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './tabs_screen.dart';
-import './products_overview_screen.dart';
 
 import '../providers/orders.dart' show Orders;
 import '../widgets/order_item.dart';
