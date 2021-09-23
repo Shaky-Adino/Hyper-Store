@@ -55,77 +55,119 @@ class _TabsScreenState extends State<TabsScreen> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Hyper Store',style: TextStyle(fontWeight: FontWeight.bold)),
-          actions: <Widget>[
-            PopupMenuButton(
-              offset: const Offset(0, 20),
-              shape: const TooltipShape(),
-              onSelected: (FilterOptions selectedValue) {
-                setStateIfMounted(() {
-                  if (selectedValue == FilterOptions.Favorites) {
-                    _showOnlyFavorites = true;
-                  } else {
-                    _showOnlyFavorites = false;
-                  }
-                });
-              },
-              icon: Icon(
-                Icons.more_vert,
-              ),
-              itemBuilder: (_) => [
-                    PopupMenuItem(
-                      child: Text('Only Favourites'),
-                      value: FilterOptions.Favorites,
-                    ),
-                    PopupMenuItem(
-                      child: Text('Show All'),
-                      value: FilterOptions.All,
-                    ),
-                  ],
-            ),
-            Consumer<Cart>(
-              builder: (_, cart, ch) => Badge(
-                    child: ch,
-                    value: cart.itemCount.toString(),
-                  ),
-              child: IconButton(
-                icon: Icon(
-                  Icons.shopping_cart,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(_isLoading ? 105 : 160),
+          child: AppBar(
+            centerTitle: true,
+            title: Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: const Text(
+                'Hyper Store',
+                style: TextStyle(
+                  fontFamily: "Anton",
+                  letterSpacing: 1.5,
+                  fontSize: 23
                 ),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(CartScreen.routeName);
+              ),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              title: Padding(
+                padding: EdgeInsets.only(left: 18, right: 18, bottom: _isLoading ? 0 : 55),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.yellow[50],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Icon(Icons.search),
+                      ),
+                      Text(
+                        'Search Hyper Store',
+                        style: TextStyle(
+                          color: Colors.grey
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              PopupMenuButton(
+                offset: const Offset(0, 20),
+                shape: const TooltipShape(),
+                onSelected: (FilterOptions selectedValue) {
+                  setStateIfMounted(() {
+                    if (selectedValue == FilterOptions.Favorites) {
+                      _showOnlyFavorites = true;
+                    } else {
+                      _showOnlyFavorites = false;
+                    }
+                  });
                 },
-              ),
-            ),
-          ],
-          bottom: !_isLoading ? TabBar(
-            isScrollable: true,
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.all_inclusive),
-                text: 'All',
-              ),
-              Tab(
-                icon: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: FaIcon(
-                    FontAwesomeIcons.tshirt,
-                    size: 18,
-                  ),
+                icon: Icon(
+                  Icons.more_vert,
                 ),
-                text: 'Clothing',
+                itemBuilder: (_) => [
+                      PopupMenuItem(
+                        child: Text('Only Favourites'),
+                        value: FilterOptions.Favorites,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Show All'),
+                        value: FilterOptions.All,
+                      ),
+                    ],
               ),
-              Tab(
-                icon: Icon(Icons.bolt),
-                text: 'Electronics',
-              ),
-              Tab(
-                icon: Icon(Icons.category),
-                text: 'Others',
+              Consumer<Cart>(
+                builder: (_, cart, ch) => Badge(
+                      child: ch,
+                      value: cart.itemCount.toString(),
+                    ),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.shopping_cart,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(CartScreen.routeName);
+                  },
+                ),
               ),
             ],
-          ) : null,
+            bottom: !_isLoading ? TabBar(
+              isScrollable: true,
+              tabs: <Widget>[
+                Tab(
+                  icon: Icon(Icons.all_inclusive),
+                  text: 'All',
+                ),
+                Tab(
+                  icon: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: FaIcon(
+                      FontAwesomeIcons.tshirt,
+                      size: 18,
+                    ),
+                  ),
+                  text: 'Clothing',
+                ),
+                Tab(
+                  icon: Icon(Icons.bolt),
+                  text: 'Electronics',
+                ),
+                Tab(
+                  icon: Icon(Icons.category),
+                  text: 'Others',
+                ),
+              ],
+            ) : null,
+          ),
         ),
         drawer: AppDrawer(),
         body: _isLoading ? Center(child: CircularProgressIndicator()) 
