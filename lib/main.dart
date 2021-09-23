@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import './screens/tabs_screen.dart';
 import './providers/rating.dart';
 import './screens/account.dart';
 import './screens/landingScreen.dart';
@@ -108,7 +109,7 @@ class MyApp extends StatelessWidget {
                   AuthScreen.routeName: (ctx) => AuthScreen(),
                   Account.routeName: (ctx) => Account(),
                   ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-                  ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen(),
+                  TabsScreen.routeName: (ctx) => TabsScreen(),
                   CartScreen.routeName: (ctx) => CartScreen(),
                   OrdersScreen.routeName: (ctx) => OrdersScreen(),
                   UserProductsScreen.routeName: (ctx) => UserProductsScreen(),

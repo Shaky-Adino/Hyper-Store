@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './tabs_screen.dart';
 import './products_overview_screen.dart';
 
 import '../providers/orders.dart' show Orders;
@@ -46,7 +47,7 @@ class OrdersScreen extends StatelessWidget {
                       const SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: (){
-                          Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
+                          Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
                         }, 
                         child: const Text('Go to Store', style: TextStyle(fontWeight: FontWeight.w500),)
                       )

@@ -34,7 +34,7 @@ class ProductItem extends StatelessWidget {
             child: FadeInImage(
               placeholder: AssetImage('assets/images/product-placeholder.png'),
               image: CachedNetworkImageProvider(product.imageUrl0),
-              fit: BoxFit.cover,
+              fit: product.imageUrl0 == product.imageUrl1 ? BoxFit.contain : BoxFit.cover,
             ),
           ),
         ),

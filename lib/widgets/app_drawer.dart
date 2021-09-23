@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../screens/tabs_screen.dart';
 import '../screens/account.dart';
 import '../screens/landingScreen.dart';
 import '../screens/products_overview_screen.dart';
@@ -51,7 +52,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.shop),
             title: Text('Shop'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
+              Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
             },
           ),
           Divider(),

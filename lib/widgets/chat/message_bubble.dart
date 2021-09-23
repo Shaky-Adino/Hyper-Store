@@ -84,7 +84,7 @@ class MessageBubble extends StatelessWidget{
                   crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: EdgeInsets.only(left: isMe ? 8 : 0, right: !isMe ? 8 : 0),
                       child: Text(
                         "$productTitle  ",
                         style: TextStyle(
