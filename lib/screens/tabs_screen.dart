@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shopapp/helpers/data_search.dart';
 import '../helpers/tootipshape.dart';
 
 import '../widgets/app_drawer.dart';
@@ -56,7 +57,7 @@ class _TabsScreenState extends State<TabsScreen> {
       length: 4,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(_isLoading ? 105 : 160),
+          preferredSize: Size.fromHeight(_isLoading ? 60 : 160),
           child: AppBar(
             centerTitle: true,
             title: Padding(
@@ -70,34 +71,43 @@ class _TabsScreenState extends State<TabsScreen> {
                 ),
               ),
             ),
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Padding(
-                padding: EdgeInsets.only(left: 18, right: 18, bottom: _isLoading ? 0 : 55),
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.yellow[50],
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Icon(Icons.search),
-                      ),
-                      Text(
-                        'Search Hyper Store',
-                        style: TextStyle(
-                          color: Colors.grey
+            flexibleSpace: _isLoading ? null 
+              : FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: Padding(
+                    padding: EdgeInsets.only(left: 18, right: 18, bottom: 55),
+                    child: GestureDetector(
+                      onTap: (){
+                        showSearch(
+                          context: context, 
+                          delegate: DataSearch(Provider.of<Products>(context, listen: false).searchItems)
+                        );
+                      },
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.yellow[50],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey),
                         ),
-                      )
-                    ],
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              child: Icon(Icons.search),
+                            ),
+                            Text(
+                              'Search Hyper Store',
+                              style: TextStyle(
+                                color: Colors.grey
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
               ),
-            ),
             actions: <Widget>[
               PopupMenuButton(
                 offset: const Offset(0, 20),
