@@ -10,17 +10,6 @@ class SplashScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset('assets/images/hyper_store.png'),
-          SizedBox(height: 60),
-          Center(
-            child: Text(
-              'Hyper Store',
-              style: TextStyle(
-                fontSize: 35,
-                color: Colors.orange,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
         ],
       ),
     );
