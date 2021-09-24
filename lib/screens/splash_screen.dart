@@ -4,13 +4,16 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset('assets/images/hyper_store.png'),
-        ],
+      backgroundColor: Colors.yellow,
+      body: Center(
+        child: Text(
+          'Loading...',
+          style: TextStyle(
+            fontSize: 25,
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ),
     );
   }

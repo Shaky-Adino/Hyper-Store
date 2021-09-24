@@ -43,18 +43,18 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   bool isLoading1 = false;
   VideoPlayerController _vcontroller;
 
-  // void checkFirstSeen() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   bool _seen = (prefs.getBool('seen') ?? false);
+  void checkFirstSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool _seen = (prefs.getBool('seen') ?? false);
 
-  //   if (!_seen) {
-  //     await prefs.setBool('seen', true);
-  //     Navigator.push(context,SlideRightRoute(page: IntroScreen()));
-  //   }
-  //   setState(() {
-  //       isLoading1 = false;
-  //   });
-  // }
+    if (!_seen) {
+      await prefs.setBool('seen', true);
+      Navigator.push(context,SlideRightRoute(page: IntroScreen()));
+    }
+    setState(() {
+        isLoading1 = false;
+    });
+  }
 
   void _pickedImage(File image) {
     _userImageFile = image;
@@ -68,7 +68,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   void initState() {
     flag = false;
     super.initState();
-    // isLoading1 = true;
+    isLoading1 = true;
     _vcontroller = VideoPlayerController.asset(
         'assets/fire.mp4')
       ..initialize().then((_) {
@@ -78,7 +78,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
         // Ensure the first frame is shown after the video is initialized
         setState(() {});
       });
-    // checkFirstSeen();
+    checkFirstSeen();
     _controller = AnimationController(
       vsync: this,
       duration: Duration(
