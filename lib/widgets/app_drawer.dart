@@ -30,10 +30,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   child: ClipOval(
                     child: url == null ? 
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset('assets/images/profile_pic.png',height: 40,width: 40),
-                      )
+                      Image.asset('assets/images/profile_pic.png',height: 40,width: 40)
                       : FadeInImage(
                         height: 40,
                         width: 40,

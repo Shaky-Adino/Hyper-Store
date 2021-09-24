@@ -30,7 +30,13 @@ class ProdRatings extends StatelessWidget {
                       image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                     ),
                   ),
-                  placeholder: (context, url) => ClipOval(child: Image.asset('assets/images/profile_pic.png')),
+                  placeholder: (context, url) => ClipOval(
+                    child: Image.asset(
+                      'assets/images/profile_pic1.png',
+                      width: 20.0,
+                      height: 20.0,
+                    ),
+                  ),
                 ),
 
                 const SizedBox(width: 8),

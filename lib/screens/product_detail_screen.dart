@@ -123,7 +123,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                 itemSize: 18.0,
                                               ),
                                               const SizedBox(height: 3),
-                                              Text('${data.average} out of 5'),
+                                              Text('${data.average.toStringAsFixed(1)} out of 5'),
                                             ],
                                           ),
                                       ],
