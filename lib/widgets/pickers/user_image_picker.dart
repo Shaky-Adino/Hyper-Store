@@ -40,7 +40,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
             child: _pickedImage == null ? Padding(
               padding: const EdgeInsets.all(6.0),
               child: ClipOval(
-                child: Image.asset('assets/images/profile_pic.png'),
+                child: Image.asset('assets/images/profile_pic1.png'),
               ),
             ) : null,
           ),

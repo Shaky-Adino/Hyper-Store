@@ -23,19 +23,24 @@ class AppDrawer extends StatelessWidget {
           AppBar(
             title: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.black,
-                  radius: 22,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.black,
-                    backgroundImage: url != null ? CachedNetworkImageProvider(url) : null,
-                    radius: 20,
-                    child: url == null ? Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: ClipOval(
-                        child: Image.asset('assets/images/profile_pic.png'),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: url == null ? 
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset('assets/images/profile_pic.png',height: 40,width: 40),
+                      )
+                      : FadeInImage(
+                        height: 40,
+                        width: 40,
+                        placeholder: AssetImage('assets/images/profile_pic.png'),
+                        image: CachedNetworkImageProvider(url),
+                        fit: BoxFit.cover,
                       ),
-                    ) : null,
                   ),
                 ),
 
