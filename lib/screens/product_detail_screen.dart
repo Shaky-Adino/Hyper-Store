@@ -250,7 +250,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 150),
               ],
             ),
           ),

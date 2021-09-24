@@ -20,107 +20,100 @@ import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
 import './helpers/custom_route.dart';
 
-
-
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   runApp(MyApp());
 } 
 
 class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-                    ChangeNotifierProvider(create: (ctx) => Auth(false)),
-                    ChangeNotifierProvider(create: (ctx) => Products()),
-                    ChangeNotifierProvider(create: (ctx) => Rating()),
-                    // ChangeNotifierProxyProvider<UserId, Products>(
-                    //       create: (_) => Products(null, []),
-                    //       update: (ctx, user, previous) => previous..updates(user.userId)
-                    //       //  Products(
-                    //       //   auth.userId,
-                    //       //   previousProducts == null ? [] : previousProducts.items,
-                    //       // ),
-                    // ),
-                    ChangeNotifierProvider(create: (ctx) => Cart()),
-                    // ChangeNotifierProxyProvider<UserId, Cart>(
-                    //       create: (_) => Cart(null, {}),
-                    //       update: (ctx, user, previous) => previous..updates(user.userId)
-                    //       // Cart(
-                    //       //   auth.userId,
-                    //       //   previousItems == null ? {} : previousItems.items,
-                    //       // ),
-                    // ),
-                    ChangeNotifierProvider(create: (ctx) => Orders()),
-                    // ChangeNotifierProxyProvider<UserId, Orders>(
-                    //       create: (_) => Orders(null, []),
-                    //       update: (ctx, user, previous) => previous..updates(user.userId)
-                    //       // Orders(
-                    //       //   auth.userId,
-                    //       //   previousOrders == null ? [] : previousOrders.orders,
-                    //       // ),
-                    // ),
-                ],
-      child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'MyShop',
-              theme: ThemeData(
-                  primarySwatch: Colors.yellow,
-                  accentColor: Colors.redAccent,
-                  inputDecorationTheme: InputDecorationTheme(
-                                  labelStyle: TextStyle(color: Colors.black),
-                                  focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.black),) , 
-                                ),
-                  textSelectionTheme: TextSelectionThemeData(
-                    cursorColor: Colors.black,
-                    selectionHandleColor: Colors.black,
-                    selectionColor: Colors.orange
-                  ),
-                  fontFamily: 'Lato',
-                  pageTransitionsTheme: PageTransitionsTheme(
-                                      builders: {
-                                                  TargetPlatform.android: CustomPageTransitionBuilder(),
-                                                  TargetPlatform.iOS: CustomPageTransitionBuilder(),
-                                                },
-                                    ),
-              ),
-              home: LandingScreen(),
-              // StreamBuilder(
-              //             stream: FirebaseAuth.instance.authStateChanges(),
-              //             builder: (ctx, userSnapshot){
-              //               if(userSnapshot.hasData){
 
-              //                 Provider.of<Products>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
-              //                 Provider.of<Cart>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
-              //                 Provider.of<Orders>(ctx, listen: false).updates(FirebaseAuth.instance.currentUser.uid);
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MultiProvider(
+            providers: [
+                          ChangeNotifierProvider(create: (ctx) => Auth(false)),
+                          ChangeNotifierProvider(create: (ctx) => Products()),
+                          ChangeNotifierProvider(create: (ctx) => Rating()),
+                          // ChangeNotifierProxyProvider<UserId, Products>(
+                          //       create: (_) => Products(null, []),
+                          //       update: (ctx, user, previous) => previous..updates(user.userId)
+                          //       //  Products(
+                          //       //   auth.userId,
+                          //       //   previousProducts == null ? [] : previousProducts.items,
+                          //       // ),
+                          // ),
+                          ChangeNotifierProvider(create: (ctx) => Cart()),
+                          // ChangeNotifierProxyProvider<UserId, Cart>(
+                          //       create: (_) => Cart(null, {}),
+                          //       update: (ctx, user, previous) => previous..updates(user.userId)
+                          //       // Cart(
+                          //       //   auth.userId,
+                          //       //   previousItems == null ? {} : previousItems.items,
+                          //       // ),
+                          // ),
+                          ChangeNotifierProvider(create: (ctx) => Orders()),
+                          // ChangeNotifierProxyProvider<UserId, Orders>(
+                          //       create: (_) => Orders(null, []),
+                          //       update: (ctx, user, previous) => previous..updates(user.userId)
+                          //       // Orders(
+                          //       //   auth.userId,
+                          //       //   previousOrders == null ? [] : previousOrders.orders,
+                          //       // ),
+                          // ),
+                      ],
+            child: MaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    title: 'MyShop',
+                    theme: ThemeData(
+                        primarySwatch: Colors.yellow,
+                        accentColor: Colors.redAccent,
+                        inputDecorationTheme: InputDecorationTheme(
+                                        labelStyle: TextStyle(color: Colors.black),
+                                        focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.black),) , 
+                                      ),
+                        textSelectionTheme: TextSelectionThemeData(
+                          cursorColor: Colors.black,
+                          selectionHandleColor: Colors.black,
+                          selectionColor: Colors.orange,
+                        ),
+                        fontFamily: 'Lato',
+                        pageTransitionsTheme: PageTransitionsTheme(
+                                            builders: {
+                                                        TargetPlatform.android: CustomPageTransitionBuilder(),
+                                                        TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                                                      },
+                                          ),
+                    ),
+                    home: LandingScreen(),
+                    routes: {
+                        LandingScreen.routeName: (ctx) => LandingScreen(),
+                        AuthScreen.routeName: (ctx) => AuthScreen(),
+                        Account.routeName: (ctx) => Account(),
+                        ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+                        TabsScreen.routeName: (ctx) => TabsScreen(),
+                        CartScreen.routeName: (ctx) => CartScreen(),
+                        OrdersScreen.routeName: (ctx) => OrdersScreen(),
+                        UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+                        EditProductScreen.routeName: (ctx) => EditProductScreen(),
+                        ChatScreen.routeName : (ctx) => ChatScreen(),
+                    },
+            ),
+          );
+        }
 
-              //                 Future.delayed(const Duration(milliseconds: 300), (){
-              //                   Provider.of<Auth>(ctx, listen: false).setUserDetails();
-              //                 });
-              //                       // return Scaffold(appBar: AppBar(title: Text('successful'),),);
-              //                 return ProductsOverviewScreen();
-              //               }
-              //               return AuthScreen();
-              //             },
-              //   ),
-              routes: {
-                  LandingScreen.routeName: (ctx) => LandingScreen(),
-                  AuthScreen.routeName: (ctx) => AuthScreen(),
-                  Account.routeName: (ctx) => Account(),
-                  ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-                  TabsScreen.routeName: (ctx) => TabsScreen(),
-                  CartScreen.routeName: (ctx) => CartScreen(),
-                  OrdersScreen.routeName: (ctx) => OrdersScreen(),
-                  UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-                  EditProductScreen.routeName: (ctx) => EditProductScreen(),
-                  ChatScreen.routeName : (ctx) => ChatScreen(),
-              },
-      ),
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: SplashScreen(),
+        );
+      },
     );
+
           // return MultiProvider(
           //           providers: [
           //             ChangeNotifierProvider(
