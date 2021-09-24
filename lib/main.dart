@@ -75,7 +75,11 @@ class MyApp extends StatelessWidget {
                                   labelStyle: TextStyle(color: Colors.black),
                                   focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.black),) , 
                                 ),
-                  textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.black,selectionHandleColor: Colors.black),
+                  textSelectionTheme: TextSelectionThemeData(
+                    cursorColor: Colors.black,
+                    selectionHandleColor: Colors.black,
+                    selectionColor: Colors.orange
+                  ),
                   fontFamily: 'Lato',
                   pageTransitionsTheme: PageTransitionsTheme(
                                       builders: {

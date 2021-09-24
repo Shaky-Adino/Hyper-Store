@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/pair.dart';
+import '../models/tuple.dart';
 import '../models/image_upload_model.dart';
 import '../models/http_exception.dart';
 import './product.dart';
@@ -52,7 +52,7 @@ class Products with ChangeNotifier{
   List<Product> _userItems = [], _clothingItems = [],
                    _electronicItems = [], _otherItems = [];
 
-  List<Pair<String,String>> _searchItems = [];
+  List<Tuple<String,String,String>> _searchItems = [];
 
   // final String authToken;
   String userId;
@@ -63,7 +63,7 @@ class Products with ChangeNotifier{
     return [..._items];
   }
 
-  List<Pair<String,String>> get searchItems {
+  List<Tuple<String,String,String>> get searchItems {
     return [..._searchItems];
   }
 
@@ -141,7 +141,7 @@ class Products with ChangeNotifier{
       final List<Product> loadedProducts = [], clothingProducts = [],
         electronicProducts = [], otherProducts = [];
       
-      final List<Pair<String,String>> searchProducts = [];
+      final List<Tuple<String,String,String>> searchProducts = [];
 
       extractedData.forEach((prodData) {
 
@@ -158,7 +158,7 @@ class Products with ChangeNotifier{
           imageUrl3: prodData['imageUrl3'],
         );
 
-        searchProducts.add(Pair(prodData.id, prodData['title']));
+        searchProducts.add(Tuple(prodData.id, prodData['title'], prodData['imageUrl0']));
 
         if(prodData['category'] == 'clothing')
           clothingProducts.add(prod);
