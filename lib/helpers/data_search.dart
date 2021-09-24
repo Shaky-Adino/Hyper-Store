@@ -5,48 +5,45 @@ import '../models/tuple.dart';
 
 class DataSearch extends SearchDelegate<String> {
   final List<Tuple<String,String,String>> products;
-  DataSearch(this.products);
+  final List<Tuple<String,String,String>> recentProducts = [];
+  DataSearch(this.products){
+    for(int i=0;i<4;i++)
+      recentProducts.add(Tuple(products[i].id, products[i].title, products[i].imageUrl));
+  }
 
   List<TextSpan> highlightOccurrences(String source, String query) {
-  if (query == null || query.isEmpty || !source.toLowerCase().contains(query.toLowerCase())) {
-    return [ TextSpan(text: source) ];
-  }
-  final matches = query.toLowerCase().allMatches(source.toLowerCase());
-
-  int lastMatchEnd = 0;
-
-  final List<TextSpan> children = [];
-  for (var i = 0; i < matches.length; i++) {
-    final match = matches.elementAt(i);
-
-    if (match.start != lastMatchEnd) {
-      children.add(TextSpan(
-        text: source.substring(lastMatchEnd, match.start),
-      ));
+    if (query == null || query.isEmpty || !source.toLowerCase().contains(query.toLowerCase())) {
+      return [ TextSpan(text: source) ];
     }
+    final matches = query.toLowerCase().allMatches(source.toLowerCase());
 
-    children.add(TextSpan(
-      text: source.substring(match.start, match.end),
-      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-    ));
+    int lastMatchEnd = 0;
 
-    if (i == matches.length - 1 && match.end != source.length) {
+    final List<TextSpan> children = [];
+    for (var i = 0; i < matches.length; i++) {
+      final match = matches.elementAt(i);
+
+      if (match.start != lastMatchEnd) {
+        children.add(TextSpan(
+          text: source.substring(lastMatchEnd, match.start),
+        ));
+      }
+
       children.add(TextSpan(
-        text: source.substring(match.end, source.length),
+        text: source.substring(match.start, match.end),
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
       ));
+
+      if (i == matches.length - 1 && match.end != source.length) {
+        children.add(TextSpan(
+          text: source.substring(match.end, source.length),
+        ));
+      }
+
+      lastMatchEnd = match.end;
     }
-
-    lastMatchEnd = match.end;
+    return children;
   }
-  return children;
-}
-
-  final List<Tuple<String,String,String>> recentProducts = [
-    Tuple('1', 'Apple',''),
-    Tuple('2', 'Orange',''),
-    Tuple('3', 'Banana',''),
-    Tuple('4', 'Something',''),
-  ];
 
   @override
   String get searchFieldLabel => 'Search Hyper Store';
@@ -112,12 +109,19 @@ class DataSearch extends SearchDelegate<String> {
             arguments: suggestionList[index].id,
           );
         },
-        leading: query.isEmpty ? Icon(Icons.fireplace) 
-          : CircleAvatar(
+        leading: CircleAvatar(
             backgroundColor: Colors.orange,
             backgroundImage: CachedNetworkImageProvider(suggestionList[index].imageUrl),
           ),
         title: Text(suggestionList[index].title, style: TextStyle(color: Colors.orange),),
+        trailing: query.isEmpty ? 
+          Text(
+            'trending',
+            style: TextStyle(
+              color: Colors.black54,
+              fontStyle: FontStyle.italic
+            ),
+          ) : null,
       ),
     );
   }
@@ -136,8 +140,7 @@ class DataSearch extends SearchDelegate<String> {
             arguments: suggestionList[index].id,
           );
         },
-        leading: query.isEmpty ? Icon(Icons.fireplace) 
-          : CircleAvatar(
+        leading: CircleAvatar(
             backgroundColor: Colors.orange,
             backgroundImage: CachedNetworkImageProvider(suggestionList[index].imageUrl),
           ),
@@ -147,6 +150,14 @@ class DataSearch extends SearchDelegate<String> {
             children: highlightOccurrences(suggestionList[index].title, query),
           ),
         ),
+        trailing: query.isEmpty ? 
+          Text(
+            'trending',
+            style: TextStyle(
+              color: Colors.black54,
+              fontStyle: FontStyle.italic
+            ),
+          ) : null,
       ),
     );
   }
