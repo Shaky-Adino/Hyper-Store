@@ -100,45 +100,46 @@ class CartItem extends StatelessWidget {
                                             ),
                                           ),
                                       ),
-                                      Padding(
-                                          padding: const EdgeInsets.only(left: 16.0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                product.title,
-                                                style: TextStyle(
-                                                    fontSize: 18.0,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                    FontWeight.w600),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                  vertical: 4.0,
-                                                ),
-                                                child: Text(
-                                                  "₹${product.price}",
+                                      Expanded(
+                                        child: Padding(
+                                            padding: const EdgeInsets.only(left: 16.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  product.title,
                                                   style: TextStyle(
-                                                      fontSize: 16.0,
-                                                      color: Theme.of(context)
-                                                          .accentColor,
+                                                      fontSize: 18.0,
+                                                      color: Colors.black,
                                                       fontWeight:
                                                       FontWeight.w600),
                                                 ),
-                                              ),
-                                              Text(
-                                                "Total: ₹${(price * quantity)}",
-                                                style: TextStyle(fontWeight:FontWeight.w400),
-                                              ),
-                                            ],
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    vertical: 4.0,
+                                                  ),
+                                                  child: Text(
+                                                    "₹${product.price}",
+                                                    style: TextStyle(
+                                                        fontSize: 16.0,
+                                                        color: Theme.of(context)
+                                                            .accentColor,
+                                                        fontWeight:
+                                                        FontWeight.w600),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Total: ₹${(price * quantity)}",
+                                                  style: TextStyle(fontWeight:FontWeight.w400),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Spacer(),
+                                      ),
                                         Padding(
                                           padding: const EdgeInsets.only(right: 5.0),
                                           child: CircleAvatar(

@@ -25,7 +25,7 @@ class _EmailVerificationState extends State<EmailVerification> {
               var user = FirebaseAuth.instance.currentUser;
               if (user.emailVerified){
                 timer.cancel();
-                Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);;
+                Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
               } 
           });
       });

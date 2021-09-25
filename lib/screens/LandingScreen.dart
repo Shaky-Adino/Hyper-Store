@@ -26,11 +26,11 @@ class LandingScreen extends StatelessWidget {
 
                   Provider.of<Auth>(ctx, listen: false).setUserDetails();
 
-                  if(!FirebaseAuth.instance.currentUser
-                    .providerData[0].providerId.toString().contains('google.com')
-                    && !FirebaseAuth.instance.currentUser.emailVerified){
-                      return EmailVerification();
-                  }
+                  // if(!FirebaseAuth.instance.currentUser
+                  //   .providerData[0].providerId.toString().contains('google.com')
+                  //   && !FirebaseAuth.instance.currentUser.emailVerified){
+                  //     return EmailVerification();
+                  // }
                   
                   return TabsScreen();
                 }

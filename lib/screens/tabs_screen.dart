@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopapp/helpers/data_search.dart';
-import 'package:shopapp/providers/rating.dart';
 import '../helpers/tootipshape.dart';
 
 import '../widgets/app_drawer.dart';

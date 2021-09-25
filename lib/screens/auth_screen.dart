@@ -134,7 +134,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
         title: const Text('An Error Occurred!'),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Okay', style: TextStyle(color: Colors.black),),
             onPressed: () {
               Navigator.of(ctx).pop();
@@ -645,14 +645,19 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
                                   const SizedBox(height: 7),
                                   
-                                  FlatButton(
+                                  TextButton(
+                                    style: ButtonStyle(
+                                      padding: MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.symmetric(horizontal: 30.0)),
+                                    ),
                                     child: Text(
-                                        '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
-                                        style: TextStyle(fontWeight: FontWeight.w800),
-                                        ),
+                                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w800
+                                      ),
+                                    ),
                                     onPressed: _switchAuthMode,
-                                    padding: EdgeInsets.symmetric(horizontal: 30.0),
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     // textColor: Colors.yellow,
                                   ),
                                 ],

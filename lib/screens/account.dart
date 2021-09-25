@@ -175,7 +175,8 @@ class Account extends StatelessWidget {
                       elevation: 3,
                       padding: EdgeInsets.all(3),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(50), 
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50), 
                           topRight: Radius.circular(50)
                         ),
                       ),

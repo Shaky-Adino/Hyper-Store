@@ -116,7 +116,7 @@ class _OrderButtonState extends State<OrderButton> {
   Widget build(BuildContext context) {
     var tax = widget.cart.totalAmount*0.1;
     var total = widget.cart.totalAmount + tax + 80;
-    return FlatButton(
+    return TextButton(
       child: _isLoading ? 
         CircularProgressIndicator() 
           : Text(
@@ -311,7 +311,6 @@ class _OrderButtonState extends State<OrderButton> {
                     },
                 );
           },
-      textColor: Theme.of(context).primaryColor,
     );
   }
 }

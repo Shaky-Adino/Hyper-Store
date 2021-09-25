@@ -14,7 +14,6 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scaffold = Scaffold.of(context);
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
@@ -65,9 +64,22 @@ class UserProductItem extends StatelessWidget {
                     }
                   );
                 } catch (error) {
-                  scaffold.showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Deleting failed!', textAlign: TextAlign.center,),
+                      content: Text(
+                        'Deleting failed!', 
+                        style: TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center
+                      ),
+                      backgroundColor: Colors.redAccent,
+                      elevation: 3,
+                      padding: EdgeInsets.all(3),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50), 
+                          topRight: Radius.circular(50)
+                        ),
+                      ),
                     ),
                   );
                 }

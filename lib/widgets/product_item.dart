@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
-import '../providers/auth.dart';
 
 class ProductItem extends StatelessWidget {
   // final String id;
@@ -67,9 +66,20 @@ class ProductItem extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Added item to cart!',
-                  ),
+                      'Added item to cart!',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                   duration: Duration(seconds: 2),
+                  backgroundColor: Colors.yellow,
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30), 
+                      topRight: Radius.circular(30)
+                    ),
+                  ),
                   action: SnackBarAction(
                     label: 'UNDO',
                     onPressed: () {

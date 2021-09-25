@@ -182,7 +182,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             ),
                 content: const Text('Something went wrong.'),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text('Okay'),
                     onPressed: () {
                       Navigator.of(ctx).pop();
