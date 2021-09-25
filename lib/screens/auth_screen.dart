@@ -273,7 +273,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
               Container(
                 height: deviceSize.height - 400,
-                color: Colors.yellow,
+                color: Color(0xffffde59),
               ),
 
               AnimatedPositioned(
@@ -563,7 +563,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     Material(
                                       child: Ink(
                                         decoration: BoxDecoration(
-                                          color: Colors.yellow,
+                                          color: Color(0xffffde59),
                                           borderRadius: BorderRadius.circular(10),
                                           border: Border.fromBorderSide(BorderSide.none),
                                         ),
