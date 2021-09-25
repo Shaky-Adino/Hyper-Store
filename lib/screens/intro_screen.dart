@@ -54,7 +54,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 const SizedBox(height: 20),
 
                 Text(
-                  'A one-stop portal for you to learn the latest technologies from SCRATCH',
+                  'A one-stop portal for all your needs\nDiscover your favourite place',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
