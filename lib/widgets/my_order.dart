@@ -25,11 +25,11 @@ class MyOrder extends StatelessWidget {
             width: prod == null ? 100 : 120,
             padding: const EdgeInsets.only(left: 8, right: 8, top: 5),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderRadius: BorderRadius.all(const Radius.circular(20)),
               color: prod == null ? Colors.grey : null,
             ),
             child: prod == null ? 
-              Center(child: Text('Removed \nfrom store'))
+              Center(child: const Text('Removed \nfrom store'))
               : Column(
                 children: [
                   Expanded(

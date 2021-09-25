@@ -132,7 +132,7 @@ class _ProductReviewState extends State<ProductReview> {
                       child: Container(
                         padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
                         color: Theme.of(context).scaffoldBackgroundColor,
-                        child: Text(
+                        child: const Text(
                           'Your Review',
                           style: TextStyle(color: Colors.black, fontSize: 24),
                         ),
@@ -169,9 +169,9 @@ class _ProductReviewState extends State<ProductReview> {
                               content: SingleChildScrollView(
                                 child: ListBody(
                                   children: <Widget>[
-                                    Icon(Icons.check, size: 45, color: Colors.green),
+                                    const Icon(Icons.check, size: 45, color: Colors.green),
                                     const SizedBox(height: 15),
-                                    Text("Your rating has been added successfully !"),
+                                    const Text("Your rating has been added successfully !"),
                                   ],
                                 ),
                               ),
@@ -192,7 +192,7 @@ class _ProductReviewState extends State<ProductReview> {
                       width: 160,
                       height: 40,
                       alignment: Alignment.center,
-                      child: Text(
+                      child: const Text(
                         "Add Rating",
                         style: TextStyle(
                           color: Colors.yellow, 

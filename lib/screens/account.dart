@@ -24,7 +24,7 @@ class Account extends StatelessWidget {
     String address = authData.userAddress;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Account'),
+        title: const Text('Your Account'),
       ),
       drawer: AppDrawer(),
       body: Container(
@@ -33,7 +33,7 @@ class Account extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('User Profile', style: TextStyle(fontSize: 18)),
+              const Text('User Profile', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(right: 8),
@@ -52,22 +52,22 @@ class Account extends StatelessWidget {
                                     horizontalTitleGap: 5,
                                     leading: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [Text('Username:')],
+                                      children: [const Text('Username:')],
                                     ),
-                                    title: username == null ? Text('Loading...') : Padding(
+                                    title: username == null ? const Text('Loading...') : Padding(
                                       padding: const EdgeInsets.only(bottom: 2),
                                       child: Text(username),
                                     ),
                                   ),
-                                  Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
+                                  const Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
                                   ListTile(
                                     visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                                     horizontalTitleGap: 5,
                                     leading: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [Text('Email:')],
+                                      children: [const Text('Email:')],
                                     ),
-                                    title: username == null ? Text('Loading...') : Padding(
+                                    title: username == null ? const Text('Loading...') : Padding(
                                       padding: const EdgeInsets.only(bottom: 2),
                                       child: Text(email),
                                     ),
@@ -79,7 +79,7 @@ class Account extends StatelessWidget {
                               padding: const EdgeInsets.only(right: 5),
                               child: CircleAvatar(
                                 radius: 35,
-                                backgroundImage: url == null ? AssetImage('assets/images/profile_pic.png') : null,
+                                backgroundImage: url == null ? const AssetImage('assets/images/profile_pic.png') : null,
                                 child: url != null ? 
                                   CachedNetworkImage(
                                     imageUrl: url,
@@ -98,28 +98,28 @@ class Account extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
+                        const Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
                         ListTile(
                             visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                             horizontalTitleGap: 5,
                             leading: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [Text('Phone No:')],
+                              children: [const Text('Phone No:')],
                             ),
-                            title: phone == null ? Text('Loading...') : Padding(
+                            title: phone == null ? const Text('Loading...') : Padding(
                               padding: const EdgeInsets.only(bottom: 2),
                               child: Text(phone),
                             ),
                         ),
-                        Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
+                        const Divider(height: 1, thickness: 1,endIndent: 5,indent: 15,),
                         ListTile(
                             visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                             horizontalTitleGap: 5,
                             leading: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [Text('Address:')],
+                              children: [const Text('Address:')],
                             ),
-                            title: address == null ? Text('Loading...') : Padding(
+                            title: address == null ? const Text('Loading...') : Padding(
                               padding: const EdgeInsets.only(bottom: 2),
                               child: Text(address),
                             ),
@@ -151,9 +151,9 @@ class Account extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.account_circle),
-                      SizedBox(width: 10),
-                      Expanded(child: Text('Edit Profile')),
+                      const Icon(Icons.account_circle),
+                      const SizedBox(width: 10),
+                      const Expanded(child: const Text('Edit Profile')),
                     ],
                   ),
                 ),
@@ -165,19 +165,19 @@ class Account extends StatelessWidget {
                 onTap: (){
                   if(FirebaseAuth.instance.currentUser.providerData[0].providerId.toString().contains('google.com')){
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      duration: Duration(milliseconds: 2500),
-                      content: Text(
+                      duration: const Duration(milliseconds: 2500),
+                      content: const Text(
                         'You are signed in through Google', 
                         textAlign: TextAlign.center, 
                         style: TextStyle(fontSize: 15),
                       ),
                       backgroundColor: Colors.orange,
                       elevation: 3,
-                      padding: EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(3),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(50), 
-                          topRight: Radius.circular(50)
+                          topLeft: const Radius.circular(50), 
+                          topRight: const Radius.circular(50)
                         ),
                       ),
                     ));
@@ -201,9 +201,9 @@ class Account extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.vpn_key, color: Colors.yellow),
-                      SizedBox(width: 10),
-                      Expanded(child: Text('Change Password', style: TextStyle(color: Colors.yellow))),
+                      const Icon(Icons.vpn_key, color: Colors.yellow),
+                      const SizedBox(width: 10),
+                      const Expanded(child: const Text('Change Password', style: TextStyle(color: Colors.yellow))),
                     ],
                   ),
                 ),
@@ -211,7 +211,7 @@ class Account extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              Text('Your Orders', style: TextStyle(fontSize: 18)),
+              const Text('Your Orders', style: TextStyle(fontSize: 18)),
 
               const SizedBox(height: 8),
 
@@ -223,10 +223,8 @@ class Account extends StatelessWidget {
                       return Center(child: CircularProgressIndicator());
                     } else {
                       if (dataSnapshot.error != null) {
-                        // ...
-                        // Do error handling stuff
                         return Center(
-                          child: Text('An error occurred!'),
+                          child: const Text('An error occurred!'),
                         );
                       } else {
                         return Consumer<Orders>(
@@ -244,7 +242,7 @@ class Account extends StatelessWidget {
                             ),
                           ) : Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text('You haven\'t ordered anything yet.', style: TextStyle(color: Colors.orange),),
+                            child: const Text('You haven\'t ordered anything yet.', style: TextStyle(color: Colors.orange),),
                           ),
                         );
                       }
@@ -255,7 +253,7 @@ class Account extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              Text('Your Favourites', style: TextStyle(fontSize: 18)),
+              const Text('Your Favourites', style: TextStyle(fontSize: 18)),
 
               const SizedBox(height: 8),
 
@@ -267,8 +265,6 @@ class Account extends StatelessWidget {
                       return Center(child: CircularProgressIndicator());
                     } else {
                       if (dataSnapshot.error != null) {
-                        // ...
-                        // Do error handling stuff
                         return Center(
                           child: Text('An error occurred!'),
                         );
@@ -285,7 +281,7 @@ class Account extends StatelessWidget {
                             ),
                           ) : Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text('There are no items in this.', style: TextStyle(color: Colors.orange),),
+                            child: const Text('There are no items in this.', style: TextStyle(color: Colors.orange),),
                           ),
                         );
                       }
@@ -296,7 +292,7 @@ class Account extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              Text('Your Products', style: TextStyle(fontSize: 18)),
+              const Text('Your Products', style: TextStyle(fontSize: 18)),
 
               const SizedBox(height: 8),
 
@@ -308,8 +304,6 @@ class Account extends StatelessWidget {
                       return Center(child: CircularProgressIndicator());
                     } else {
                       if (dataSnapshot.error != null) {
-                        // ...
-                        // Do error handling stuff
                         return Center(
                           child: Text('An error occurred!'),
                         );
@@ -326,7 +320,7 @@ class Account extends StatelessWidget {
                             ),
                           ) : Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text('You haven\'t added any products to the store yet.', style: TextStyle(color: Colors.orange),),
+                            child: const Text('You haven\'t added any products to the store yet.', style: TextStyle(color: Colors.orange),),
                           ),
                         );
                       }

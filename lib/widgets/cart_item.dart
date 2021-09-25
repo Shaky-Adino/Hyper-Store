@@ -27,14 +27,14 @@ class CartItem extends StatelessWidget {
       key: ValueKey(id),
       background: Container(
         color: Theme.of(context).errorColor,
-        child: Icon(
+        child: const Icon(
           Icons.delete,
           color: Colors.white,
           size: 40,
         ),
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        margin: EdgeInsets.symmetric(
+        padding: const EdgeInsets.only(right: 20),
+        margin: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 4,
         ),
@@ -44,13 +44,11 @@ class CartItem extends StatelessWidget {
         return showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('Are you sure?'),
+            title: const Text('Are you sure?'),
             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-            content: Text(
-              'Do you want to remove the item from the cart?',
+              borderRadius: BorderRadius.circular(20),
             ),
+            content: const Text('Do you want to remove the item from the cart?'),
             actions: <Widget>[
               TextButton(
                 child: Text('No',style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)),
@@ -79,7 +77,7 @@ class CartItem extends StatelessWidget {
             );
           },
         child: Card(
-          margin: EdgeInsets.symmetric(
+          margin: const EdgeInsets.symmetric(
             horizontal: 15,
             vertical: 4,
           ),
@@ -145,7 +143,7 @@ class CartItem extends StatelessWidget {
                                           child: CircleAvatar(
                                               backgroundColor: Colors.yellow,
                                               child: Padding(
-                                                  padding: EdgeInsets.all(4.0),
+                                                  padding: const EdgeInsets.all(4.0),
                                                   child: FittedBox(
                                                     child: Text('$quantity x', style: TextStyle(color: Colors.black),),
                                                   ),

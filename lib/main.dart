@@ -68,13 +68,13 @@ class MyApp extends StatelessWidget {
                       ],
             child: MaterialApp(
                     debugShowCheckedModeBanner: false,
-                    title: 'MyShop',
+                    title: 'Hyper Store',
                     theme: ThemeData(
                         primarySwatch: Colors.yellow,
                         accentColor: Colors.redAccent,
                         inputDecorationTheme: InputDecorationTheme(
                                         labelStyle: TextStyle(color: Colors.black),
-                                        focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.black),) , 
+                                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black),) , 
                                       ),
                         textSelectionTheme: TextSelectionThemeData(
                           cursorColor: Colors.black,

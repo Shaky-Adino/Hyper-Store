@@ -31,7 +31,7 @@ class AppDrawer extends StatelessWidget {
                       : FadeInImage(
                         height: 40,
                         width: 40,
-                        placeholder: AssetImage('assets/images/profile_pic.png'),
+                        placeholder: const AssetImage('assets/images/profile_pic.png'),
                         image: CachedNetworkImageProvider(url),
                         fit: BoxFit.cover,
                       ),
@@ -40,58 +40,58 @@ class AppDrawer extends StatelessWidget {
 
                 const SizedBox(width: 8),
 
-                username != null ? Text('Hello $username!') : Text('Hello friend!'),
+                username != null ? Text('Hello $username!') : const Text('Hello friend!'),
               ],
             ),
             automaticallyImplyLeading: false,
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.shop),
-            title: Text('Shop'),
+            leading: const Icon(Icons.shop),
+            title: const Text('Shop'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.payment),
-            title: Text('Orders'),
+            leading: const Icon(Icons.payment),
+            title: const Text('Orders'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Manage Products'),
+            leading: const Icon(Icons.edit),
+            title: const Text('Manage Products'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(UserProductsScreen.routeName);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.chat),
-            title: Text('Seller\'s Arena'),
+            leading: const Icon(Icons.chat),
+            title: const Text('Seller\'s Arena'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(ChatScreen.routeName);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Icon(Icons.account_circle, size: 28,),
-            title: Text('Your Account'),
+            title: const Text('Your Account'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(Account.routeName);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
             onTap: () async {
               await Provider.of<Auth>(context,listen: false).newlogout();
             },

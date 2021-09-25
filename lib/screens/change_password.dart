@@ -56,9 +56,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                     content: SingleChildScrollView(
                       child: ListBody(
                         children: <Widget>[
-                          Icon(Icons.check, size: 45, color: Colors.green),
+                          const Icon(Icons.check, size: 45, color: Colors.green),
                           const SizedBox(height: 15),
-                          Text("Password Updated Successfully!"),
+                          const Text("Password Updated Successfully!"),
                         ],
                       ),
                     ),
@@ -98,7 +98,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Hyper Store'),
+          title: const Text('Hyper Store'),
         ),
         body: SingleChildScrollView(
             child: Container(
@@ -234,7 +234,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   width: 160,
                                   height: 40,
                                   alignment: Alignment.center,
-                                  child: Text(
+                                  child: const Text(
                                     "Change Password",
                                     style: TextStyle(
                                       color: Colors.yellow, 
@@ -255,7 +255,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       child: Container(
                         padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
                         color: Theme.of(context).scaffoldBackgroundColor,
-                        child: Text(
+                        child: const Text(
                           'Change Password',
                           style: TextStyle(color: Colors.black, fontSize: 24),
                         ),
@@ -295,7 +295,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         },
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       "Reset Password",
                       style: TextStyle(
                         color: Colors.blue,

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shopapp/helpers/data_search.dart';
+import '../helpers/data_search.dart';
 import '../helpers/tootipshape.dart';
-
 import '../widgets/app_drawer.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
@@ -94,9 +93,9 @@ class _TabsScreenState extends State<TabsScreen> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Icon(Icons.search),
+                              child: const Icon(Icons.search),
                             ),
-                            Text(
+                            const Text(
                               'Search Hyper Store',
                               style: TextStyle(
                                 color: Colors.grey
@@ -121,16 +120,14 @@ class _TabsScreenState extends State<TabsScreen> {
                     }
                   });
                 },
-                icon: Icon(
-                  Icons.more_vert,
-                ),
+                icon: const Icon(Icons.more_vert),
                 itemBuilder: (_) => [
                       PopupMenuItem(
-                        child: Text('Only Favourites'),
+                        child: const Text('Only Favourites'),
                         value: FilterOptions.Favorites,
                       ),
                       PopupMenuItem(
-                        child: Text('Show All'),
+                        child: const Text('Show All'),
                         value: FilterOptions.All,
                       ),
                     ],
@@ -141,9 +138,7 @@ class _TabsScreenState extends State<TabsScreen> {
                       value: cart.itemCount.toString(),
                     ),
                 child: IconButton(
-                  icon: Icon(
-                    Icons.shopping_cart,
-                  ),
+                  icon: const Icon(Icons.shopping_cart),
                   onPressed: () {
                     Navigator.of(context).pushNamed(CartScreen.routeName);
                   },
@@ -154,13 +149,13 @@ class _TabsScreenState extends State<TabsScreen> {
               isScrollable: true,
               tabs: <Widget>[
                 Tab(
-                  icon: Icon(Icons.all_inclusive),
+                  icon: const Icon(Icons.all_inclusive),
                   text: 'All',
                 ),
                 Tab(
                   icon: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: FaIcon(
+                    child: const FaIcon(
                       FontAwesomeIcons.tshirt,
                       size: 18,
                     ),
@@ -168,11 +163,11 @@ class _TabsScreenState extends State<TabsScreen> {
                   text: 'Clothing',
                 ),
                 Tab(
-                  icon: Icon(Icons.bolt),
+                  icon: const Icon(Icons.bolt),
                   text: 'Electronics',
                 ),
                 Tab(
-                  icon: Icon(Icons.category),
+                  icon: const Icon(Icons.category),
                   text: 'Others',
                 ),
               ],

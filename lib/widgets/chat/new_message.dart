@@ -9,6 +9,7 @@ import 'package:shopapp/providers/auth.dart';
 class NewMessage extends StatefulWidget {
   final products;
   final List<PopupMenuItem<int>> items = [];
+
   NewMessage(this.products){
     for(int i=0;i<products.length;i++)
       items.add(PopupMenuItem(
@@ -82,7 +83,7 @@ class _NewMessageState extends State<NewMessage> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(left: 8),
-                                child: Text('Select your product!', style: TextStyle(color: Colors.yellow),),
+                                child: const Text('Select your product!', style: TextStyle(color: Colors.yellow),),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 3),
@@ -90,7 +91,7 @@ class _NewMessageState extends State<NewMessage> {
                                   height: 28,
                                   width: 28,
                                   child: IconButton(
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.close,
                                       size: 18,
                                       color: Colors.yellow,
@@ -112,13 +113,7 @@ class _NewMessageState extends State<NewMessage> {
                           constraints: const BoxConstraints(minWidth: 161, maxWidth: 161),
                           child: Container(
                             padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.yellow[200],
-                              borderRadius: const BorderRadius.only(
-                                  // topLeft: Radius.circular(10),
-                                  // topRight: Radius.circular(10),
-                                ),
-                            ),
+                            color: Colors.yellow[200],
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -168,9 +163,9 @@ class _NewMessageState extends State<NewMessage> {
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.black),
                                 borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(12),
-                                  bottomLeft: Radius.circular(12),
-                                  bottomRight: Radius.circular(12),
+                                  topRight: const Radius.circular(12),
+                                  bottomLeft: const Radius.circular(12),
+                                  bottomRight: const Radius.circular(12),
                                 ),
                               ),
                               padding: const EdgeInsets.only(left: 8),
@@ -192,7 +187,7 @@ class _NewMessageState extends State<NewMessage> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.send),
+                            icon: const Icon(Icons.send),
                             onPressed: (_enteredMessage.trim().isEmpty || selectedIndex < 0) ? null : _sendMessage,
                           ),
                         ],

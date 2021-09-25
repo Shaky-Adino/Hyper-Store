@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -49,12 +48,12 @@ class _UserProfileState extends State<UserProfile> {
       builder: (BuildContext context){
         return AlertDialog(
           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
           content: Row(
             children: [
               CircularProgressIndicator(),
-              Container(margin: EdgeInsets.only(left: 10),child:Text("Saving..." )),
+              Container(margin: EdgeInsets.only(left: 10),child: const Text("Saving..." )),
             ],
           ),
         );
@@ -86,7 +85,7 @@ class _UserProfileState extends State<UserProfile> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Hyper Store'),
+          title: const Text('Hyper Store'),
         ),
         body: WillPopScope(
           onWillPop: () async {
@@ -123,7 +122,7 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                     onPressed: _pickImage,
                     icon: Icon(Icons.image, size: 19,),
-                    label: Text('Edit Image', overflow: TextOverflow.visible),
+                    label: const Text('Edit Image', overflow: TextOverflow.visible),
                   ),
 
                   const SizedBox(height: 10),
@@ -136,7 +135,7 @@ class _UserProfileState extends State<UserProfile> {
                           initialValue: widget.username,
                           style: TextStyle(fontSize: 14.0),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                                           Icons.account_circle,
                                           size: 18,
                                           color: Colors.black,
@@ -174,7 +173,7 @@ class _UserProfileState extends State<UserProfile> {
                           initialValue: widget.phone,
                           style: TextStyle(fontSize: 14.0),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                                           Icons.phone,
                                           size: 18,
                                           color: Colors.black,
@@ -213,7 +212,7 @@ class _UserProfileState extends State<UserProfile> {
                           keyboardType: TextInputType.multiline,
                           style: TextStyle(fontSize: 14.0),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                                           Icons.home,
                                           size: 18,
                                           color: Colors.black,
@@ -251,7 +250,7 @@ class _UserProfileState extends State<UserProfile> {
                                 onPressed: (){
                                   _saveForm(context);
                                 }, 
-                                child: Text("SAVE",style: TextStyle(fontWeight: FontWeight.bold),softWrap: false,)
+                                child: const Text("SAVE",style: TextStyle(fontWeight: FontWeight.bold),softWrap: false,)
                               ),
                             ],
                           ),

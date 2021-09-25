@@ -74,7 +74,7 @@ class ProdRatings extends StatelessWidget {
               ),
 
             if(showDivider)
-              Divider(),
+              const Divider(),
           ],
         ),
       ),

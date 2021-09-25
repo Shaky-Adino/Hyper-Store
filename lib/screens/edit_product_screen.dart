@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,8 +24,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
-  // final _imageUrlController = TextEditingController();
-  // final _imageUrlFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
   var _editedProduct = Product(
     id: null,
@@ -127,8 +124,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
           builder: (BuildContext context){
             return AlertDialog(
               shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                borderRadius: BorderRadius.circular(20),
+              ),
               content: const  Text("Please select the category of your product."),
               actions: [
                 TextButton(
@@ -183,7 +180,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 content: const Text('Something went wrong.'),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('Okay'),
+                    child: const Text('Okay'),
                     onPressed: () {
                       Navigator.of(ctx).pop();
                     },
@@ -201,15 +198,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final deviceSize = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Edit Product'),
+          title: const Text('Edit Product'),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.save),
+              icon: const Icon(Icons.save),
               onPressed: (){_saveForm(context);},
             ),
           ],
@@ -320,7 +316,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(14.0),
-                          child: Text(
+                          child: const Text(
                             "Add images of your product",
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                           ),
@@ -372,7 +368,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                         right: 5,
                                         top: 5,
                                         child: InkWell(
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.remove_circle,
                                             size: 20,
                                             color: Colors.red,
@@ -399,7 +395,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 ),
                                 child: Card(
                                   child: IconButton(
-                                    icon: Icon(Icons.add_a_photo),
+                                    icon: const Icon(Icons.add_a_photo),
                                     onPressed: () {
                                       _onAddImageClick(0);
                                     },
@@ -410,7 +406,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ListTile(
-                                    leading: Icon(Icons.arrow_left, size: 35,),
+                                    leading: const Icon(Icons.arrow_left, size: 35,),
                                     title: const Text(
                                       "(This image will be used as preview)",
                                       style: TextStyle(

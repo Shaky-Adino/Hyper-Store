@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import './user_profile.dart';
 import '../providers/auth.dart';
-
 import '../providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
 import '../providers/orders.dart';
@@ -16,7 +15,7 @@ class CartScreen extends StatelessWidget {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Cart'),
+        title: const Text('Your Cart'),
       ),
       body: Column(
         children: <Widget>[
@@ -27,7 +26,7 @@ class CartScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'Total',
                     style: TextStyle(fontSize: 20),
                   ),
@@ -144,7 +143,7 @@ class _OrderButtonState extends State<OrderButton> {
                     ),
                     content: SingleChildScrollView(
                       child: ListBody(
-                        children: <Widget>[Text("Update your profile with your contact information.")]
+                        children: <Widget>[const Text("Update your profile with your contact information.")]
                       ),
                     ),
                     actions: <Widget>[
@@ -225,7 +224,7 @@ class _OrderButtonState extends State<OrderButton> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text('Subtotal:'),
-                                  Text('₹${widget.cart.totalAmount.toString()}'),
+                                  Text('₹${widget.cart.totalAmount.toStringAsFixed(2)}'),
                                 ],
                               ),
                               const SizedBox(height: 4),
@@ -241,7 +240,7 @@ class _OrderButtonState extends State<OrderButton> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text('Tax:'),
-                                  Text('₹$tax'),
+                                  Text('₹${tax.toStringAsFixed(2)}'),
                                 ],
                               ),
                               Divider(),
@@ -267,7 +266,7 @@ class _OrderButtonState extends State<OrderButton> {
                                   Navigator.of(context).pop();
                                 }, 
                                 child: loading ? CircularProgressIndicator()
-                                  : Text('Confirm Order', style: TextStyle(fontWeight: FontWeight.bold))
+                                  : const Text('Confirm Order', style: TextStyle(fontWeight: FontWeight.bold))
                               ),
                             ],
                         ),
@@ -282,7 +281,7 @@ class _OrderButtonState extends State<OrderButton> {
               if(orderPlaced)
                 await showDialog(
                   context: context,
-                  builder:  (BuildContext context)
+                  builder: (BuildContext context)
                     {
                       return AlertDialog(
                         shape: RoundedRectangleBorder(
@@ -291,11 +290,11 @@ class _OrderButtonState extends State<OrderButton> {
                         content: SingleChildScrollView(
                           child: ListBody(
                             children: <Widget>[
-                              Icon(Icons.check, size: 45, color: Colors.green),
+                              const Icon(Icons.check, size: 45, color: Colors.green),
                               const SizedBox(height: 15),
-                              Text("Order placed successfully!"),
+                              const Text("Order placed successfully!"),
                               const SizedBox(height: 9),
-                              Text('Thank you for shopping on \nHyper Store')
+                              const Text('Thank you for shopping on \nHyper Store')
                             ],
                           ),
                         ),

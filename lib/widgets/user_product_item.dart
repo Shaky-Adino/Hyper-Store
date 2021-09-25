@@ -24,7 +24,7 @@ class UserProductItem extends StatelessWidget {
         child: Row(
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.edit, color: Colors.black),
+              icon: const Icon(Icons.edit, color: Colors.black),
               onPressed: () {
                 Navigator.of(context)
                     .pushNamed(EditProductScreen.routeName, arguments: id);
@@ -32,7 +32,7 @@ class UserProductItem extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () async {
                 try {
                   await showDialog(
@@ -40,11 +40,11 @@ class UserProductItem extends StatelessWidget {
                     barrierDismissible: false,
                     builder: (BuildContext context){
                       return AlertDialog(
-                        title: Text("Are you sure?"),
+                        title: const Text("Are you sure?"),
                         shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                        content: Text("This action is permanent and can't be undone !"),
+                        content: const Text("This action is permanent and can't be undone !"),
                         actions: [
                           TextButton(
                             onPressed: (){
@@ -66,18 +66,18 @@ class UserProductItem extends StatelessWidget {
                 } catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
+                      content: const Text(
                         'Deleting failed!', 
                         style: TextStyle(color: Colors.white),
                         textAlign: TextAlign.center
                       ),
                       backgroundColor: Colors.redAccent,
                       elevation: 3,
-                      padding: EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(3),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(50), 
-                          topRight: Radius.circular(50)
+                        borderRadius: const BorderRadius.only(
+                          topLeft: const Radius.circular(50), 
+                          topRight: const Radius.circular(50)
                         ),
                       ),
                     ),

@@ -171,8 +171,7 @@ class Auth with ChangeNotifier{
     _auth = FirebaseAuth.instance;
     if(_auth.currentUser.providerData[0].providerId.toString().contains('google.com'))
       await GoogleSignIn().signOut();
-    else
-      await _auth.signOut();
+    await _auth.signOut();
   }
 
   Future<void> updateUserInfo(String username, String url, String phone, String address) async {

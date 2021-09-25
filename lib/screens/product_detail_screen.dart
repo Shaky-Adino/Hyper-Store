@@ -56,14 +56,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            // automaticallyImplyLeading: false,
             expandedHeight: 330,
-            // backgroundColor: Colors.transparent,
             pinned: true,
             title: const Text('Hyper Store', style: TextStyle(fontWeight: FontWeight.bold)),
             flexibleSpace: FlexibleSpaceBar(
-              // title: Text(loadedProduct.title),
-              // centerTitle: true,
               background: Container(
                 width: deviceSize.width,
                 decoration: BoxDecoration(color: Colors.white),
@@ -77,7 +73,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-
                 ProductDetail(loadedProduct: loadedProduct, cart: cart),
 
                 const SizedBox(height: 40),
@@ -90,10 +85,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         return Center(child: CircularProgressIndicator());
                       } else {
                         if (dataSnapshot.error != null) {
-                          // ...
-                          // Do error handling stuff
                           return Center(
-                            child: Text('An error occurred!'),
+                            child: const Text('An error occurred!'),
                           );
                         } else {
                           return Consumer<Rating>(
@@ -165,8 +158,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Divider(),
-                                              Text(
+                                              const Divider(),
+                                              const Text(
                                                 'No reviews yet',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -174,14 +167,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                 ),
                                               ),
                                               const SizedBox(height: 8),
-                                              Text(
+                                              const Text(
                                                 'Be the first one to rate',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 14
                                                 ),
                                               ),
-                                              Divider(),
+                                              const Divider(),
                                             ],
                                           ),
                                     ),
@@ -296,7 +289,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       child: Icon(widget.loadedProduct.isFavorite ? Icons.favorite : Icons.favorite_border,),
                       style: ElevatedButton.styleFrom(
                         shape: CircleBorder(),
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         onPrimary: Colors.redAccent
                       ),
                     ),
@@ -328,10 +321,10 @@ class _ProductDetailState extends State<ProductDetail> {
                           subject: 'Hyper Store product'
                         );
                       }, 
-                      child: Icon(Icons.share),
+                      child: const Icon(Icons.share),
                       style: ElevatedButton.styleFrom(
                         shape: CircleBorder(),
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                       ),
                     ),
           ],
@@ -401,7 +394,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         bottomLeft: Radius.circular(15),
                       )
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.remove,
                       color: Colors.black,
                       size: 20,
@@ -442,7 +435,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         bottomRight: Radius.circular(15),
                       )
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.add,
                       color: Colors.black,
                       size: 20,
@@ -479,7 +472,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           ),
                         ],
                       ),
-                      Text(
+                      const Text(
                         "You save : 20%",
                         style: TextStyle(
                             color: Colors.green,
@@ -509,7 +502,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
-                                          content: Text(
+                                          content: const Text(
                                             'Added item to cart!',
                                           ),
                                           duration: Duration(seconds: 2),
@@ -527,13 +520,11 @@ class _ProductDetailState extends State<ProductDetail> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Icon(
-                                            Icons.shopping_cart,
-                                        ),
+                                        const Icon(Icons.shopping_cart),
 
                                         const SizedBox(width: 10),
 
-                                        Text(
+                                        const Text(
                                             "Add to cart",
                                             style: TextStyle(
                                                 color: Colors.black,
@@ -582,7 +573,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                             ),
                                             content: SingleChildScrollView(
                                               child: ListBody(
-                                                children: <Widget>[Text("Update your profile with your contact information.")]
+                                                children: <Widget>[const Text("Update your profile with your contact information.")]
                                               ),
                                             ),
                                             actions: <Widget>[
@@ -629,7 +620,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
                                         const SizedBox(width: 10),
 
-                                        Text(
+                                        const Text(
                                             "Buy Now",
                                             style: TextStyle(
                                                 color: Colors.black,
@@ -719,7 +710,7 @@ class _ProductImageState extends State<ProductImage> {
           child: Row(children: [
               for(var i=0;i<4;i++)
                 AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 200),
                   curve: Curves.easeInCubic,
                   margin: EdgeInsets.symmetric(horizontal: 5.0),
                   width: (_selectedPage == i ? 35.0 : 12.0),

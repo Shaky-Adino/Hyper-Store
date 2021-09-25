@@ -31,7 +31,7 @@ class ProductItem extends StatelessWidget {
           child: Hero(
             tag: product.id,
             child: FadeInImage(
-              placeholder: AssetImage('assets/images/app_icon.png'),
+              placeholder: const AssetImage('assets/images/app_icon.png'),
               image: CachedNetworkImageProvider(product.imageUrl0),
               fit: product.imageUrl0 == product.imageUrl1 ? BoxFit.contain : BoxFit.cover,
             ),
@@ -57,27 +57,25 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-            ),
+            icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               cart.newaddItem(product.id, product.imageUrl0, product.price, product.title);
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
+                  content: const Text(
                       'Added item to cart!',
                       style: TextStyle(
                         color: Colors.black,
                       ),
                     ),
-                  duration: Duration(seconds: 2),
+                  duration: const Duration(seconds: 2),
                   backgroundColor: Colors.yellow,
                   elevation: 3,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30), 
-                      topRight: Radius.circular(30)
+                    borderRadius: const BorderRadius.only(
+                      topLeft: const Radius.circular(30), 
+                      topRight: const Radius.circular(30)
                     ),
                   ),
                   action: SnackBarAction(

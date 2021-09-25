@@ -1,16 +1,15 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:video_player/video_player.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import './forgot_password.dart';
 import '../widgets/pickers/user_image_picker.dart';
 import '../helpers/scale_route.dart';
-
 import '../widgets/wave_widget.dart';
-import 'package:video_player/video_player.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shopapp/screens/splash_screen.dart';
+import './splash_screen.dart';
 import './intro_screen.dart';
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
@@ -135,7 +134,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            child: Text('Okay', style: TextStyle(color: Colors.black),),
+            child: const Text('Okay', style: TextStyle(color: Colors.black),),
             onPressed: () {
               Navigator.of(ctx).pop();
             },
@@ -171,8 +170,14 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     if(_userImageFile == null && _authMode == AuthMode.Signup){
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please pick an image', textAlign: TextAlign.center),
+          content: const Text('Please pick an image', textAlign: TextAlign.center),
           backgroundColor: Theme.of(context).errorColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(40), 
+              topRight: const Radius.circular(40)
+            ),
+          ),
         ),
       );
       return;
@@ -216,19 +221,15 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   }
 
   void handleError(Exception error){
-    // var errorMessage = 'Authentication failed';
-    //   if (error.toString().contains('EMAIL_EXISTS')) {
-    //     errorMessage = 'This email address is already in use.';
-    //   } else if (error.toString().contains('INVALID_EMAIL')) {
-    //     errorMessage = 'This is not a valid email address';
-    //   } else if (error.toString().contains('WEAK_PASSWORD')) {
-    //     errorMessage = 'This password is too weak.';
-    //   } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-    //     errorMessage = 'Could not find a user with that email.';
-    //   } else if (error.toString().contains('INVALID_PASSWORD')) {
-    //     errorMessage = 'Invalid password.';
-    //   }
-    _showErrorDialog(error.toString());
+    var errorMessage = error.toString();
+      if (error.toString().contains('account-exists-with-different-credential')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.toString().contains('user-not-found')) {
+        errorMessage = 'Could not find a user with that email.';
+      } else if (error.toString().contains('wrong-password')) {
+        errorMessage = 'Invalid password.';
+      }
+    _showErrorDialog(errorMessage);
   }
 
   void _switchAuthMode() {
@@ -273,11 +274,11 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
               Container(
                 height: deviceSize.height - 400,
-                color: Color(0xffffde59),
+                color: const Color(0xffffde59),
               ),
 
               AnimatedPositioned(
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
                 curve: Curves.easeOutQuad,
                 top: keyBoardOpen ? -deviceSize.height / 3.5 : 0.0,
                 child: WaveWidget(
@@ -288,7 +289,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               ),
 
               AnimatedPositioned(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOutQuad,
                 top: keyBoardOpen ? -deviceSize.height / 3.7 : 0.0,
                 child: Padding(
@@ -300,9 +301,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                             width: 230,
                             height: 230,
                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000)),
-                            child: ClipOval(
-                                    child: VideoPlayer(_vcontroller)
-                                  ),
+                            child: ClipOval(child: VideoPlayer(_vcontroller)),
                         ),
                       ],
                     ),
@@ -348,7 +347,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                       minHeight: _authMode == AuthMode.Signup ? 60 : 0,
                                       maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
                                     ),
-                                    duration: Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn,
                                     child: FadeTransition(
                                       opacity: _opacityAnimation,
@@ -360,7 +359,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                             fontSize: 14.0,
                                           ),
                                           decoration: InputDecoration(
-                                            prefixIcon: Icon(
+                                            prefixIcon: const Icon(
                                               Icons.account_circle,
                                               size: 18,
                                               color: Colors.black,
@@ -401,7 +400,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                       fontSize: 14.0,
                                     ),
                                     decoration: InputDecoration(
-                                      prefixIcon: Icon(
+                                      prefixIcon: const Icon(
                                         Icons.mail,
                                         size: 18,
                                         color: Colors.black,
@@ -435,7 +434,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                       fontSize: 14.0,
                                     ),
                                     decoration: InputDecoration(
-                                      prefixIcon: Icon(
+                                      prefixIcon: const Icon(
                                         Icons.vpn_key,
                                         size: 18,
                                         color: Colors.black,
@@ -514,7 +513,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                             fontSize: 14.0,
                                           ),
                                           decoration: InputDecoration(
-                                            prefixIcon: Icon(
+                                            prefixIcon: const Icon(
                                               Icons.vpn_key,
                                               size: 18,
                                               color: Colors.black,
@@ -563,7 +562,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                     Material(
                                       child: Ink(
                                         decoration: BoxDecoration(
-                                          color: Color(0xffffde59),
+                                          color: const Color(0xffffde59),
                                           borderRadius: BorderRadius.circular(10),
                                           border: Border.fromBorderSide(BorderSide.none),
                                         ),
@@ -627,7 +626,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                                           ),
                                                         ),
                                                         const SizedBox(width: 12),
-                                                        Text(
+                                                        const Text(
                                                           ' Sign in with Google',
                                                           style: TextStyle(
                                                             fontSize: 16.0,

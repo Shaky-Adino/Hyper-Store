@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../providers/orders.dart';
 import '../screens/product_detail_screen.dart';
 import '../providers/products.dart';
-
 import '../providers/orders.dart' as ord;
 
 class OrderItem extends StatefulWidget {
@@ -27,7 +25,7 @@ class _OrderItemState extends State<OrderItem> {
     bool show = !widget.order.cancelled && 
                     widget.order.dateTime.isAfter(DateTime.now().subtract(const Duration(days: 7)));
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       height:
           _expanded ? max(widget.order.products.length * 115.0 + (show ? 140 : 110), 200) : (show ? 130 : 115),
       child: Card(
@@ -49,8 +47,8 @@ class _OrderItemState extends State<OrderItem> {
               ),
             ),
             AnimatedContainer(
-              duration: Duration(milliseconds: 300),
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+              duration: const Duration(milliseconds: 300),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
               height: _expanded
                   ? max(widget.order.products.length * 115.0 + 10, 100)
                   : 0,
@@ -66,49 +64,42 @@ class _OrderItemState extends State<OrderItem> {
                             arguments: prod.prodId,
                           );
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                                width: 90,
-                                height: 90,
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: prod.imageUrl,
-                                      placeholder: (context, url) => CircularProgressIndicator(),
-                                      fit: BoxFit.cover,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                  width: 90,
+                                  height: 90,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl: prod.imageUrl,
+                                        placeholder: (context, url) => CircularProgressIndicator(),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  prod.title,
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600
                                   ),
-                            ),
-                            Text(
-                              prod.title,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600
+                                ),
                               ),
-                            ),
-                            // CircleAvatar(
-                            //     backgroundColor: Colors.yellow,
-                            //     child: Padding(
-                            //     padding: EdgeInsets.all(4.0),
-                            //       child: FittedBox(
-                            //         child: Text(
-                            //           '${prod.quantity}x  ₹${prod.price}', 
-                            //           style: TextStyle(color: Colors.black),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            Text(
-                              '${prod.quantity}x  ₹${prod.price}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black.withOpacity(0.7),
-                              ),
-                            )
-                          ],
+                              Text(
+                                '${prod.quantity}x  ₹${prod.price.toStringAsFixed(1)}',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black.withOpacity(0.7),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ).toList(),
@@ -123,7 +114,7 @@ class _OrderItemState extends State<OrderItem> {
                       padding: const EdgeInsets.only(left: 8),
                       child: Row(
                         children: [
-                          Text('Arriving on ', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                          const Text('Arriving on ', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
                           Text(
                             DateFormat('EEE, MMM d').format(widget.order.dateTime.add(const Duration(days: 7))),
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -197,7 +188,7 @@ class _OrderItemState extends State<OrderItem> {
                             }
                           );
                         }, 
-                        child: Text('Cancel Order', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                        child: const Text('Cancel Order', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
                       ),
                     ),
                   if(!show)

@@ -38,7 +38,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ),
             content: SingleChildScrollView(
               child: ListBody(
-                children: <Widget>[Text("Password reset link sent to your email.")]
+                children: <Widget>[const Text("Password reset link sent to your email.")]
               ),
             ),
             actions: <Widget>[
@@ -94,7 +94,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xffffde59),
+          backgroundColor: const Color(0xffffde59),
           title: const Text('Reset Password'),
         ),
         body: Column(
@@ -120,7 +120,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             fontSize: 14.0,
                           ),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.mail,
                               size: 18,
                               color: Colors.black,
@@ -154,7 +154,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         Material(
                           child: Ink(
                             decoration: BoxDecoration(
-                              color: Color(0xffffde59),
+                              color: const Color(0xffffde59),
                               borderRadius: BorderRadius.circular(10),
                                 border: Border.fromBorderSide(BorderSide.none),
                               ),
@@ -169,7 +169,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               child: Container(
                                 height: 50.0,
                                 child: Center(
-                                  child: Text(
+                                  child: const Text(
                                     'Send Email',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,fontSize: 16.0,

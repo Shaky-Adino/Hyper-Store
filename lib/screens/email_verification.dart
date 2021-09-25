@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,14 +46,14 @@ class _EmailVerificationState extends State<EmailVerification> {
           child: Column(
             children: [
               SizedBox(height: 150),
-              Text(
+              const Text(
                 'Hyper Store',
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Text(
                 'An Email has been sent to ${FirebaseAuth.instance.currentUser.email} \nPlease verify the email to continue.',
                 style: TextStyle(
@@ -62,26 +61,26 @@ class _EmailVerificationState extends State<EmailVerification> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Center(
                 child: CircularProgressIndicator(),
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Waiting email verification',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500
                 ),
               ),
-              SizedBox(height: 45),
+              const SizedBox(height: 45),
               Text(
                 'Not ${FirebaseAuth.instance.currentUser.email} ?',
                 style: TextStyle(
                   color: Colors.red
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.black,
@@ -90,7 +89,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                 onPressed: (){
                   Provider.of<Auth>(context,listen: false).newlogout();
                 }, 
-                child: Text('Go Back')
+                child: const Text('Go Back')
               ),
             ],
           ),

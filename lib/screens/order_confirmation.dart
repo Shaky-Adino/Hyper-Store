@@ -115,11 +115,11 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                         content: SingleChildScrollView(
                           child: ListBody(
                             children: <Widget>[
-                              Icon(Icons.check, size: 45, color: Colors.green),
+                              const Icon(Icons.check, size: 45, color: Colors.green),
                               const SizedBox(height: 15),
-                              Text("Order placed successfully!"),
+                              const Text("Order placed successfully!"),
                               const SizedBox(height: 9),
-                              Text('Thank you for shopping on Hyper Store')
+                              const Text('Thank you for shopping on Hyper Store')
                             ],
                           ),
                         ),
@@ -137,7 +137,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 Navigator.of(context).pop();
               }, 
               child: loading ? CircularProgressIndicator()
-                        : Text('Confirm Order', style: TextStyle(fontWeight: FontWeight.bold))
+                        : const Text('Confirm Order', style: TextStyle(fontWeight: FontWeight.bold))
             ),
 
             const SizedBox(height: 30),
@@ -150,7 +150,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 onPressed: (){
                   Navigator.of(context).pop();
                 }, 
-                child: Text('CANCEL', style: TextStyle(color: Colors.white))
+                child: const Text('CANCEL', style: TextStyle(color: Colors.white))
               ),
           ],
         ),

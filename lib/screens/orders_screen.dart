@@ -11,10 +11,9 @@ class OrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final orderData = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Orders'),
+        title: const Text('Your Orders'),
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(
@@ -24,10 +23,8 @@ class OrdersScreen extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else {
             if (dataSnapshot.error != null) {
-              // ...
-              // Do error handling stuff
               return Center(
-                child: Text('An error occurred!'),
+                child: const Text('An error occurred!'),
               );
             } else {
               if(Provider.of<Orders>(context, listen: false).orders.length == 0)
