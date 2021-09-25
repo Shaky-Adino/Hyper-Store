@@ -94,6 +94,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xffffde59),
           title: const Text('Reset Password'),
         ),
         body: Column(
@@ -153,7 +154,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         Material(
                           child: Ink(
                             decoration: BoxDecoration(
-                              color: Colors.yellow,
+                              color: Color(0xffffde59),
                               borderRadius: BorderRadius.circular(10),
                                 border: Border.fromBorderSide(BorderSide.none),
                               ),

@@ -27,7 +27,7 @@ class _IntroScreenState extends State<IntroScreen> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      backgroundColor: Colors.yellow,
+      backgroundColor: Color(0xffffde59),
         body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -44,7 +44,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 ),
 
                 const SizedBox(height: 20),
-                //Texts and Styling of them
+                
                 Text(
                   'Welcome to Hyper Store !',
                   textAlign: TextAlign.center,
@@ -60,8 +60,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 ),
 
                 const SizedBox(height: 30),
-                //Our MaterialButton which when pressed will take us to a new screen named as 
-                //LoginScreen
+
                 Container(
                     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                     child: MaterialButton(
@@ -76,11 +75,11 @@ class _IntroScreenState extends State<IntroScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text('Get Started ',
-                              style: TextStyle(color: Colors.yellow, fontSize: 20)),
+                              style: TextStyle(color: Color(0xffffde59), fontSize: 20)),
                           Icon(Icons.arrow_forward_ios)
                         ],
                       ),
-                      textColor: Colors.yellow,
+                      textColor: Color(0xffffde59),
                     ),
                   ),
               ],
