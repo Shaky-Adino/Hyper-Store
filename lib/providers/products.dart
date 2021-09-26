@@ -103,6 +103,13 @@ class Products with ChangeNotifier{
     );
   }
 
+  Product findById2(String id) {
+    return _userItems.firstWhere(
+      (prod) => prod.id == id,
+      orElse: () => null,
+    );
+  }
+
   void updates(String uid){
     userId = uid;
   }
@@ -222,7 +229,7 @@ class Products with ChangeNotifier{
       final store = FirebaseStorage.instance.ref().child('products');
 
       for(var i=0;i<4;i++){
-        var ref = store.child(userId + i.toString() + '.jpg');
+        var ref = store.child(userId + DateTime.now().toIso8601String() + i.toString() + '.jpg');
         await ref.putFile(images[i].imageFile);
         var imgUrl = await ref.getDownloadURL();
         urls.add(imgUrl);
@@ -322,7 +329,7 @@ class Products with ChangeNotifier{
             break;
         }
         await FirebaseStorage.instance.refFromURL(delurl).delete();
-        var ref = store.child(userId + i.toString() + '.jpg');
+        var ref = store.child(userId + DateTime.now().toIso8601String() + i.toString() + '.jpg');
         await ref.putFile(images[i].imageFile);
         var imgUrl = await ref.getDownloadURL();
         newUrls.add(imgUrl);
@@ -371,6 +378,11 @@ class Products with ChangeNotifier{
     notifyListeners();
     try{
       await firestore.collection('products').doc(id).delete();
+      await firestore.collection('ratings').doc(id).delete();
+      await FirebaseStorage.instance.refFromURL(existingProduct.imageUrl0).delete();
+      await FirebaseStorage.instance.refFromURL(existingProduct.imageUrl1).delete();
+      await FirebaseStorage.instance.refFromURL(existingProduct.imageUrl2).delete();
+      await FirebaseStorage.instance.refFromURL(existingProduct.imageUrl3).delete();
     } catch(e){
       _userItems.insert(existingProductIndex, existingProduct);
       notifyListeners();

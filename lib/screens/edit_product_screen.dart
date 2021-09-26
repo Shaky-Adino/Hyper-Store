@@ -25,6 +25,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
+
   var _editedProduct = Product(
     id: null,
     category: '',
@@ -61,7 +62,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       final productId = ModalRoute.of(context).settings.arguments as String;
       if (productId != null) {
         buttonText = "Update";
-        _editedProduct = Provider.of<Products>(context, listen: false).findById(productId);
+        _editedProduct = Provider.of<Products>(context, listen: false).findById2(productId);
         dropdownValue = _editedProduct.category;
         _initValues = {
           'title': _editedProduct.title,
@@ -190,6 +191,34 @@ class _EditProductScreenState extends State<EditProductScreen> {
         );
       }
     }
+    await showDialog(
+      context: context,
+      builder:  (BuildContext context)
+      {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Icon(Icons.check, size: 45, color: Colors.green),
+                const SizedBox(height: 15),
+                const Text("Product added successfully!"),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close', style: TextStyle(color:Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
     setState(() {
       _isLoading = false;
     });
@@ -211,9 +240,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
           ],
         ),
         body: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
+            ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(child: CircularProgressIndicator()),
+                const SizedBox(height: 65),
+                const Text(
+                  'Adding your product to the Hyper Store.\nThis might take a while...',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )
             : Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Form(
@@ -448,6 +489,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 setState(() {
                                   dropdownValue = newValue;
                                 });
+                                _descriptionFocusNode.unfocus();
+                              },
+                              onTap: (){
+                                FocusManager.instance.primaryFocus?.unfocus();
                               },
                             ),
                           ),

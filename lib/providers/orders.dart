@@ -165,6 +165,9 @@ class Orders with ChangeNotifier{
             });
     final index = _orders.indexWhere((order) => order.id == orderId);
     _orders[index].cancelled = true;
+    _orders[index].products.map((item){
+      _products[item.prodId] = false;
+    });
     notifyListeners();
   }
 

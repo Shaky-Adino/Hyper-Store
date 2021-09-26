@@ -39,27 +39,49 @@ class UserProductItem extends StatelessWidget {
                     context: context, 
                     barrierDismissible: false,
                     builder: (BuildContext context){
-                      return AlertDialog(
-                        title: const Text("Are you sure?"),
-                        shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                        content: const Text("This action is permanent and can't be undone !"),
-                        actions: [
-                          TextButton(
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                            }, 
-                            child: Text("CANCEL",style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold))
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await Provider.of<Products>(context, listen: false).newdeleteProduct(id);
-                              Navigator.of(context).pop();
-                            }, 
-                            child: Text("YES",style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold))
-                          ),
-                        ],
+                      bool deleting = false;
+                      return StatefulBuilder(
+                        builder : (context, setState){
+                          return AlertDialog(
+                            title: !deleting ? const Text("Are you sure?") : null,
+                            shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                            content: deleting ? 
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Center(child: CircularProgressIndicator()),
+                                  const SizedBox(height: 20),
+                                  Text('Deleting your product from Hyper Store'),
+                                ],
+                              )  : const Text("This action is permanent and can't be undone !"),
+                            actions: [
+                              TextButton(
+                                onPressed: (){
+                                  Navigator.of(context).pop();
+                                }, 
+                                child: !deleting ? 
+                                  Text("CANCEL",style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)) : null,
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  setState((){
+                                    deleting = true;
+                                  });
+                                  await Provider.of<Products>(context, listen: false).newdeleteProduct(id);
+                                  setState((){
+                                    deleting = false;
+                                  });
+                                  Navigator.of(context).pop();
+                                }, 
+                                child: !deleting ?
+                                 Text("YES",style: TextStyle(color:Colors.orange[700], fontWeight: FontWeight.bold)) : null,
+                              ),
+                            ],
+                          );
+                        }
                       );
                     }
                   );
